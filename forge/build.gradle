@@ -65,7 +65,7 @@ dependencies {
 	modLocalRuntime("net.darkhax.bookshelf:Bookshelf-1.16.5:${rootProject.forge_bookshelf_version}")
 	modLocalRuntime("net.darkhax.gamestages:GameStages-1.16.5:${rootProject.forge_gamestages_version}")
 
-	modLocalRuntime("com.ridanisaurus:emendatusenigmatica:${rootProject.forge_ee_version}")
+	// modLocalRuntime("com.ridanisaurus:emendatusenigmatica:${rootProject.forge_ee_version}")
 
 	// test mods, these are included at runtime only
 	// modRuntime("com.resourcefulbees:ResourcefulBees:1.16.5-0.6.4b")
