@@ -2,6 +2,7 @@ package dev.latvian.kubejs.forge;
 
 import dev.latvian.kubejs.BuiltinKubeJSPlugin;
 import dev.latvian.kubejs.KubeJS;
+import dev.latvian.kubejs.event.PlatformEventHandler;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
@@ -31,7 +32,7 @@ public class BuiltinKubeJSForgePlugin extends BuiltinKubeJSPlugin {
 		super.addBindings(event);
 
 		if (event.type == ScriptType.STARTUP) {
-			event.addFunction("onForgeEvent", args -> onPlatformEvent(event, args), null, KubeJSForgeEventHandlerWrapper.class);
+			event.addFunction("onForgeEvent", PlatformEventHandler.instance(), null, KubeJSForgeEventHandlerWrapper.class);
 		}
 
 		event.add("BiomeDictionary", BiomeDictionaryWrapper.class);
@@ -43,6 +44,12 @@ public class BuiltinKubeJSForgePlugin extends BuiltinKubeJSPlugin {
 		typeWrappers.register(BiomeDictionary.Type.class, BiomeDictionaryWrapper::getBiomeType);
 	}
 
+	/**
+	 * @deprecated
+	 * @see PlatformEventHandler#instance()
+	 * @see PlatformEventHandler#call(Object[])
+	 */
+	@Deprecated
 	public static Object onPlatformEvent(BindingsEvent event, Object[] args) {
 		if (args.length < 2 || !(args[0] instanceof CharSequence)) {
 			throw new RuntimeException("Invalid syntax! onPlatformEvent(string, function) required event class and handler");
