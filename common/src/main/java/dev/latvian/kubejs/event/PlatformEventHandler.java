@@ -6,7 +6,7 @@ import dev.latvian.mods.rhino.util.DynamicFunction;
 public abstract class PlatformEventHandler implements DynamicFunction.Callback {
 
 	@ExpectPlatform
-	public PlatformEventHandler instance() {
+	public static PlatformEventHandler instance() {
 		throw new AssertionError("Not implemented");
 	}
 
