@@ -46,25 +46,9 @@ public class BuiltinKubeJSForgePlugin extends BuiltinKubeJSPlugin {
 
 	/**
 	 * @deprecated
-	 * @see PlatformEventHandler
 	 */
 	@Deprecated
 	public static Object onPlatformEvent(BindingsEvent event, Object[] args) {
-		if (args.length < 2 || !(args[0] instanceof CharSequence)) {
-			throw new RuntimeException("Invalid syntax! onPlatformEvent(string, function) required event class and handler");
-		} else if (!KubeJS.startupScriptManager.firstLoad) {
-			ConsoleJS.STARTUP.warn("onPlatformEvent() can't be reloaded! You will have to restart the game for changes to take effect.");
-			return null;
-		}
-
-		try {
-			Class type = Class.forName(args[0].toString());
-			KubeJSForgeEventHandlerWrapper handler = (KubeJSForgeEventHandlerWrapper) args[1];
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, type, handler);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-
-		return null;
+		return PlatformEventHandler.instance().call(args);
 	}
 }
