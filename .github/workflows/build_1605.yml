@@ -3,10 +3,10 @@ name: Java CI (1.16.5)
 on:
   push:
     branches:
-      - '1605'
+      - '1605-extended'
   workflow_dispatch:
     branches:
-      - '1605'
+      - '1605-extended'
     inputs:
       release_type:
         description: 'Release Type'

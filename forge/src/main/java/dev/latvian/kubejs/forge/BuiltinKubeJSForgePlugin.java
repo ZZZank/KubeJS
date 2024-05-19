@@ -46,8 +46,7 @@ public class BuiltinKubeJSForgePlugin extends BuiltinKubeJSPlugin {
 
 	/**
 	 * @deprecated
-	 * @see PlatformEventHandler#instance()
-	 * @see PlatformEventHandler#call(Object[])
+	 * @see PlatformEventHandler
 	 */
 	@Deprecated
 	public static Object onPlatformEvent(BindingsEvent event, Object[] args) {

@@ -20,6 +20,9 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 		}
 	}
 
+	/**
+	 * @see PlatformEventHandler#instance()
+	 */
 	public static PlatformEventHandler instance() {
 		return INSTANCE;
 	}
