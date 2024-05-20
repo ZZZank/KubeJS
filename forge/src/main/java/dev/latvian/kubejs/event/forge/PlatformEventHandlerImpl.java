@@ -18,6 +18,7 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 		for (KubeJSForgeEventHandlerWrapper listener : this.listeners) {
 			MinecraftForge.EVENT_BUS.unregister(listener);
 		}
+		this.listeners.clear();
 	}
 
 	/**
