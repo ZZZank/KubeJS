@@ -34,8 +34,8 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 		}
 
 		try {
-			Class type = Class.forName(params[0].toString());
-			KubeJSForgeEventHandlerWrapper handler = (KubeJSForgeEventHandlerWrapper) params[1];
+			final Class type = Class.forName(params[0].toString());
+			final var handler = ((KubeJSForgeEventHandlerWrapper) params[1]).secured(type);
 			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, type, handler);
 			listeners.add(handler);
 		} catch (Exception ex) {
