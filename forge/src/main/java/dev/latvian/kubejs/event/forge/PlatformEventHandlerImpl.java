@@ -36,7 +36,7 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 
 		try {
 			final Class type = Class.forName(params[0].toString());
-			final var handler = ((KubeJSForgeEventHandlerWrapper) params[1]).secured(type);
+			final var handler = secured((KubeJSForgeEventHandlerWrapper) params[1],type);
 			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, type, handler);
 			listeners.add(handler);
 		} catch (Exception ex) {
@@ -44,5 +44,21 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 		}
 
 		return null;
+	}
+
+	/**
+	 * wrap provided event handler with a try-catch that will catch Exception and log them using {@link PlatformEventHandler#logException(Exception, String)}
+	 * @param handler event handler
+	 * @param eventTarget event type class
+	 * @return wrapped handler
+	 */
+	static KubeJSForgeEventHandlerWrapper secured(KubeJSForgeEventHandlerWrapper handler, Class eventTarget) {
+		return event -> {
+			try {
+				handler.accept(event);
+			} catch (Exception ex) {
+				PlatformEventHandler.logException(ex, "Error when calling 'onForgeEvent' for " + eventTarget);
+			}
+		};
 	}
 }
