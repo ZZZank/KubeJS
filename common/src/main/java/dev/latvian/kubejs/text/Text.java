@@ -77,8 +77,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 			}
 
 			return text;
-		} else if (o instanceof MapJS) {
-			MapJS map = (MapJS) o;
+		} else if (o instanceof MapJS map) {
 
 			if (map.containsKey("text") || map.containsKey("translate")) {
 				Text text;
@@ -482,8 +481,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
-		} else if (obj instanceof Text) {
-			Text t = (Text) obj;
+		} else if (obj instanceof Text t) {
 
 			if (color == t.color && bold == t.bold && italic == t.italic && underlined == t.underlined && strikethrough == t.strikethrough && obfuscated == t.obfuscated) {
 				return Objects.equals(insertion, t.insertion) && Objects.equals(font, t.font) && Objects.equals(click, t.click) && Objects.equals(hover, t.hover) && Objects.equals(siblings, t.siblings);

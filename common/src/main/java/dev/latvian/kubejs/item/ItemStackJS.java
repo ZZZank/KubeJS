@@ -311,8 +311,7 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 			return new DummyFluidItemStackJS((FluidStackJS) o);
 		} else if (o instanceof IngredientJS) {
 			return ((IngredientJS) o).getFirst();
-		} else if (o instanceof ItemStack) {
-			ItemStack stack = (ItemStack) o;
+		} else if (o instanceof ItemStack stack) {
 			return stack.isEmpty() ? EMPTY : new ItemStackJS(stack);
 		} else if (o instanceof ResourceLocation) {
 			Item item = KubeJSRegistries.items().get((ResourceLocation) o);
@@ -863,8 +862,7 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 	public boolean equals(Object o) {
 		if (o instanceof CharSequence) {
 			return getId().equals(UtilsJS.getID(o.toString()));
-		} else if (o instanceof ItemStack) {
-			ItemStack s = (ItemStack) o;
+		} else if (o instanceof ItemStack s) {
 			return !s.isEmpty() && areItemsEqual(s) && isNBTEqual(s);
 		}
 
@@ -875,8 +873,7 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 	public boolean strongEquals(Object o) {
 		if (o instanceof CharSequence) {
 			return getId().equals(UtilsJS.getID(o.toString())) && getCount() == 1 && !hasNBT();
-		} else if (o instanceof ItemStack) {
-			ItemStack s = (ItemStack) o;
+		} else if (o instanceof ItemStack s) {
 			return getCount() == s.getCount() && areItemsEqual(s) && isNBTEqual(s);
 		}
 

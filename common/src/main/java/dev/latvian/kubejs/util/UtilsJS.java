@@ -539,8 +539,7 @@ public class UtilsJS {
 		if (type instanceof Class<?>) {
 			return (Class<?>) type;
 
-		} else if (type instanceof ParameterizedType) {
-			ParameterizedType parameterizedType = (ParameterizedType) type;
+		} else if (type instanceof ParameterizedType parameterizedType) {
 
 			Type rawType = parameterizedType.getRawType();
 			checkArgument(rawType instanceof Class);

@@ -100,8 +100,7 @@ public class TRRecipeJS extends RecipeJS {
 
 	@Override
 	public IngredientJS parseIngredientItem(Object o, String key) {
-		if (o instanceof JsonObject) {
-			JsonObject json = (JsonObject) o;
+		if (o instanceof JsonObject json) {
 
 			ResourceLocation type = DummyRebornIngredient.STACK_RECIPE_TYPE;
 

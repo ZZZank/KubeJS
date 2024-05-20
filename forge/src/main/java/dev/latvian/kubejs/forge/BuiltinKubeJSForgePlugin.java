@@ -1,17 +1,13 @@
 package dev.latvian.kubejs.forge;
 
 import dev.latvian.kubejs.BuiltinKubeJSPlugin;
-import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.PlatformEventHandler;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
-import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.world.gen.forge.BiomeDictionaryWrapper;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
 
 public class BuiltinKubeJSForgePlugin extends BuiltinKubeJSPlugin {
 	@Override

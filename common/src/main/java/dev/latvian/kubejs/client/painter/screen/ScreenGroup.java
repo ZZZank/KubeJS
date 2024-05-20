@@ -43,8 +43,7 @@ public class ScreenGroup extends ScreenPainterObject {
 		h = FixedUnit.ZERO;
 
 		for (PainterObject object : storage.getObjects()) {
-			if (object instanceof ScreenPainterObject) {
-				ScreenPainterObject s = (ScreenPainterObject) object;
+			if (object instanceof ScreenPainterObject s) {
 				s.preDraw(event);
 				w = w.max(s.x.add(s.w));
 				h = h.max(s.y.add(s.h));
@@ -66,8 +65,7 @@ public class ScreenGroup extends ScreenPainterObject {
 		event.scale(scaleX, scaleY, scaleZ);
 
 		for (PainterObject object : storage.getObjects()) {
-			if (object instanceof ScreenPainterObject) {
-				ScreenPainterObject s = (ScreenPainterObject) object;
+			if (object instanceof ScreenPainterObject s) {
 				s.draw(event);
 			}
 		}
