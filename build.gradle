@@ -17,6 +17,9 @@ subprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 		mappings loom.officialMojangMappings()
+
+		annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
+		compileOnly 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
 	}
 }
 
@@ -31,7 +34,7 @@ allprojects {
 	group = project.maven_group
 	archivesBaseName = project.archives_base_name
 
-	sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+	sourceCompatibility = compileJava.sourceCompatibility = '16'
 
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
