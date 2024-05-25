@@ -39,16 +39,16 @@ import java.util.List;
  * @author LatvianModder
  */
 public class KubeJSServerEventHandler {
-	private static final LevelResource PERSISTENT_DATA = LevelResourceHooks.create("kubejs_persistent_data.nbt");
+	private static final LevelResource PERSISTENT_DATA = new LevelResource("kubejs_persistent_data.nbt");
 
 	public static void init() {
 		LifecycleEvent.SERVER_BEFORE_START.register(KubeJSServerEventHandler::serverAboutToStart);
 		CommandRegistrationEvent.EVENT.register(KubeJSServerEventHandler::registerCommands);
 		LifecycleEvent.SERVER_STARTED.register(KubeJSServerEventHandler::serverStarted);
-		LifecycleEvent.SERVER_STOPPING.register(KubeJSServerEventHandler::serverStopping);
-		LifecycleEvent.SERVER_WORLD_SAVE.register(KubeJSServerEventHandler::serverWorldSave);
 		TickEvent.SERVER_POST.register(KubeJSServerEventHandler::serverTick);
 		CommandPerformEvent.EVENT.register(KubeJSServerEventHandler::command);
+		LifecycleEvent.SERVER_STOPPING.register(KubeJSServerEventHandler::serverStopping);
+		LifecycleEvent.SERVER_WORLD_SAVE.register(KubeJSServerEventHandler::serverWorldSave);
 	}
 
 	public static void serverAboutToStart(MinecraftServer server) {

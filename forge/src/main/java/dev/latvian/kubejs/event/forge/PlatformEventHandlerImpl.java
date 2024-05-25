@@ -57,7 +57,7 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 			try {
 				handler.accept(event);
 			} catch (Exception ex) {
-				PlatformEventHandler.logException(ex, "Error when calling 'onForgeEvent' for " + eventTarget);
+				logException(ex, "Error when calling 'onForgeEvent' for " + eventTarget);
 			}
 		};
 	}
