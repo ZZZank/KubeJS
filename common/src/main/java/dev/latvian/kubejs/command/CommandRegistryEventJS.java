@@ -33,11 +33,11 @@ public class CommandRegistryEventJS extends ServerEventJS {
 		return dispatcher.register(command);
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> literal(final String name) {
+	public LiteralArgumentBuilder<CommandSourceStack> literal(final String name) {
 		return LiteralArgumentBuilder.literal(name);
 	}
 
-	public static  <T> RequiredArgumentBuilder<Object, T> argument(String name, ArgumentType<T> argumentType) {
+	public <T> RequiredArgumentBuilder<Object, T> argument(String name, ArgumentType<T> argumentType) {
 		return RequiredArgumentBuilder.argument(name, argumentType);
 	}
 }
