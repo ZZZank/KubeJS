@@ -1,4 +1,10 @@
 
+TODO(high priority)
+- what is the earliest point where a server is guaranteed to be available now or in the future
+  - it's not `LifecycleEvent.SERVER_BEFORE_START`
+  - it should be at or earlier then `CommandRegistrationEvent`, ot make command registering event be fired normally
+  - 
+
 arch api 1.22 -> 1.32
 - villager trade
   	- VillagerTradeOfferContext

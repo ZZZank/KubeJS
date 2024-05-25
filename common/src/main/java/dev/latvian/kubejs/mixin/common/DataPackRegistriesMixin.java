@@ -16,9 +16,9 @@ import java.util.List;
  */
 @Mixin(ServerResources.class)
 public abstract class DataPackRegistriesMixin {
+
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void init(CallbackInfo ci) {
-		ServerScriptManager.instance = new ServerScriptManager();
 		ServerScriptManager.instance.init((ServerResources) (Object) this);
 	}
 
