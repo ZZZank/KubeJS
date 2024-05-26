@@ -74,10 +74,11 @@ public class KubeJSServerEventHandler {
 	}
 
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
-		//TODO: check if this does not break script reloading, and possibly find an earlier time
+		//TODO: check if this is breaking script reloading, and possibly find an earlier time
 		ServerScriptManager.instance = new ServerScriptManager();
 
 		KubeJSCommands.register(dispatcher);
+		//TODO: not working, why
 		new CommandRegistryEventJS(dispatcher, selection).post(ScriptType.SERVER, KubeJSEvents.COMMAND_REGISTRY);
 	}
 
