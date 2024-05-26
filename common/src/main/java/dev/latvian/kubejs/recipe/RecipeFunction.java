@@ -93,8 +93,7 @@ public class RecipeFunction extends BaseFunction implements WrappedJS {
 			return ((ItemStackJS) o).toResultJson();
 		} else if (o instanceof IngredientJS) {
 			return ((IngredientJS) o).toJson();
-		} else if (o instanceof String) {
-			String s = (String) o;
+		} else if (o instanceof String s) {
 
 			if (s.length() >= 4 && s.startsWith("#") && s.indexOf(':') != -1) {
 				return TagIngredientJS.createTag(s.substring(1)).toJson();

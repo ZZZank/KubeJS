@@ -2,7 +2,6 @@ package dev.latvian.kubejs.item;
 
 import com.google.common.collect.Lists;
 import dev.latvian.kubejs.KubeJSRegistries;
-import dev.latvian.kubejs.script.ScriptType;
 import me.shedaniel.architectury.hooks.FoodPropertiesHooks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;

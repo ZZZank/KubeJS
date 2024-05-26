@@ -8,6 +8,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.core.MinecraftServerKJS;
+import dev.latvian.kubejs.event.PlatformEventHandler;
 import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.item.ingredient.GroupIngredientJS;
 import dev.latvian.kubejs.item.ingredient.ModIngredientJS;
@@ -271,9 +272,12 @@ public class KubeJSCommands {
 	}
 
 	private static int reloadStartup(CommandSourceStack source) {
+		PlatformEventHandler.instance().unregister();
+
 		KubeJS.startupScriptManager.unload();
 		KubeJS.startupScriptManager.loadFromDirectory();
 		KubeJS.startupScriptManager.load();
+
 		UtilsJS.postModificationEvents();
 		source.sendSuccess(new TextComponent("Done!"), false);
 		return 1;

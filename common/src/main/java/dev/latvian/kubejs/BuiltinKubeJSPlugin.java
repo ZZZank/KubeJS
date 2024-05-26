@@ -351,14 +351,13 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		});
 
 		typeWrappers.register(Vec3.class, o -> {
-			if (o instanceof Vec3) {
-				return (Vec3) o;
-			} else if (o instanceof EntityJS) {
-				return ((EntityJS) o).minecraftEntity.position();
-			} else if (o instanceof List && ((List<?>) o).size() >= 3) {
-				return new Vec3(((Number) ((List<?>) o).get(0)).doubleValue(), ((Number) ((List<?>) o).get(1)).doubleValue(), ((Number) ((List<?>) o).get(2)).doubleValue());
-			} else if (o instanceof BlockPos) {
-				BlockPos bp = (BlockPos) o;
+			if (o instanceof Vec3 v) {
+				return v;
+			} else if (o instanceof EntityJS ent) {
+				return ent.minecraftEntity.position();
+			} else if (o instanceof List l && l.size() >= 3) {
+				return new Vec3(((Number) l.get(0)).doubleValue(), ((Number) l.get(1)).doubleValue(), ((Number) l.get(2)).doubleValue());
+			} else if (o instanceof BlockPos bp) {
 				return new Vec3(bp.getX() + 0.5D, bp.getY() + 0.5D, bp.getZ() + 0.5D);
 			} else if (o instanceof BlockContainerJS) {
 				BlockPos bp = ((BlockContainerJS) o).getPos();

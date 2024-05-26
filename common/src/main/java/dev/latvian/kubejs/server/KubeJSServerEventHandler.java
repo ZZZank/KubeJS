@@ -2,6 +2,7 @@ package dev.latvian.kubejs.server;
 
 import com.mojang.brigadier.CommandDispatcher;
 import dev.latvian.kubejs.KubeJSEvents;
+import dev.latvian.kubejs.command.CommandRegistryEventJS;
 import dev.latvian.kubejs.command.KubeJSCommands;
 import dev.latvian.kubejs.player.PlayerDataJS;
 import dev.latvian.kubejs.player.SimplePlayerEventJS;
@@ -38,16 +39,16 @@ import java.util.List;
  * @author LatvianModder
  */
 public class KubeJSServerEventHandler {
-	private static final LevelResource PERSISTENT_DATA = LevelResourceHooks.create("kubejs_persistent_data.nbt");
+	private static final LevelResource PERSISTENT_DATA = new LevelResource("kubejs_persistent_data.nbt");
 
 	public static void init() {
 		LifecycleEvent.SERVER_BEFORE_START.register(KubeJSServerEventHandler::serverAboutToStart);
 		CommandRegistrationEvent.EVENT.register(KubeJSServerEventHandler::registerCommands);
 		LifecycleEvent.SERVER_STARTED.register(KubeJSServerEventHandler::serverStarted);
-		LifecycleEvent.SERVER_STOPPING.register(KubeJSServerEventHandler::serverStopping);
-		LifecycleEvent.SERVER_WORLD_SAVE.register(KubeJSServerEventHandler::serverWorldSave);
 		TickEvent.SERVER_POST.register(KubeJSServerEventHandler::serverTick);
 		CommandPerformEvent.EVENT.register(KubeJSServerEventHandler::command);
+		LifecycleEvent.SERVER_STOPPING.register(KubeJSServerEventHandler::serverStopping);
+		LifecycleEvent.SERVER_WORLD_SAVE.register(KubeJSServerEventHandler::serverWorldSave);
 	}
 
 	public static void serverAboutToStart(MinecraftServer server) {
@@ -73,8 +74,12 @@ public class KubeJSServerEventHandler {
 	}
 
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+		//TODO: check if this is breaking script reloading, and possibly find an earlier time
+		ServerScriptManager.instance = new ServerScriptManager();
+
 		KubeJSCommands.register(dispatcher);
-		//		new CommandRegistryEventJS(dispatcher, selection).post(ScriptType.SERVER, KubeJSEvents.COMMAND_REGISTRY);
+		//TODO: not working, why
+		new CommandRegistryEventJS(dispatcher, selection).post(ScriptType.SERVER, KubeJSEvents.COMMAND_REGISTRY);
 	}
 
 	public static void serverStarted(MinecraftServer server) {
