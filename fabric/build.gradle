@@ -37,7 +37,7 @@ dependencies {
 		exclude group: "net.fabricmc"
 	}
 
-	modRuntime("me.shedaniel:RoughlyEnoughItems:${rootProject.fabric_rei_version}") {
+	modRuntimeOnly("me.shedaniel:RoughlyEnoughItems:${rootProject.fabric_rei_version}") {
 		exclude group: "net.fabricmc.fabric-api"
 		exclude group: "net.fabricmc"
 	}
@@ -56,7 +56,7 @@ processResources {
 
 shadowJar {
 	configurations = [project.configurations.shadowCommon]
-	classifier "dev-shadow"
+	archiveClassifier.set "dev-shadow"
 }
 
 remapJar {
@@ -67,7 +67,7 @@ remapJar {
 }
 
 jar {
-	classifier "dev"
+	archiveClassifier.set "dev"
 }
 
 components.java {
