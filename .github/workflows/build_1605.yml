@@ -49,6 +49,13 @@ jobs:
         with:
           arguments: build publish --stacktrace --no-daemon
 
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            forge/build/libs
+            fabric/build/libs
+
       - name: Release to CurseForge
         uses: gradle/gradle-build-action@v3
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_type != 'none' }}
