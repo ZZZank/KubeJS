@@ -78,7 +78,7 @@ public class KubeJSServerEventHandler {
 		ServerScriptManager.instance = new ServerScriptManager();
 
 		KubeJSCommands.register(dispatcher);
-		//TODO: not working, why
+		//TODO: custom command registry not working, why
 		new CommandRegistryEventJS(dispatcher, selection).post(ScriptType.SERVER, KubeJSEvents.COMMAND_REGISTRY);
 	}
 

@@ -94,7 +94,9 @@ public class KubeJS {
 
 		for (Mod mod : Platform.getMods()) {
 			try {
-				KubeJSPlugins.load(mod.getModId(), mod.getFilePath());
+				for (Path path : mod.getFilePaths()) {
+					KubeJSPlugins.load(mod.getModId(), path);
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -143,13 +145,12 @@ public class KubeJS {
 
 		final String pathPrefix = path;
 
-		UtilsJS.tryIO(() -> Files.walk(dir, 10).filter(Files::isRegularFile).forEach(file -> {
-			String fileName = dir.relativize(file).toString().replace(File.separatorChar, '/');
-
-			if (fileName.endsWith(".js")) {
-				pack.info.scripts.add(new ScriptFileInfo(pack.info, pathPrefix + fileName));
-			}
-		}));
+		UtilsJS.tryIO(() -> Files
+				.walk(dir, 10)
+				.filter(Files::isRegularFile)
+				.map(file -> dir.relativize(file).toString().replace(File.separatorChar, '/'))
+				.filter(name -> name.endsWith(".js"))
+				.forEach(fileName -> pack.info.scripts.add(new ScriptFileInfo(pack.info, pathPrefix + fileName))));
 	}
 
 	public static String appendModId(String id) {

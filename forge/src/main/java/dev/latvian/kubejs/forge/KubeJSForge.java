@@ -61,8 +61,8 @@ public class KubeJSForge {
 			}
 		}
 
-		CraftingHelper.register(new ResourceLocation("kubejs:custom_predicate"), CustomPredicateIngredient.SERIALIZER);
-		CraftingHelper.register(new ResourceLocation("kubejs:ignore_nbt"), IgnoreNBTIngredient.SERIALIZER);
+		CraftingHelper.register(new ResourceLocation("kubejs", "custom_predicate"), CustomPredicateIngredient.SERIALIZER);
+		CraftingHelper.register(new ResourceLocation("kubejs", "ignore_nbt"), IgnoreNBTIngredient.SERIALIZER);
 	}
 
 	private static void loadComplete(FMLLoadCompleteEvent event) {
