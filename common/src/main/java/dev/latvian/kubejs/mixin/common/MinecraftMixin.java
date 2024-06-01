@@ -2,6 +2,7 @@ package dev.latvian.kubejs.mixin.common;
 
 import dev.latvian.kubejs.client.ClientProperties;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
+import dev.latvian.kubejs.core.MinecraftClientKJS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.PackRepository;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author LatvianModder
  */
 @Mixin(Minecraft.class)
-public abstract class MinecraftMixin {
+public abstract class MinecraftMixin implements MinecraftClientKJS {
 	@Shadow
 	@Final
 	private PackRepository resourcePackRepository;
