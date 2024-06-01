@@ -15,6 +15,7 @@ import dev.latvian.mods.rhino.RhinoException;
 import dev.latvian.mods.rhino.Scriptable;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +30,9 @@ import java.util.Optional;
  * @author LatvianModder
  */
 public class ScriptManager {
+
+	private static final ThreadLocal<Context> CURRENT_CONTEXT = new ThreadLocal<>();
+
 	public final ScriptType type;
 	public final Path directory;
 	public final String exampleScript;
@@ -97,17 +101,23 @@ public class ScriptManager {
 		return classFilter.isAllowed(name);
 	}
 
+	@Nullable
+	public static Context getCurrentContext() {
+		return CURRENT_CONTEXT.get();
+	}
+
 	public void load() {
 		Context context = Context.enterWithNewFactory();
 		context.setClassShutter((fullClassName, type) -> type != ClassShutter.TYPE_CLASS_IN_PACKAGE || isClassAllowed(fullClassName));
 		TypeWrappers typeWrappers = context.getTypeWrappers();
 		// typeWrappers.removeAll();
 		KubeJSPlugins.forEachPlugin(plugin -> plugin.addTypeWrappers(type, typeWrappers));
+		CURRENT_CONTEXT.set(context);
 
 		for (RegistryTypeWrapperFactory<?> registryTypeWrapperFactory : RegistryTypeWrapperFactory.getAll()) {
 			try {
 				typeWrappers.register(registryTypeWrapperFactory.type, UtilsJS.cast(registryTypeWrapperFactory));
-			} catch (IllegalArgumentException ex) {
+			} catch (IllegalArgumentException ignored) {
 			}
 		}
 
