@@ -438,7 +438,7 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 		} else if (o instanceof CharSequence) {
 			String s = o.toString();
 
-			if (s == null || s.isEmpty()) {
+			if (s.isEmpty()) {
 				return Items.AIR;
 			} else if (s.charAt(0) != '#') {
 				return KubeJSRegistries.items().get(UtilsJS.getMCID(s));

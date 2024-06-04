@@ -278,15 +278,16 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		int added = 0;
 
 		for (var builder : this) {
-			if (!builder.dummyBuilder && (builder.getRegistryType().bypassServerOnly || !CommonProperties.get().serverOnly)) {
-				function.accept(builder.id, builder::createTransformedObject);
-
-				if (CommonProperties.get().debugInfo) {
-					ConsoleJS.STARTUP.info("+ " + this + " | " + builder.id);
-				}
-
-				added++;
+			if (builder.dummyBuilder || (!builder.getRegistryType().bypassServerOnly && CommonProperties.get().serverOnly)) {
+				continue;
 			}
+			function.accept(builder.id, builder::createTransformedObject);
+
+			if (CommonProperties.get().debugInfo) {
+				ConsoleJS.STARTUP.info("+ " + this + " | " + builder.id);
+			}
+
+			added++;
 		}
 
 		if (!objects.isEmpty() && CommonProperties.get().debugInfo) {
