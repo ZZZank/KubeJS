@@ -343,7 +343,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		var value = getValue(id);
 
 		if (value == null) {
-			var npe = new NullPointerException("No such element with id %s in registry %s!".formatted(id, this));
+			var npe = new NullPointerException(String.format("No such element with id %s in registry %s!",id, this));
 			ConsoleJS.STARTUP.error("Error while wrapping registry element type!", npe);
 			throw npe;
 		}
