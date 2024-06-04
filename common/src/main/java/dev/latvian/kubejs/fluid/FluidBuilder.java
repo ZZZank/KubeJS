@@ -68,18 +68,30 @@ public class FluidBuilder extends BuilderBase {
 		stillTexture = id.toString();
 		return this;
 	}
+	public FluidBuilder stillTexture(ResourceLocation id) {
+		return textureStill(id);
+	}
 
 	public FluidBuilder textureFlowing(ResourceLocation id) {
 		flowingTexture = id.toString();
 		return this;
 	}
+	public FluidBuilder flowingTexture(ResourceLocation id) {
+		return textureFlowing(id);
+	}
 
 	public FluidBuilder textureThick(int color) {
 		return textureStill(KubeJS.id("fluid/fluid_thick")).textureFlowing(KubeJS.id("fluid/fluid_thick_flow")).color(color);
 	}
+	public FluidBuilder thickTexture(int color) {
+		return textureThick(color);
+	}
 
 	public FluidBuilder textureThin(int color) {
 		return textureStill(KubeJS.id("fluid/fluid_thin")).textureFlowing(KubeJS.id("fluid/fluid_thin_flow")).color(color);
+	}
+	public FluidBuilder thinTexture(int color) {
+		return textureThin(color);
 	}
 
 	public FluidBuilder luminosity(int luminosity) {
