@@ -206,7 +206,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 			registryInfo.fireRegistryEvent();
 		}
 		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
-		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
+//		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
 		new FluidRegistryEventJS().post(KubeJSEvents.FLUID_REGISTRY);
 	}
 
