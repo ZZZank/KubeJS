@@ -2,6 +2,11 @@ package dev.latvian.kubejs;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import dev.latvian.kubejs.bindings.BlockWrapper;
 import dev.latvian.kubejs.bindings.IngredientWrapper;
 import dev.latvian.kubejs.bindings.ItemWrapper;
@@ -305,9 +310,17 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 		event.add("DecorationGenerationStep", GenerationStep.Decoration.class);
 		event.add("CarvingGenerationStep", GenerationStep.Carving.class);
+		//vector
 		event.add("Vec3", Vec3.class);
 		event.add("Vec3d", Vec3.class);
 		event.add("Vec3i", Vec3i.class);
+		event.add("Vector3d", Vector3d.class);
+		event.add("Vector3f", Vector3f.class);
+		event.add("Vector4f", Vector4f.class);
+		//matrix
+		event.add("Matrix3f", Matrix3f.class);
+		event.add("Matrix4f", Matrix4f.class);
+		//
 		event.add("BlockPos", BlockPos.class);
 
 		KubeJS.PROXY.clientBindings(event);
