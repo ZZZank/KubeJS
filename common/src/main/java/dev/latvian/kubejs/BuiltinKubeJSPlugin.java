@@ -70,6 +70,8 @@ import dev.latvian.kubejs.recipe.mod.IDSqueezerRecipeJS;
 import dev.latvian.kubejs.recipe.mod.MATagRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapedArtisanRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapelessArtisanRecipeJS;
+import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.builder.misc.SoundEventBuilder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
 import dev.latvian.kubejs.script.ScriptType;
@@ -150,6 +152,49 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		ItemTypes.register(ArmorItemType.CHESTPLATE);
 		ItemTypes.register(ArmorItemType.LEGGINGS);
 		ItemTypes.register(ArmorItemType.BOOTS);
+
+		//sound
+		RegistryInfo.SOUND_EVENT.addType("basic", SoundEventBuilder.class, SoundEventBuilder::new);
+		//block
+//		RegistryInfo.BLOCK.addType("basic", BasicBlockJS.Builder.class, BasicBlockJS.Builder::new);
+//		RegistryInfo.BLOCK.addType("detector", DetectorBlock.Builder.class, DetectorBlock.Builder::new);
+//		RegistryInfo.BLOCK.addType("slab", SlabBlockBuilder.class, SlabBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("stairs", StairBlockBuilder.class, StairBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("fence", FenceBlockBuilder.class, FenceBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("wall", WallBlockBuilder.class, WallBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("fence_gate", FenceGateBlockBuilder.class, FenceGateBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("pressure_plate", PressurePlateBlockBuilder.class, PressurePlateBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("button", ButtonBlockBuilder.class, ButtonBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("falling", FallingBlockBuilder.class, FallingBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("crop", CropBlockBuilder.class, CropBlockBuilder::new);
+//		RegistryInfo.BLOCK.addType("cardinal", HorizontalDirectionalBlockBuilder.class, HorizontalDirectionalBlockBuilder::new);
+		//item
+//		RegistryInfo.ITEM.addType("basic", BasicItemJS.Builder.class, BasicItemJS.Builder::new);
+//		RegistryInfo.ITEM.addType("sword", SwordItemBuilder.class, SwordItemBuilder::new);
+//		RegistryInfo.ITEM.addType("pickaxe", PickaxeItemBuilder.class, PickaxeItemBuilder::new);
+//		RegistryInfo.ITEM.addType("axe", AxeItemBuilder.class, AxeItemBuilder::new);
+//		RegistryInfo.ITEM.addType("shovel", ShovelItemBuilder.class, ShovelItemBuilder::new);
+//		RegistryInfo.ITEM.addType("shears", ShearsItemBuilder.class, ShearsItemBuilder::new);
+//		RegistryInfo.ITEM.addType("hoe", HoeItemBuilder.class, HoeItemBuilder::new);
+//		RegistryInfo.ITEM.addType("helmet", ArmorItemBuilder.Helmet.class, ArmorItemBuilder.Helmet::new);
+//		RegistryInfo.ITEM.addType("chestplate", ArmorItemBuilder.Chestplate.class, ArmorItemBuilder.Chestplate::new);
+//		RegistryInfo.ITEM.addType("leggings", ArmorItemBuilder.Leggings.class, ArmorItemBuilder.Leggings::new);
+//		RegistryInfo.ITEM.addType("boots", ArmorItemBuilder.Boots.class, ArmorItemBuilder.Boots::new);
+//		RegistryInfo.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
+//		RegistryInfo.ITEM.addType("smithing_template", SmithingTemplateItemBuilder.class, SmithingTemplateItemBuilder::new);
+		//misc
+//		RegistryInfo.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
+//		RegistryInfo.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
+//		RegistryInfo.MOB_EFFECT.addType("basic", BasicMobEffect.Builder.class, BasicMobEffect.Builder::new);
+//		RegistryInfo.POTION.addType("basic", PotionBuilder.class, PotionBuilder::new);
+//		RegistryInfo.PARTICLE_TYPE.addType("basic", ParticleTypeBuilder.class, ParticleTypeBuilder::new);
+//		RegistryInfo.CUSTOM_STAT.addType("basic", CustomStatBuilder.class, CustomStatBuilder::new);
+//		RegistryInfo.POINT_OF_INTEREST_TYPE.addType("basic", PoiTypeBuilder.class, PoiTypeBuilder::new);
+//		RegistryInfo.VILLAGER_TYPE.addType("basic", VillagerTypeBuilder.class, VillagerTypeBuilder::new);
+//		RegistryInfo.VILLAGER_PROFESSION.addType("basic", VillagerProfessionBuilder.class, VillagerProfessionBuilder::new);
+//		RegistryInfo.CREATIVE_MODE_TAB.addType("basic", CreativeTabBuilder.class, CreativeTabBuilder::new);
+		//TODO: ENTITY_TYPE
+		//TODO: BLOCK_ENTITY_TYPE
 	}
 
 	@Override
