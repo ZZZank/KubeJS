@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[32,)"
-issueTrackerURL = "https://github.com/KubeJS-Mods/KubeJS/issues"
+issueTrackerURL = "https://github.com/Hellish-Mods/KesseractJS/issues"
 license = "GNU LGPLv3"
 
 [[mods]]
 modId = "kubejs"
 version = "${version}"
-displayName = "KubeJS"
-authors = "LatvianModder"
+displayName = "KesseractJS"
+authors = "LatvianModder, ZZZank, Hellish Mods (G_cat), MundM2007"
 description = '''
-Customize your modpack or server with JavaScript!
+A maintained fork of the 1.16.5 version of KubeJS
 '''
-logoFile = "kubejs_logo.png"
+logoFile = "pack.png"
 license = "GNU LGPLv3"
 
 [[dependencies.kubejs]]

@@ -2,17 +2,20 @@
 	"schemaVersion": 1,
 	"id": "kubejs",
 	"version": "${version}",
-	"name": "KubeJS",
-	"description": "Customize your modpack or server with JavaScript!",
+	"name": "KesseractJS",
+	"description": "A maintained fork of the 1.16.5 version of KubeJS",
 	"authors": [
-		"LatvianModder"
+		"LatvianModder",
+		"ZZZank",
+		"Hellish Mods (G_cat)",
+		"MundM2007"
 	],
 	"contact": {
-		"sources": "https://github.com/KubeJS-Mods/KubeJS",
-		"issues": "https://github.com/KubeJS-Mods/KubeJS/issues"
+		"sources": "https://github.com/Hellish-Mods/KesseractJS",
+		"issues": "https://github.com/Hellish-Mods/KesseractJS/issues"
 	},
 	"license": "GNU LGPLv3",
-	"icon": "kubejs_logo.png",
+	"icon": "pack.png",
 	"entrypoints": {
 		"main": [
 			"dev.latvian.kubejs.fabric.KubeJSFabric"
