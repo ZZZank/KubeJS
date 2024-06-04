@@ -1,9 +1,10 @@
 package dev.latvian.kubejs.client;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import dev.latvian.kubejs.KubeJS;
+import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
+import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.script.data.KubeJSResourcePack;
 import dev.latvian.kubejs.util.KubeJSPlugins;
 import net.minecraft.resources.ResourceLocation;
@@ -43,15 +44,27 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		AssetJsonGenerator generator = new AssetJsonGenerator(map);
 		KubeJSPlugins.forEachPlugin(p -> p.generateAssetJsons(generator));
 
+		generateLang(generator);
+	}
+
+	private void generateLang(AssetJsonGenerator generator) {
+		var langEvent = new LangEventJS();
 		Map<String, String> langMap = new HashMap<>();
+
 		KubeJSPlugins.forEachPlugin(p -> p.generateLang(langMap));
+		langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
 
-		JsonObject lang = new JsonObject();
+		//using a special namespace to keep backward equivalence
+		langEvent.get("kubejs_generated", "en_us").addAll(langMap);
 
-		for (Map.Entry<String, String> entry : langMap.entrySet()) {
-			lang.addProperty(entry.getKey(), entry.getValue());
+		for (var entry : langEvent.namespace2lang2entries.entrySet()) {
+			var namespace = entry.getKey();
+			var lang2entries = entry.getValue();
+			for (var e : lang2entries.entrySet()) {
+				var lang = e.getKey();
+				var entries = e.getValue();
+				generator.json(new ResourceLocation(namespace, "lang/" + lang), entries.asJson());
+			}
 		}
-
-		generator.json(new ResourceLocation("kubejs_generated:lang/en_us"), lang);
 	}
 }
