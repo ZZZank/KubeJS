@@ -29,7 +29,7 @@ public interface ItemKJS {
 
 	void setFoodPropertiesKJS(FoodProperties properties);
 
-	void kjs$setItemBuilder(dev.latvian.kubejs.registry.builder.ItemBuilder builder);
+	void kjs$setItemBuilder(dev.latvian.kubejs.registry.builder.item.ItemBuilder builder);
 
-	dev.latvian.kubejs.registry.builder.ItemBuilder kjs$getItemBuilder(dev.latvian.kubejs.registry.builder.ItemBuilder builder);
+	dev.latvian.kubejs.registry.builder.item.ItemBuilder kjs$getItemBuilder(dev.latvian.kubejs.registry.builder.item.ItemBuilder builder);
 }

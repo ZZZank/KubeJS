@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.registry.builder;
+package dev.latvian.kubejs.registry.builder.item;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
