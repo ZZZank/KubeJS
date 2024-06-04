@@ -7,8 +7,11 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
+ * @deprecated
+ * @see dev.latvian.kubejs.registry.BuilderBase
  * @author LatvianModder
  */
+@Deprecated
 public abstract class BuilderBase {
 	public final ResourceLocation id;
 	public String translationKey;
