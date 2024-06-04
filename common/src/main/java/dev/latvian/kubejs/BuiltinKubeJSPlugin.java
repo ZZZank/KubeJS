@@ -202,7 +202,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		new ItemToolTierEventJS().post(KubeJSEvents.ITEM_REGISTRY_TOOL_TIERS);
 		new ItemArmorTierEventJS().post(KubeJSEvents.ITEM_REGISTRY_ARMOR_TIERS);
 
-		for (var registryInfo : RegistryInfo.MAP.values()) {
+		for (var registryInfo : RegistryInfo.WITH_TYPE.values()) {
 			registryInfo.fireRegistryEvent();
 		}
 		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
