@@ -363,7 +363,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	}
 
 	public Registry<T> getVanillaRegistry() {
-		return BuiltInRegistries.REGISTRY.get((ResourceKey) key);
+		return Registry.REGISTRY.get((ResourceKey) key);
 	}
 
 	public Set<Map.Entry<ResourceKey<T>, T>> entrySet() {
@@ -390,12 +390,12 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 			return (T) o;
 		}
 
-		var id = UtilsJS.getMCID(cx, o);
+		var id = UtilsJS.getMCID(o);
 		var value = getValue(id);
 
 		if (value == null) {
 			var npe = new NullPointerException("No such element with id %s in registry %s!".formatted(id, this));
-			ConsoleJS.getCurrent(cx).error("Error while wrapping registry element type!", npe);
+			ConsoleJS.STARTUP.error("Error while wrapping registry element type!", npe);
 			throw npe;
 		}
 
