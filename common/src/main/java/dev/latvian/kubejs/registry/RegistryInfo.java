@@ -76,6 +76,7 @@ import java.util.Set;
  */
 public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>, TypeWrapperFactory<T> {
 	public static final Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+	public static final Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());
 	public static final List<BuilderBase<?>> ALL_BUILDERS = new LinkedList<>();
 
 //	@Info("Platform-agnostic wrapper of minecraft registries, can be used to register content or get objects from the registry")
@@ -213,6 +214,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 
 			defaultType = b;
 		}
+		WITH_TYPE.put(key, this);
 	}
 
 	public void addType(String type, Class<? extends BuilderBase<? extends T>> builderType, BuilderFactory factory) {
@@ -353,7 +355,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 
 	public void fireRegistryEvent() {
 		var event = new RegistryEventJS<>(this);
-		event.post(ScriptType.STARTUP, KubeJSEvents.REGISTRY, key.location().getPath());
+		event.post(ScriptType.STARTUP, key.location().getPath() + KubeJSEvents.REGISTRY_SUFFIX);
 		event.created.forEach(BuilderBase::createAdditionalObjects);
 	}
 }

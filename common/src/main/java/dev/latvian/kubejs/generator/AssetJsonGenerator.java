@@ -38,4 +38,8 @@ public class AssetJsonGenerator extends JsonGenerator {
 		consumer.accept(gen);
 		json(new ResourceLocation(id.getNamespace(), "models/item/" + id.getPath()), gen.toJson());
 	}
+
+	public static ResourceLocation asItemModelLocation(ResourceLocation id) {
+		return new ResourceLocation(id.getNamespace(), "models/item/" + id.getPath());
+	}
 }

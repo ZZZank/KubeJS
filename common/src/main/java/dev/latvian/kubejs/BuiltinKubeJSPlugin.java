@@ -42,9 +42,9 @@ import dev.latvian.kubejs.fluid.FluidWrapper;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.item.ItemBuilder;
-import dev.latvian.kubejs.item.ItemRegistryEventJS;
 import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.item.custom.ArmorItemType;
+import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
 import dev.latvian.kubejs.item.custom.ItemArmorTierEventJS;
 import dev.latvian.kubejs.item.custom.ItemToolTierEventJS;
@@ -71,7 +71,8 @@ import dev.latvian.kubejs.recipe.mod.MATagRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapedArtisanRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapelessArtisanRecipeJS;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.registry.builder.misc.SoundEventBuilder;
+import dev.latvian.kubejs.registry.builder.SoundEventBuilder;
+import dev.latvian.kubejs.registry.builder.item.BasicItemJS2;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
 import dev.latvian.kubejs.script.ScriptType;
@@ -169,6 +170,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.BLOCK.addType("crop", CropBlockBuilder.class, CropBlockBuilder::new);
 //		RegistryInfo.BLOCK.addType("cardinal", HorizontalDirectionalBlockBuilder.class, HorizontalDirectionalBlockBuilder::new);
 		//item
+		RegistryInfo.ITEM.addType("basic", BasicItemJS2.Builder.class, BasicItemJS2.Builder::new);
 //		RegistryInfo.ITEM.addType("basic", BasicItemJS.Builder.class, BasicItemJS.Builder::new);
 //		RegistryInfo.ITEM.addType("sword", SwordItemBuilder.class, SwordItemBuilder::new);
 //		RegistryInfo.ITEM.addType("pickaxe", PickaxeItemBuilder.class, PickaxeItemBuilder::new);
@@ -202,9 +204,11 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		new ItemToolTierEventJS().post(KubeJSEvents.ITEM_REGISTRY_TOOL_TIERS);
 		new ItemArmorTierEventJS().post(KubeJSEvents.ITEM_REGISTRY_ARMOR_TIERS);
 
-		//TODO: future registry events should be posted here
+		for (var registryInfo : RegistryInfo.WITH_TYPE.values()) {
+			registryInfo.fireRegistryEvent();
+		}
 		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
-		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
+//		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
 		new FluidRegistryEventJS().post(KubeJSEvents.FLUID_REGISTRY);
 	}
 

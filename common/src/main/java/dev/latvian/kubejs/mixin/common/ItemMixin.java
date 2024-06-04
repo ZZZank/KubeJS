@@ -24,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ItemMixin implements ItemKJS {
 	@Unique
 	private ItemBuilder itemBuilderKJS;
+	@Unique
+	private dev.latvian.kubejs.registry.builder.item.ItemBuilder kjs$itemBuilder;
 
 	@Override
 	@Nullable
@@ -34,6 +36,14 @@ public abstract class ItemMixin implements ItemKJS {
 	@Override
 	public void setItemBuilderKJS(ItemBuilder b) {
 		itemBuilderKJS = b;
+	}
+
+	public void kjs$setItemBuilder(dev.latvian.kubejs.registry.builder.item.ItemBuilder builder) {
+		kjs$itemBuilder = builder;
+	}
+
+	public dev.latvian.kubejs.registry.builder.item.ItemBuilder kjs$getItemBuilder(dev.latvian.kubejs.registry.builder.item.ItemBuilder builder) {
+		return builder;
 	}
 
 	@Override
