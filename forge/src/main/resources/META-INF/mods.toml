@@ -29,9 +29,9 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.kubejs]]
-modId = "rhino"
+modId = "rhizo"
 mandatory = true
-versionRange = "[1605.1.5-build.73,)"
+versionRange = "[3.0,)"
 ordering = "AFTER"
 side = "BOTH"
 
