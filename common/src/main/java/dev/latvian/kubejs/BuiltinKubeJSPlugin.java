@@ -71,7 +71,7 @@ import dev.latvian.kubejs.recipe.mod.MATagRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapedArtisanRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapelessArtisanRecipeJS;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.registry.builder.misc.SoundEventBuilder;
+import dev.latvian.kubejs.registry.builder.SoundEventBuilder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
 import dev.latvian.kubejs.script.ScriptType;
