@@ -41,6 +41,7 @@ public class ScriptManager {
 	private final ClassFilter classFilter;
 	public boolean firstLoad;
 	private Map<String, Optional<NativeJavaClass>> javaClassCache;
+	public Context context;
 
 	public ScriptManager(ScriptType t, Path p, String e) {
 		type = t;
@@ -107,7 +108,7 @@ public class ScriptManager {
 	}
 
 	public void load() {
-		Context context = Context.enterWithNewFactory();
+		this.context = Context.enterWithNewFactory();
 		context.setClassShutter((fullClassName, type) -> type != ClassShutter.TYPE_CLASS_IN_PACKAGE || isClassAllowed(fullClassName));
 		TypeWrappers typeWrappers = context.getTypeWrappers();
 		// typeWrappers.removeAll();
