@@ -28,4 +28,8 @@ public interface ItemKJS {
 	void setBurnTimeKJS(int i);
 
 	void setFoodPropertiesKJS(FoodProperties properties);
+
+	void kjs$setItemBuilder(dev.latvian.kubejs.registry.builder.ItemBuilder builder);
+
+	dev.latvian.kubejs.registry.builder.ItemBuilder kjs$getItemBuilder(dev.latvian.kubejs.registry.builder.ItemBuilder builder);
 }
