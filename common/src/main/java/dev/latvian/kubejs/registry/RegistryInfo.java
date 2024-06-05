@@ -264,6 +264,10 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		return key.location().toString();
 	}
 
+	public int registerArch() {
+		return registerObjects(this.getArchRegistry()::registerSupplied);
+	}
+
 	public int registerObjects(RegistryCallback<T> function) {
 		if (CommonProperties.get().debugInfo) {
 			if (objects.isEmpty()) {

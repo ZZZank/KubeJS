@@ -27,6 +27,8 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -39,8 +41,12 @@ import org.apache.commons.lang3.tuple.Pair;
 @Mod(KubeJS.MOD_ID)
 public class KubeJSForge {
 	public KubeJSForge() throws Throwable {
-		EventBuses.registerModEventBus(KubeJS.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(KubeJSForge::loadComplete);
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		EventBuses.registerModEventBus(KubeJS.MOD_ID, bus);
+		bus.addListener(KubeJSForge::loadComplete);
+		//bus.addGenericListener(Block.class, EventPriority.LOW, KubeJSForge::initRegistries);
+
 		KubeJS.instance = new KubeJS();
 		KubeJS.instance.setup();
 		IntegrationManager.init();
@@ -63,6 +69,10 @@ public class KubeJSForge {
 
 		CraftingHelper.register(new ResourceLocation("kubejs", "custom_predicate"), CustomPredicateIngredient.SERIALIZER);
 		CraftingHelper.register(new ResourceLocation("kubejs", "ignore_nbt"), IgnoreNBTIngredient.SERIALIZER);
+	}
+
+	private static void initRegistries(RegistryEvent.Register<Block> event) {
+		//KubeJS.LOGGER.info("registering");
 	}
 
 	private static void loadComplete(FMLLoadCompleteEvent event) {
