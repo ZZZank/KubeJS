@@ -15,11 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * @deprecated
- * @see dev.latvian.kubejs.registry.BuilderBase
- * @author LatvianModder
- */
 public abstract class BuilderBase<T> implements Supplier<T> {
 	public final ResourceLocation id;
 	public String translationKey;
