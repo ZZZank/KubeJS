@@ -9,6 +9,8 @@ import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.plugins.jei.info.IngredientInfoRecipe;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 import java.util.Set;
@@ -30,7 +32,7 @@ public class InformationJEIEventJS extends EventJS {
 		recipes.addAll(IngredientInfoRecipe.create(
 				IngredientJS.of(o).getStacks().stream().map(ItemStackJS::getItemStack).collect(Collectors.toList()),
 				VanillaTypes.ITEM,
-				ListJS.orSelf(s).stream().map(String::valueOf).toArray(String[]::new)));
+				ListJS.orSelf(s).stream().map(String::valueOf).map(TranslatableComponent::new).toArray(Component[]::new)));
 	}
 
 	public <T> void addForType(IIngredientType<T> type, Object o, Object s) {
@@ -41,7 +43,7 @@ public class InformationJEIEventJS extends EventJS {
 						.stream()
 						.filter(t -> targets.contains(helper.getWildcardId(t)))
 						.collect(Collectors.toList()),
-				type, ListJS.orSelf(s).stream().map(String::valueOf).toArray(String[]::new)));
+				type, ListJS.orSelf(s).stream().map(String::valueOf).map(TranslatableComponent::new).toArray(Component[]::new)));
 	}
 
 }

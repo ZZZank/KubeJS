@@ -16,6 +16,7 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.plugins.jei.info.IngredientInfoRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,12 @@ public class JEIPlugin implements IModPlugin {
 	public IJeiRuntime runtime;
 
 	@Override
-	public ResourceLocation getPluginUid() {
+	public @NotNull ResourceLocation getPluginUid() {
 		return ID;
 	}
 
 	@Override
-	public void onRuntimeAvailable(IJeiRuntime r) {
+	public void onRuntimeAvailable(@NotNull IJeiRuntime r) {
 		runtime = r;
 		BuiltinKubeJSPlugin.GLOBAL.put("jeiRuntime", runtime);
 
@@ -60,7 +61,7 @@ public class JEIPlugin implements IModPlugin {
 	}
 
 	@Override
-	public void registerItemSubtypes(ISubtypeRegistration registration) {
+	public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
 		new JEISubtypesEventJS(registration).post(ScriptType.CLIENT, JEIIntegration.JEI_SUBTYPES);
 	}
 
