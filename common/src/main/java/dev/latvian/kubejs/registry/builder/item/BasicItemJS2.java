@@ -45,8 +45,8 @@ public class BasicItemJS2 extends Item {
 
 	@Override
 	public Component getName(ItemStack itemStack) {
-		if (itemBuilder.displayName != null && itemBuilder.formattedDisplayName) {
-			return itemBuilder.displayName;
+		if (itemBuilder.display != null && itemBuilder.formattedDisplayName) {
+			return itemBuilder.display;
 		}
 
 		return super.getName(itemStack);

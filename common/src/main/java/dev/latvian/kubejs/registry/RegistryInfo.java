@@ -1,5 +1,7 @@
 package dev.latvian.kubejs.registry;
 
+import dev.latvian.kubejs.util.BuilderBase;
+
 import com.mojang.serialization.Codec;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;

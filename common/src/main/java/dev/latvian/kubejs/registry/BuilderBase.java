@@ -4,6 +4,7 @@ import dev.latvian.kubejs.client.LangEventJS;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.util.UtilsJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,9 +15,9 @@ import java.util.function.Supplier;
 
 public abstract class BuilderBase<T> implements Supplier<T> {
 	public final ResourceLocation id;
-	protected T object;
 	public String translationKey;
-	public Component displayName;
+	public Component display;
+	protected T object;
 	public boolean formattedDisplayName;
 	public transient boolean dummyBuilder;
 	public transient Set<ResourceLocation> defaultTags;
@@ -25,7 +26,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		id = i;
 		object = null;
 		translationKey = "";
-		displayName = null;
+		display = null;
 		formattedDisplayName = false;
 		dummyBuilder = false;
 		defaultTags = new HashSet<>();
@@ -59,41 +60,41 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		return getRegistryType().languageKeyPrefix;
 	}
 
-//	@Info("""
-//		Sets the translation key for this object, e.g. `block.minecraft.stone`.
-//		""")
+	@JSInfo("""
+		Sets the translation key for this object, e.g. `block.minecraft.stone`.
+		""")
 	public BuilderBase<T> translationKey(String key) {
 		translationKey = key;
 		return this;
 	}
 
-//	@Info("""
-//		Sets the display name for this object, e.g. `Stone`.
-//
-//		This will be overridden by a lang file if it exists.
-//		""")
+	@JSInfo("""
+		Sets the display name for this object, e.g. `Stone`.
+
+		This will be overridden by a lang file if it exists.
+		""")
 	public BuilderBase<T> displayName(Component name) {
-		displayName = name;
+		display = name;
 		return this;
 	}
 
-//	@Info("""
-//		Makes displayName() override language files.
-//		""")
+	@JSInfo("""
+		Makes displayName() override language files.
+		""")
 	public BuilderBase<T> formattedDisplayName() {
 		formattedDisplayName = true;
 		return this;
 	}
 
-//	@Info("""
-//			Combined method of formattedDisplayName().displayName(name).""")
+	@JSInfo("""
+			Combined method of formattedDisplayName().displayName(name).""")
 	public BuilderBase<T> formattedDisplayName(Component name) {
 		return formattedDisplayName().displayName(name);
 	}
 
-//	@Info("""
-//		Adds a tag to this object, e.g. `minecraft:stone`.
-//		""")
+	@JSInfo("""
+		Adds a tag to this object, e.g. `minecraft:stone`.
+		""")
 	public BuilderBase<T> tag(ResourceLocation tag) {
 		defaultTags.add(tag);
 		getRegistryType().hasDefaultTags = true;
@@ -118,14 +119,13 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		if (translationKey.isEmpty()) {
 			return Util.makeDescriptionId(getTranslationKeyGroup(), id);
 		}
-
 		return translationKey;
 	}
 
 	public void generateLang(LangEventJS event) {
-		var name = displayName  == null
+		var name = display == null
 				? UtilsJS.convertSnakeCaseToCamelCase(id.getPath())
-				: displayName.getString();
+				: display.getString();
 		event.get(id.getNamespace(), "en_us").add(getBuilderTranslationKey(), name);
 	}
 

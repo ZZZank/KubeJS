@@ -3,6 +3,7 @@ package dev.latvian.kubejs.registry;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.StartupEventJS;
 import dev.latvian.kubejs.util.UtilsJS;
+import dev.latvian.kubejs.util.BuilderBase;
 
 import java.util.ArrayList;
 import java.util.List;
