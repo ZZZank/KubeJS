@@ -6,10 +6,13 @@ import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.item.custom.ArmorItemType;
+import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
 import dev.latvian.kubejs.item.custom.ItemType;
+import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ConsoleJS;
+import dev.latvian.kubejs.util.UtilsJS;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.network.chat.Component;
@@ -36,7 +39,7 @@ import java.util.function.Function;
 /**
  * @author LatvianModder
  */
-public class ItemBuilder extends BuilderBase {
+public class ItemBuilder extends BuilderBase<Item> {
 	public static final Map<String, Tier> TOOL_TIERS = new HashMap<>();
 	public static final Map<String, ArmorMaterial> ARMOR_TIERS = new HashMap<>();
 
@@ -83,7 +86,11 @@ public class ItemBuilder extends BuilderBase {
 	public JsonObject modelJson;
 
 	public ItemBuilder(String i) {
-		super(i);
+		this(UtilsJS.getMCID(KubeJS.appendModId(i)));
+	}
+
+	public ItemBuilder(ResourceLocation id) {
+		super(id);
 		type = BasicItemType.INSTANCE;
 		maxStackSize = 64;
 		maxDamage = 0;
@@ -106,6 +113,16 @@ public class ItemBuilder extends BuilderBase {
 		armorTier = ArmorMaterials.IRON;
 		displayName = "";
 		modelJson = null;
+	}
+
+	@Override
+	public RegistryInfo getRegistryType() {
+		return RegistryInfo.ITEM;
+	}
+
+	@Override
+	public Item createObject() {
+		return new BasicItemJS(this);
 	}
 
 	@Override
