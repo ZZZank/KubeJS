@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
+import dev.latvian.kubejs.item.ItemRegistryEventJS;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.UtilsJS;
@@ -70,6 +71,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * @author ZZZank
@@ -108,7 +110,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	public static final RegistryInfo<Block> BLOCK = of(Registry.BLOCK, Block.class);
 	public static final RegistryInfo<Enchantment> ENCHANTMENT = of(Registry.ENCHANTMENT, Enchantment.class);
 	public static final RegistryInfo<EntityType> ENTITY_TYPE = of(Registry.ENTITY_TYPE, EntityType.class);
-	public static final RegistryInfo<Item> ITEM = of(Registry.ITEM, Item.class).noAutoWrap();
+	public static final RegistryInfo<Item> ITEM = of(Registry.ITEM, Item.class).noAutoWrap().customRegistryEvent(ItemRegistryEventJS::new);
 	public static final RegistryInfo<Potion> POTION = of(Registry.POTION, Potion.class);
 	public static final RegistryInfo<ParticleType> PARTICLE_TYPE = of(Registry.PARTICLE_TYPE, ParticleType.class);
 	public static final RegistryInfo<BlockEntityType> BLOCK_ENTITY_TYPE = of(Registry.BLOCK_ENTITY_TYPE, BlockEntityType.class);
@@ -177,6 +179,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	public boolean autoWrap;
 	private me.shedaniel.architectury.registry.Registry<T> archRegistry;
 	public String languageKeyPrefix;
+	public Supplier<RegistryEventJS<T>> customRegEvent;
 
 	private RegistryInfo(ResourceKey<? extends Registry<T>> key, Class<T> objectBaseClass) {
 		this.key = key;
@@ -186,10 +189,16 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		this.bypassServerOnly = false;
 		this.autoWrap = objectBaseClass != Codec.class && objectBaseClass != ResourceLocation.class && objectBaseClass != String.class;
 		this.languageKeyPrefix = key.location().getPath().replace('/', '.');
+		this.customRegEvent = null;
 	}
 
 	public RegistryInfo<T> bypassServerOnly() {
 		this.bypassServerOnly = true;
+		return this;
+	}
+
+	public RegistryInfo<T> customRegistryEvent(Supplier<RegistryEventJS<T>> supplier) {
+		this.customRegEvent = supplier;
 		return this;
 	}
 
@@ -225,11 +234,9 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		if (builder == null) {
 			throw new IllegalArgumentException("Can't add null builder in registry '" + key.location() + "'!");
 		}
-
 		if (CommonProperties.get().debugInfo) {
 			ConsoleJS.STARTUP.info("~ " + key.location() + " | " + builder.id);
 		}
-
 		if (objects.containsKey(builder.id)) {
 			throw new IllegalArgumentException("Duplicate key '" + builder.id + "' in registry '" + key.location() + "'!");
 		}
@@ -358,7 +365,9 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	}
 
 	public void fireRegistryEvent() {
-		var event = new RegistryEventJS<>(this);
+		var event = customRegEvent == null
+				?new RegistryEventJS<>(this)
+				:customRegEvent.get();
 		event.post(ScriptType.STARTUP, key.location().getPath() + KubeJSEvents.REGISTRY_SUFFIX);
 		event.created.forEach(BuilderBase::createAdditionalObjects);
 	}
