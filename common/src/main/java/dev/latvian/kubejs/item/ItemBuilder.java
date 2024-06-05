@@ -36,9 +36,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * @author LatvianModder
- */
 public class ItemBuilder extends BuilderBase<Item> {
 	public static final Map<String, Tier> TOOL_TIERS = new HashMap<>();
 	public static final Map<String, ArmorMaterial> ARMOR_TIERS = new HashMap<>();
@@ -47,12 +44,12 @@ public class ItemBuilder extends BuilderBase<Item> {
 		for (Tier tier : Tiers.values()) {
 			TOOL_TIERS.put(tier.toString().toLowerCase(), tier);
 		}
-
 		for (ArmorMaterial tier : ArmorMaterials.values()) {
 			ARMOR_TIERS.put(tier.toString().toLowerCase(), tier);
 		}
 	}
 
+	public transient final List<Component> tooltip;
 	public transient ItemType type;
 	public transient int maxStackSize;
 	public transient int maxDamage;
@@ -65,7 +62,6 @@ public class ItemBuilder extends BuilderBase<Item> {
 	public transient Float attackSpeed;
 	public transient RarityWrapper rarity;
 	public transient boolean glow;
-	public transient final List<Component> tooltip;
 	public transient CreativeModeTab group;
 	public transient Int2IntOpenHashMap color;
 	public String texture;
@@ -113,6 +109,11 @@ public class ItemBuilder extends BuilderBase<Item> {
 		armorTier = ArmorMaterials.IRON;
 		displayName = "";
 		modelJson = null;
+	}
+
+	@ExpectPlatform
+	private static void appendToolType(Item.Properties properties, ToolType type, Integer level) {
+		throw new AssertionError();
 	}
 
 	@Override
@@ -298,10 +299,5 @@ public class ItemBuilder extends BuilderBase<Item> {
 		}
 
 		return properties;
-	}
-
-	@ExpectPlatform
-	private static void appendToolType(Item.Properties properties, ToolType type, Integer level) {
-		throw new AssertionError();
 	}
 }
