@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.BlockProperties;
 import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
@@ -336,7 +337,7 @@ public class BlockBuilder extends BuilderBase {
 
 	public BlockBuilder tagBlockAndItem(String tag) {
 		defaultTags.add(tag);
-		itemBuilder.defaultTags.add(tag);
+		itemBuilder.tags.add(ResourceLocation.tryParse(tag));
 		return this;
 	}
 

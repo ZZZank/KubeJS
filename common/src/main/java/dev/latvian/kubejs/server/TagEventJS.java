@@ -381,14 +381,14 @@ public class TagEventJS<T> extends EventJS {
 
 		if (type.equals("items")) {
 			for (ItemBuilder item : KubeJSObjects.ITEMS.values()) {
-				for (String s : item.defaultTags) {
-					add(new ResourceLocation(s), item.id);
+				for (ResourceLocation s : item.tags) {
+					add(s, item.id);
 				}
 
 				for (BlockBuilder block : KubeJSObjects.BLOCKS.values()) {
 					if (block.itemBuilder != null) {
-						for (String s : block.itemBuilder.defaultTags) {
-							add(new ResourceLocation(s), block.itemBuilder.id);
+						for (ResourceLocation s : block.itemBuilder.tags) {
+							add(s, block.itemBuilder.id);
 						}
 					}
 				}

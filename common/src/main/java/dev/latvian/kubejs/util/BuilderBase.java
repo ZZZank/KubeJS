@@ -23,7 +23,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	protected T object;
 	public boolean formattedDisplayName;
 	public transient boolean dummyBuilder;
-	public transient Set<ResourceLocation> defaultTags;
+	public transient Set<ResourceLocation> tags;
 
 	public BuilderBase(ResourceLocation i) {
 		id = i;
@@ -32,7 +32,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		display = null;
 		formattedDisplayName = false;
 		dummyBuilder = false;
-		defaultTags = new HashSet<>();
+		tags = new HashSet<>();
 	}
 
 	public BuilderBase(String s) {
@@ -114,8 +114,8 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	@JSInfo("""
 		Adds a tag to this object, e.g. `minecraft:stone`.
 		""")
-	public BuilderBase<T> tag(ResourceLocation tag) {
-		defaultTags.add(tag);
+	public BuilderBase<T> addTag(ResourceLocation tag) {
+		tags.add(tag);
 		getRegistryType().hasDefaultTags = true;
 		return this;
 	}

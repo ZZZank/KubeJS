@@ -1,10 +1,15 @@
 package dev.latvian.kubejs.item;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.bindings.RarityWrapper;
+import dev.latvian.kubejs.core.ItemKJS;
+import dev.latvian.kubejs.generator.AssetJsonGenerator;
+import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.item.custom.ArmorItemType;
 import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
@@ -12,29 +17,40 @@ import dev.latvian.kubejs.item.custom.ItemType;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ConsoleJS;
-import dev.latvian.kubejs.util.UtilsJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
+import dev.latvian.mods.rhino.mod.util.color.Color;
+import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
+import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public class ItemBuilder extends BuilderBase<Item> {
 	public static final Map<String, Tier> TOOL_TIERS = new HashMap<>();
@@ -64,60 +80,99 @@ public class ItemBuilder extends BuilderBase<Item> {
 	public transient boolean glow;
 	public transient CreativeModeTab group;
 	public transient Int2IntOpenHashMap color;
+	public transient boolean fireResistant;
+	@Nullable
+	public transient ItemTintFunction tint;
+	public transient Function<ItemStackJS, Color> barColor;
+	public transient ToIntFunction<ItemStackJS> barWidth;
+	public transient ItemBuilder.NameCallback nameGetter;
+	public transient Multimap<ResourceLocation, AttributeModifier> attributes;
+	public transient UseAnim anim;
+	public transient ToIntFunction<ItemStackJS> useDuration;
+	public transient ItemBuilder.UseCallback use;
+	public transient ItemBuilder.FinishUsingCallback finishUsing;
+	public transient ItemBuilder.ReleaseUsingCallback releaseUsing;
 	public String texture;
 	public String parentModel;
 	public transient FoodBuilder foodBuilder;
+	/**
+	 * @see BuilderBase#tags
+	 */
+	@Deprecated
 	public transient Set<String> defaultTags;
 
-	// Tools //
+	public JsonObject textureJson;
+
+	// Tools, kept for backward compatibility
 	public transient Tier toolTier;
 	public transient float attackDamageBaseline;
 	public transient float attackSpeedBaseline;
 
-	// Armor //
+	// Armor, kept for backward compatibility
 	public transient ArmorMaterial armorTier;
-
-	public transient Item item;
 
 	public JsonObject modelJson;
 
-	public ItemBuilder(String i) {
-		this(UtilsJS.getMCID(KubeJS.appendModId(i)));
-	}
-
-	public ItemBuilder(ResourceLocation id) {
-		super(id);
-		type = BasicItemType.INSTANCE;
+	public ItemBuilder(ResourceLocation i) {
+		super(i);
 		maxStackSize = 64;
 		maxDamage = 0;
 		burnTime = 0;
 		containerItem = "minecraft:air";
 		subtypes = null;
-		tools = new HashMap<>();
-		miningSpeed = 1.0F;
 		rarity = RarityWrapper.COMMON;
 		glow = false;
 		tooltip = new ArrayList<>();
-		group = KubeJS.tab;
-		color = new Int2IntOpenHashMap();
-		color.defaultReturnValue(0xFFFFFFFF);
-		texture = "";
+		textureJson = new JsonObject();
 		parentModel = "";
 		foodBuilder = null;
-		defaultTags = new HashSet<>();
-		toolTier = Tiers.IRON;
-		armorTier = ArmorMaterials.IRON;
-		displayName = "";
 		modelJson = null;
+		attributes = ArrayListMultimap.create();
+		anim = null;
+		useDuration = null;
+		use = null;
+		finishUsing = null;
+		releaseUsing = null;
+		fireResistant = false;
 	}
+
+	public static ArmorMaterial toArmorMaterial(Object o) {
+		if (o instanceof ArmorMaterial armorMaterial) {
+			return armorMaterial;
+		}
+		String asString = String.valueOf(o);
+		ArmorMaterial armorMaterial = ItemBuilder.ARMOR_TIERS.get(asString);
+		if (armorMaterial != null) {
+			return armorMaterial;
+		}
+		String withKube = KubeJS.appendModId(asString);
+		return ItemBuilder.ARMOR_TIERS.getOrDefault(withKube, ArmorMaterials.IRON);
+	}
+
 
 	@ExpectPlatform
 	private static void appendToolType(Item.Properties properties, ToolType type, Integer level) {
 		throw new AssertionError();
 	}
 
+	public static Tier toToolTier(Object o) {
+		if (o instanceof Tier tier) {
+			return tier;
+		}
+
+		String asString = String.valueOf(o);
+
+		Tier toolTier = ItemBuilder.TOOL_TIERS.get(asString);
+		if (toolTier != null) {
+			return toolTier;
+		}
+
+		String withKube = KubeJS.appendModId(asString);
+		return ItemBuilder.TOOL_TIERS.getOrDefault(withKube, Tiers.IRON);
+	}
+
 	@Override
-	public RegistryInfo getRegistryType() {
+	public final RegistryInfo getRegistryType() {
 		return RegistryInfo.ITEM;
 	}
 
@@ -127,8 +182,9 @@ public class ItemBuilder extends BuilderBase<Item> {
 	}
 
 	@Override
-	public String getBuilderType() {
-		return "item";
+	public Item transformObject(Item obj) {
+		((ItemKJS) obj).setItemBuilderKJS(this);
+		return obj;
 	}
 
 	public ItemBuilder type(ItemType t) {
@@ -149,30 +205,67 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return this;
 	}
 
+	@Override
+	public void generateDataJsons(DataJsonGenerator generator) {
+	}
+
+	@Override
+	public void generateAssetJsons(AssetJsonGenerator generator) {
+		if (modelJson != null) {
+			generator.json(AssetJsonGenerator.asItemModelLocation(id), modelJson);
+			return;
+		}
+
+
+		generator.itemModel(id, m -> {
+			if (!parentModel.isEmpty()) {
+				m.parent(parentModel);
+			} else {
+				m.parent("minecraft:item/generated");
+			}
+
+			if (textureJson.size() == 0) {
+				texture(newID("item/", "").toString());
+			}
+
+			m.textures(textureJson);
+		});
+	}
+
+	@JSInfo("Sets the item's max stack size. Default is 64.")
 	public ItemBuilder maxStackSize(int v) {
 		maxStackSize = v;
 		return this;
 	}
 
+	@JSInfo("Makes the item not stackable, equivalent to setting the item's max stack size to 1.")
 	public ItemBuilder unstackable() {
 		return maxStackSize(1);
 	}
 
+	@JSInfo("Sets the item's max damage. Default is 0 (No durability).")
 	public ItemBuilder maxDamage(int v) {
 		maxDamage = v;
 		return this;
 	}
 
+	@JSInfo("Sets the item's burn time. Default is 0 (Not a fuel).")
 	public ItemBuilder burnTime(int v) {
 		burnTime = v;
 		return this;
 	}
 
+	@JSInfo("Sets the item's container item, e.g. a bucket for a milk bucket.")
 	public ItemBuilder containerItem(String id) {
 		containerItem = id;
 		return this;
 	}
 
+	@JSInfo("""
+			Adds subtypes to the item. The function should return a collection of item stacks, each with a different subtype.
+
+			Each subtype will appear as a separate item in JEI and the creative inventory.
+			""")
 	public ItemBuilder subtypes(Function<ItemStackJS, Collection<ItemStackJS>> fn) {
 		subtypes = fn;
 		return this;
@@ -201,16 +294,19 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return this;
 	}
 
+	@JSInfo("Sets the item's rarity.")
 	public ItemBuilder rarity(RarityWrapper v) {
 		rarity = v;
 		return this;
 	}
 
+	@JSInfo("Makes the item glow like enchanted, even if it's not enchanted.")
 	public ItemBuilder glow(boolean v) {
 		glow = v;
 		return this;
 	}
 
+	@JSInfo("Adds a tooltip to the item.")
 	public ItemBuilder tooltip(Component text) {
 		tooltip.add(text);
 		return this;
@@ -223,25 +319,87 @@ public class ItemBuilder extends BuilderBase<Item> {
 				return this;
 			}
 		}
-
 		return this;
 	}
 
+	@JSInfo("use `tint(...)` instead")
+	@Deprecated
 	public ItemBuilder color(int index, int c) {
-		color.put(index, 0xFF000000 | c);
+		return tint(index, new ItemTintFunction.Fixed(new SimpleColor(c)));
+	}
+
+	@JSInfo("Colorizes item's texture of the given index. Index is used when you have multiple layers, e.g. a crushed ore (of rock + ore).")
+	public ItemBuilder tint(int index, ItemTintFunction color) {
+		if (!(tint instanceof ItemTintFunction.Mapped)) {
+			tint = new ItemTintFunction.Mapped();
+		}
+		((ItemTintFunction.Mapped) tint).map.put(index, color);
 		return this;
 	}
 
+	@JSInfo("Colorizes item's texture of the given index. Useful for coloring items, like GT ores ore dusts.")
+	public ItemBuilder tint(ItemTintFunction callback) {
+		tint = callback;
+		return this;
+	}
+
+	@JSInfo("Sets the item's texture (layer0).")
 	public ItemBuilder texture(String tex) {
-		texture = tex;
+		textureJson.addProperty("layer0", tex);
 		return this;
 	}
 
+	@JSInfo("Sets the item's texture by given key.")
+	public ItemBuilder texture(String key, String tex) {
+		textureJson.addProperty(key, tex);
+		return this;
+	}
+
+	@JSInfo("Directlys set the item's texture json.")
+	public ItemBuilder textureJson(JsonObject json) {
+		textureJson = json;
+		return this;
+	}
+
+	@JSInfo("Directly set the item's model json.")
+	public ItemBuilder modelJson(JsonObject json) {
+		modelJson = json;
+		return this;
+	}
+
+	@JSInfo("Sets the item's model (parent).")
 	public ItemBuilder parentModel(String m) {
 		parentModel = m;
 		return this;
 	}
 
+	@JSInfo("Determines the color of the item's durability bar. Defaulted to vanilla behavior.")
+	public ItemBuilder barColor(Function<ItemStackJS, Color> barColor) {
+		this.barColor = barColor;
+		return this;
+	}
+
+	@JSInfo("""
+			Determines the width of the item's durability bar. Defaulted to vanilla behavior.
+
+			The function should return a value between 0 and 13 (max width of the bar).
+			""")
+	public ItemBuilder barWidth(ToIntFunction<ItemStackJS> barWidth) {
+		this.barWidth = barWidth;
+		return this;
+	}
+
+	@JSInfo("""
+			Sets the item's name dynamically.
+			""")
+	public ItemBuilder name(ItemBuilder.NameCallback name) {
+		this.nameGetter = name;
+		return this;
+	}
+
+	@JSInfo("""
+			Set the food properties of the item.
+			""")
 	public ItemBuilder food(Consumer<FoodBuilder> b) {
 		foodBuilder = new FoodBuilder();
 		b.accept(foodBuilder);
@@ -267,12 +425,23 @@ public class ItemBuilder extends BuilderBase<Item> {
 	}
 
 	public ItemBuilder tag(String tag) {
-		defaultTags.add(tag);
+		tags.add(ResourceLocation.tryParse(tag));
 		return this;
 	}
 
+	@JSInfo("Makes the item fire resistant like netherite tools (or not).")
+	public ItemBuilder fireResistant(boolean isFireResistant) {
+		fireResistant = isFireResistant;
+		return this;
+	}
+
+	@JSInfo("Makes the item fire resistant like netherite tools.")
+	public ItemBuilder fireResistant() {
+		return fireResistant(true);
+	}
+
 	public Item.Properties createItemProperties() {
-		Item.Properties properties = new Item.Properties();
+		var properties = new KubeJSItemProperties(this);
 
 		properties.tab(group);
 
@@ -298,6 +467,98 @@ public class ItemBuilder extends BuilderBase<Item> {
 			properties.food(foodBuilder.build());
 		}
 
+		if (fireResistant) {
+			properties.fireResistant();
+		}
+
 		return properties;
+	}
+
+	@JSInfo(value = """
+			Adds an attribute modifier to the item.
+
+			An attribute modifier is something like a damage boost or a speed boost.
+			On tools, they're applied when the item is held, on armor, they're
+			applied when the item is worn.
+			"""
+//			, params = {
+//					@JSParam(rename = "attribute", value = "The resource location of the attribute, e.g. 'generic.attack_damage'"),
+//					@JSParam(rename = "identifier", value = "A unique identifier for the modifier. Modifiers are considered the same if they have the same identifier."),
+//					@JSParam(rename = "d", value = "The amount of the modifier."), @JSParam(rename = "operation", value = "The operation to apply the modifier with. Can be ADDITION, MULTIPLY_BASE, or MULTIPLY_TOTAL.")}
+	)
+	public ItemBuilder modifyAttribute(ResourceLocation attribute, String identifier, double d, AttributeModifier.Operation operation) {
+		attributes.put(attribute, new AttributeModifier(new UUID(identifier.hashCode(), identifier.hashCode()), identifier, d, operation));
+		return this;
+	}
+
+	@JSInfo("Determines the animation of the item when used, e.g. eating food.")
+	public ItemBuilder useAnimation(UseAnim animation) {
+		this.anim = animation;
+		return this;
+	}
+
+	@JSInfo("""
+			The duration when the item is used.
+
+			For example, when eating food, this is the time it takes to eat the food.
+			This can change the eating speed, or be used for other things (like making a custom bow).
+			""")
+	public ItemBuilder useDuration(ToIntFunction<ItemStackJS> useDuration) {
+		this.useDuration = useDuration;
+		return this;
+	}
+
+	@JSInfo("""
+			Determines if player will start using the item.
+
+			For example, when eating food, returning true will make the player start eating the food.
+			""")
+	public ItemBuilder use(ItemBuilder.UseCallback use) {
+		this.use = use;
+		return this;
+	}
+
+	@JSInfo("""
+			When players finish using the item.
+
+			This is called only when `useDuration` ticks have passed.
+
+			For example, when eating food, this is called when the player has finished eating the food, so hunger is restored.
+			""")
+	public ItemBuilder finishUsing(ItemBuilder.FinishUsingCallback finishUsing) {
+		this.finishUsing = finishUsing;
+		return this;
+	}
+
+	@JSInfo("""
+			When players did not finish using the item but released the right mouse button halfway through.
+
+			An example is the bow, where the arrow is shot when the player releases the right mouse button.
+
+			To ensure the bow won't finish using, Minecraft sets the `useDuration` to a very high number (1h).
+			""")
+	public ItemBuilder releaseUsing(ItemBuilder.ReleaseUsingCallback releaseUsing) {
+		this.releaseUsing = releaseUsing;
+		return this;
+	}
+
+	@FunctionalInterface
+	public interface UseCallback {
+		boolean use(Level level, Player player, InteractionHand interactionHand);
+	}
+
+	@FunctionalInterface
+	public interface FinishUsingCallback {
+		ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity);
+	}
+
+	@FunctionalInterface
+	public interface ReleaseUsingCallback {
+		void releaseUsing(ItemStack itemStack, Level level, LivingEntity user, int tick);
+	}
+
+	@FunctionalInterface
+	public interface NameCallback {
+		Component apply(ItemStack itemStack);
 	}
 }
