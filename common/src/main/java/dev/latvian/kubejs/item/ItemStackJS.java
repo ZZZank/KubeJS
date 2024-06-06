@@ -305,14 +305,14 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 
 		if (o == null || o == ItemStack.EMPTY || o == Items.AIR) {
 			return EMPTY;
+		} else if (o instanceof ItemStack stack) {
+			return stack.isEmpty() ? EMPTY : new ItemStackJS(stack);
 		} else if (o instanceof ItemStackJS) {
 			return (ItemStackJS) o;
 		} else if (o instanceof FluidStackJS) {
 			return new DummyFluidItemStackJS((FluidStackJS) o);
 		} else if (o instanceof IngredientJS) {
 			return ((IngredientJS) o).getFirst();
-		} else if (o instanceof ItemStack stack) {
-			return stack.isEmpty() ? EMPTY : new ItemStackJS(stack);
 		} else if (o instanceof ResourceLocation) {
 			Item item = KubeJSRegistries.items().get((ResourceLocation) o);
 

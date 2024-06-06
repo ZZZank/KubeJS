@@ -3,6 +3,7 @@ package dev.latvian.kubejs.mixin.common;
 import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.item.ItemBuilder;
+import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.mods.rhino.util.RemapForJS;
 import me.shedaniel.architectury.registry.fuel.FuelRegistry;
 import net.minecraft.network.chat.Component;
@@ -97,31 +98,10 @@ public abstract class ItemMixin implements ItemKJS {
 		}
 	}
 
-	@Inject(method = "isBarVisible", at = @At("HEAD"), cancellable = true)
-	private void isBarVisible(ItemStack stack, CallbackInfoReturnable<Boolean> ci) {
-		if (itemBuilderKJS != null && itemBuilderKJS.barWidth != null && itemBuilderKJS.barWidth.applyAsInt(stack) <= Item.MAX_BAR_WIDTH) {
-			ci.setReturnValue(true);
-		}
-	}
-
-	@Inject(method = "getBarWidth", at = @At("HEAD"), cancellable = true)
-	private void getBarWidth(ItemStack stack, CallbackInfoReturnable<Integer> ci) {
-		if (itemBuilderKJS != null && itemBuilderKJS.barWidth != null) {
-			ci.setReturnValue(itemBuilderKJS.barWidth.applyAsInt(stack));
-		}
-	}
-
-	@Inject(method = "getBarColor", at = @At("HEAD"), cancellable = true)
-	private void getBarColor(ItemStack stack, CallbackInfoReturnable<Integer> ci) {
-		if (itemBuilderKJS != null && itemBuilderKJS.barColor != null) {
-			ci.setReturnValue(itemBuilderKJS.barColor.apply(stack).getRgbJS());
-		}
-	}
-
 	@Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
 	private void getUseDuration(ItemStack itemStack, CallbackInfoReturnable<Integer> ci) {
 		if (itemBuilderKJS != null && itemBuilderKJS.useDuration != null) {
-			ci.setReturnValue(itemBuilderKJS.useDuration.applyAsInt(itemStack));
+			ci.setReturnValue(itemBuilderKJS.useDuration.applyAsInt(new ItemStackJS(itemStack)));
 		}
 	}
 
@@ -140,11 +120,12 @@ public abstract class ItemMixin implements ItemKJS {
 	}
 
 	@Inject(method = "use", at = @At("HEAD"), cancellable = true)
-	private void use(Level level, Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
+	private void use(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
 		if (itemBuilderKJS != null && itemBuilderKJS.use != null) {
-			ItemStack itemStack = player.getItemInHand(interactionHand);
-			if (itemBuilderKJS.use.use(level, player, interactionHand)) {
-				ci.setReturnValue(ItemUtils.startUsingInstantly(level, player, interactionHand));
+			ItemStack itemStack = player.getItemInHand(hand);
+			if (itemBuilderKJS.use.use(level, player, hand)) {
+				player.startUsingItem(hand);
+				ci.setReturnValue(InteractionResultHolder.consume(player.getItemInHand(hand)));
 			} else {
 				ci.setReturnValue(InteractionResultHolder.fail(itemStack));
 			}

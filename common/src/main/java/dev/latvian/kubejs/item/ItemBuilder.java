@@ -9,7 +9,6 @@ import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
-import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.item.custom.ArmorItemType;
 import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
@@ -18,9 +17,7 @@ import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
-import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
-import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.network.chat.Component;
@@ -83,8 +80,6 @@ public class ItemBuilder extends BuilderBase<Item> {
 	public transient boolean fireResistant;
 	@Nullable
 	public transient ItemTintFunction tint;
-	public transient Function<ItemStackJS, Color> barColor;
-	public transient ToIntFunction<ItemStackJS> barWidth;
 	public transient ItemBuilder.NameCallback nameGetter;
 	public transient Multimap<ResourceLocation, AttributeModifier> attributes;
 	public transient UseAnim anim;
@@ -100,6 +95,11 @@ public class ItemBuilder extends BuilderBase<Item> {
 	 */
 	@Deprecated
 	public transient Set<String> defaultTags;
+	/**
+	 * @see BuilderBase#object
+	 */
+	@Deprecated
+	public Item item;
 
 	public JsonObject textureJson;
 
@@ -178,7 +178,9 @@ public class ItemBuilder extends BuilderBase<Item> {
 
 	@Override
 	public Item createObject() {
-		return new BasicItemJS(this);
+		object = new BasicItemJS(this);
+		item = object;
+		return object;
 	}
 
 	@Override
@@ -206,17 +208,11 @@ public class ItemBuilder extends BuilderBase<Item> {
 	}
 
 	@Override
-	public void generateDataJsons(DataJsonGenerator generator) {
-	}
-
-	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
 		if (modelJson != null) {
 			generator.json(AssetJsonGenerator.asItemModelLocation(id), modelJson);
 			return;
 		}
-
-
 		generator.itemModel(id, m -> {
 			if (!parentModel.isEmpty()) {
 				m.parent(parentModel);
@@ -370,22 +366,6 @@ public class ItemBuilder extends BuilderBase<Item> {
 	@JSInfo("Sets the item's model (parent).")
 	public ItemBuilder parentModel(String m) {
 		parentModel = m;
-		return this;
-	}
-
-	@JSInfo("Determines the color of the item's durability bar. Defaulted to vanilla behavior.")
-	public ItemBuilder barColor(Function<ItemStackJS, Color> barColor) {
-		this.barColor = barColor;
-		return this;
-	}
-
-	@JSInfo("""
-			Determines the width of the item's durability bar. Defaulted to vanilla behavior.
-
-			The function should return a value between 0 and 13 (max width of the bar).
-			""")
-	public ItemBuilder barWidth(ToIntFunction<ItemStackJS> barWidth) {
-		this.barWidth = barWidth;
 		return this;
 	}
 
