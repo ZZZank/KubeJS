@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.EventJS;
 import dev.latvian.kubejs.item.ItemStackJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -50,7 +51,12 @@ public class LangEventJS extends EventJS {
 			return obj;
 		}
 
-		public static void ensureValid(String key, String text) {
+		@JSInfo("`{namespace}:lang/{lang}`")
+		public ResourceLocation path() {
+			return new ResourceLocation(namespace, "lang/" + lang);
+		}
+
+		static void ensureValid(String key, String text) {
 			if (key == null || text == null || key.trim().isEmpty()) {
 				throw new IllegalArgumentException("Invalid key or value: [" + key + ", " + text + "]");
 			}

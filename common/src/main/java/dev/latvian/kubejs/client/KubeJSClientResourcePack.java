@@ -66,13 +66,9 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		//using a special namespace to keep backward equivalence
 		langEvent.get("kubejs_generated", "en_us").addAll(langMap);
 
-		for (var entry : langEvent.namespace2lang2entries.entrySet()) {
-			var namespace = entry.getKey();
-			var lang2entries = entry.getValue();
-			for (var e : lang2entries.entrySet()) {
-				var lang = e.getKey();
-				var entries = e.getValue();
-				generator.json(new ResourceLocation(namespace, "lang/" + lang), entries.asJson());
+		for (var lang2entries : langEvent.namespace2lang2entries.values()) {
+			for (var entries : lang2entries.values()) {
+				generator.json(entries.path(), entries.asJson());
 			}
 		}
 	}
