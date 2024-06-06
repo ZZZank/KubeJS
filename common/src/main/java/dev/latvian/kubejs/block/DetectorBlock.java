@@ -19,13 +19,14 @@ public class DetectorBlock extends Block {
 
 	@Override
 	public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
-		if (!level.isClientSide) {
-			boolean p = !blockState.getValue(BlockStateProperties.POWERED);
+		if (level.isClientSide) {
+			return;
+		}
+		boolean p = !blockState.getValue(BlockStateProperties.POWERED);
 
-			if (p == level.hasNeighborSignal(blockPos)) {
-				level.setBlock(blockPos, blockState.setValue(BlockStateProperties.POWERED, p), 2);
-				new DetectorBlockEventJS(detectorId, level, blockPos, p).post("block.detector." + detectorId, p ? "powered" : "unpowered");
-			}
+		if (p == level.hasNeighborSignal(blockPos)) {
+			level.setBlock(blockPos, blockState.setValue(BlockStateProperties.POWERED, p), 2);
+			new DetectorBlockEventJS(detectorId, level, blockPos, p).post("block.detector." + detectorId, p ? "powered" : "unpowered");
 		}
 	}
 

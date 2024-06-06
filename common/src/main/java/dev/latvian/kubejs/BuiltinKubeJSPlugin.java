@@ -549,6 +549,10 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 	@Override
 	public void generateDataJsons(DataJsonGenerator generator) {
+		for (BuilderBase<?> builder : RegistryInfo.ALL_BUILDERS) {
+			builder.generateDataJsons(generator);
+		}
+
 		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
 			if (builder.lootTable != null) {
 				LootBuilder lootBuilder = new LootBuilder(null);
@@ -567,6 +571,10 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
+		for (BuilderBase<?> builder : RegistryInfo.ALL_BUILDERS) {
+			builder.generateAssetJsons(generator);
+		}
+
 		for (DetectorInstance detector : KubeJSObjects.DETECTORS.values()) {
 			generator.blockState(new ResourceLocation(KubeJS.MOD_ID, "detector_" + detector.id), bs -> {
 				bs.variant("powered=false", "kubejs:block/detector");

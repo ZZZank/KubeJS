@@ -221,11 +221,7 @@ public class ItemBuilder extends BuilderBase<Item> {
 			return;
 		}
 		generator.itemModel(id, m -> {
-			if (!parentModel.isEmpty()) {
-				m.parent(parentModel);
-			} else {
-				m.parent("minecraft:item/generated");
-			}
+			m.parent(parentModel.isEmpty() ? "minecraft:item/generated" : parentModel);
 
 			if (textureJson.size() == 0) {
 				texture(newID("item/", "").toString());
@@ -411,9 +407,14 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return attackSpeed;
 	}
 
+	@JSInfo("""
+			e.g. `minecraft:stone`, there shall not be `#`
+			
+			recommend using `addTag()` instead
+			""")
+	@Deprecated
 	public ItemBuilder tag(String tag) {
-		tags.add(ResourceLocation.tryParse(tag));
-		return this;
+		return (ItemBuilder) addTag(ResourceLocation.tryParse(tag));
 	}
 
 	@JSInfo("Makes the item fire resistant like netherite tools (or not).")

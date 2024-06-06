@@ -51,7 +51,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 
 	@Deprecated
 	public String getBuilderType() {
-		return "";
+		return getRegistryType().key.location().getPath();
 	}
 
 	@Override
