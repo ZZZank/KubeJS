@@ -16,6 +16,7 @@ import dev.latvian.kubejs.item.custom.ItemType;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ConsoleJS;
+import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -76,6 +77,7 @@ public class ItemBuilder extends BuilderBase<Item> {
 	public transient RarityWrapper rarity;
 	public transient boolean glow;
 	public transient CreativeModeTab group;
+	@Deprecated
 	public transient Int2IntOpenHashMap color;
 	public transient boolean fireResistant;
 	@Nullable
@@ -103,15 +105,19 @@ public class ItemBuilder extends BuilderBase<Item> {
 
 	public JsonObject textureJson;
 
-	// Tools, kept for backward compatibility
+	//tools related, kept for backward compatibility
 	public transient Tier toolTier;
 	public transient float attackDamageBaseline;
 	public transient float attackSpeedBaseline;
 
-	// Armor, kept for backward compatibility
+	//armor related, kept for backward compatibility
 	public transient ArmorMaterial armorTier;
 
 	public JsonObject modelJson;
+
+	public ItemBuilder(String i) {
+		this(UtilsJS.getMCID(KubeJS.appendModId(i)));
+	}
 
 	public ItemBuilder(ResourceLocation i) {
 		super(i);
@@ -134,6 +140,7 @@ public class ItemBuilder extends BuilderBase<Item> {
 		finishUsing = null;
 		releaseUsing = null;
 		fireResistant = false;
+		group = KubeJS.tab;
 	}
 
 	public static ArmorMaterial toArmorMaterial(Object o) {

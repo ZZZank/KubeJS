@@ -8,6 +8,7 @@ import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -18,6 +19,10 @@ import java.util.List;
 @FunctionalInterface
 public interface ItemTintFunction {
 	Color getColor(ItemStack stack, int index);
+
+	default ItemColor asItemColor() {
+		return (stack, index) -> getColor(stack, index).getArgbKJS();
+	}
 
 	@Desugar
 	record Fixed(Color color) implements ItemTintFunction {

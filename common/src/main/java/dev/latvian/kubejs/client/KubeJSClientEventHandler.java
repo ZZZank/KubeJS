@@ -18,6 +18,7 @@ import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.item.ItemTooltipEventJS;
 import dev.latvian.kubejs.item.OldItemTooltipEventJS;
 import dev.latvian.kubejs.player.AttachPlayerDataEvent;
+import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.Tags;
 import dev.latvian.kubejs.world.AttachWorldDataEvent;
@@ -285,11 +286,16 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void itemColors() {
-		for (ItemBuilder builder : KubeJSObjects.ITEMS.values()) {
-			if (!builder.color.isEmpty()) {
-				ColorHandlers.registerItemColors((stack, index) -> builder.color.get(index), Objects.requireNonNull(builder.item, "Item " + builder.id + " is null!"));
-			}
-		}
+		RegistryInfo.ITEM.objects
+				.values()
+				.stream()
+				.map(o -> (ItemBuilder) o)
+				.filter(b -> b.tint != null)
+				.forEach(builder -> ColorHandlers.registerItemColors(
+						builder.tint.asItemColor(),
+						Objects.requireNonNull(builder.get(), "Item " + builder.id + " is null!")
+						)
+				);
 
 		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
 			if (builder.itemBuilder != null && !builder.color.isEmpty()) {
