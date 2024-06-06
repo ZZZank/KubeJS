@@ -1,9 +1,11 @@
 package dev.latvian.kubejs.block;
 
 import com.google.gson.JsonObject;
+import dev.latvian.kubejs.block.custom.BasicBlockJS;
 import dev.latvian.kubejs.block.custom.BasicBlockType;
 import dev.latvian.kubejs.block.custom.BlockType;
 import dev.latvian.kubejs.loot.LootBuilder;
+import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.BuilderBase;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -27,7 +29,7 @@ import java.util.function.Consumer;
 /**
  * @author LatvianModder
  */
-public class BlockBuilder extends BuilderBase {
+public class BlockBuilder extends BuilderBase<Block> {
 	public static BlockBuilder current;
 
 	public transient BlockType type;
@@ -104,6 +106,16 @@ public class BlockBuilder extends BuilderBase {
 		redstoneConductor = true;
 		transparent = false;
 		defaultTags = new HashSet<>();
+	}
+
+	@Override
+	public RegistryInfo getRegistryType() {
+		return RegistryInfo.BLOCK;
+	}
+
+	@Override
+	public Block createObject() {
+		return new BasicBlockJS(this);
 	}
 
 	@Override
