@@ -181,7 +181,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.ITEM.addType("leggings", ArmorItemBuilder.Leggings.class, ArmorItemBuilder.Leggings::new);
 //		RegistryInfo.ITEM.addType("boots", ArmorItemBuilder.Boots.class, ArmorItemBuilder.Boots::new);
 //		RegistryInfo.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
-//		RegistryInfo.ITEM.addType("smithing_template", SmithingTemplateItemBuilder.class, SmithingTemplateItemBuilder::new);
 		//misc
 //		RegistryInfo.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
 //		RegistryInfo.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
@@ -583,6 +582,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 			builder.type.generateAssets(builder, generator);
 		}
 
+
 		for (ItemBuilder builder : KubeJSObjects.ITEMS.values()) {
 			builder.type.generateAssets(builder, generator);
 		}
@@ -601,19 +601,19 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 	public void generateLang(Map<String, String> lang) {
 		lang.put("itemGroup.kubejs.kubejs", "KubeJS");
 
-		for (BuilderBase builder : KubeJSObjects.ALL) {
-			if (!builder.displayName.isEmpty()) {
-				lang.put(builder.translationKey, builder.displayName);
+		for (var builder : KubeJSObjects.ALL) {
+			if (builder.formattedDisplayName && builder.display != null) {
+				lang.put(builder.translationKey, builder.display.getString());
 			}
 		}
 
-		for (DetectorInstance detector : KubeJSObjects.DETECTORS.values()) {
+		for (var detector : KubeJSObjects.DETECTORS.values()) {
 			lang.put("block.kubejs.detector_" + detector.id, "KubeJS Detector [" + detector.id + "]");
 		}
 
-		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
-			if (!builder.displayName.isEmpty()) {
-				lang.put(builder.bucketItem.getDescriptionId(), builder.displayName + " Bucket");
+		for (var builder : KubeJSObjects.FLUIDS.values()) {
+			if (builder.formattedDisplayName && builder.display != null) {
+				lang.put(builder.translationKey, builder.display.getString());
 			}
 		}
 	}
