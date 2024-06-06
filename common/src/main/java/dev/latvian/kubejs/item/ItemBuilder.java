@@ -441,8 +441,10 @@ public class ItemBuilder extends BuilderBase<Item> {
 
 		properties.rarity(rarity.rarity);
 
-		for (Map.Entry<ToolType, Integer> entry : tools.entrySet()) {
-			appendToolType(properties, entry.getKey(), entry.getValue());
+		if (tools != null) {
+			for (var entry : tools.entrySet()) {
+				appendToolType(properties, entry.getKey(), entry.getValue());
+			}
 		}
 
 		Item item = KubeJSRegistries.items().get(new ResourceLocation(containerItem));
