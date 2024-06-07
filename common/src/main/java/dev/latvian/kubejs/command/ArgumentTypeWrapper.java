@@ -150,13 +150,6 @@ public enum ArgumentTypeWrapper {
 		this.getter = getter;
 	}
 
-	@Deprecated(forRemoval = true)
-	public ArgumentType<?> create() {
-		ConsoleJS.SERVER.warn("Using argument types without the event as context is deprecated and will be removed soon!");
-		ConsoleJS.SERVER.warn("Please consider using create(event) instead!");
-		return create(null);
-	}
-
 	public ArgumentType<?> create(CommandRegistryEventJS event) {
 		return factory.get();
 	}
