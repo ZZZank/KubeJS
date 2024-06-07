@@ -74,13 +74,13 @@ public enum ArgumentTypeWrapper {
 	PLAYERS(EntityArgument::players, EntityArgument::getPlayers),
 	GAME_PROFILE(GameProfileArgument::gameProfile, GameProfileArgument::getGameProfiles),
 	// position types
-	BLOCK_POS(BlockPosArgument::blockPos, BlockPosArgument::getSpawnablePos),
+	BLOCK_POS(BlockPosArgument::blockPos, BlockPosArgument::getOrLoadBlockPos),
 	BLOCK_POS_LOADED(BlockPosArgument::blockPos, BlockPosArgument::getLoadedBlockPos),
 	COLUMN_POS(ColumnPosArgument::columnPos, ColumnPosArgument::getColumnPos),
 	// by default, vector arguments are automatically placed at the **center** of the block
 	// if no explicit offset is given, since devs may not necessarily want that, we provide both options
 	VEC3(() -> Vec3Argument.vec3(false), Vec3Argument::getVec3),
-	VEC2(() -> Vec2Argument.vec2(false), Vec2Argument::getVec2),
+	VEC2(() -> new Vec2Argument(false), Vec2Argument::getVec2),
 	VEC3_CENTERED(Vec3Argument::vec3, Vec3Argument::getVec3),
 	VEC2_CENTERED(Vec2Argument::vec2, Vec2Argument::getVec2),
 	// block-based types
@@ -107,7 +107,7 @@ public enum ArgumentTypeWrapper {
 	MOB_EFFECT(MobEffectArgument::effect, MobEffectArgument::getEffect),
 	ENTITY_ANCHOR(EntityAnchorArgument::anchor, EntityAnchorArgument::getAnchor),
 	INT_RANGE(RangeArgument::intRange, RangeArgument.Ints::getRange),
-	FLOAT_RANGE(RangeArgument::floatRange, RangeArgument.Floats::getRange),
+	FLOAT_RANGE(RangeArgument::floatRange, (context, name) -> context.getArgument(name, RangeArgument.Floats.class)),
 	ITEM_ENCHANTMENT(ItemEnchantmentArgument::enchantment, ItemEnchantmentArgument::getEnchantment),
 	ENTITY_SUMMON(EntitySummonArgument::id, EntitySummonArgument::getSummonableEntity),
 	DIMENSION(DimensionArgument::dimension, DimensionArgument::getDimension),
@@ -138,7 +138,6 @@ public enum ArgumentTypeWrapper {
 	private static Map<ResourceLocation, ClassWrapper<?>> getOrCacheByName() {
 		if (byNameCache == null) {
 			byNameCache = new HashMap<>();
-
 			for (var argType : ArgumentTypes.BY_CLASS.entrySet()) {
 				byNameCache.putIfAbsent(argType.getValue().name, new ClassWrapper(argType.getKey()));
 			}
