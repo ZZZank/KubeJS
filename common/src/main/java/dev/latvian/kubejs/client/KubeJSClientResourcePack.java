@@ -3,20 +3,24 @@ package dev.latvian.kubejs.client;
 import com.google.gson.JsonElement;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
+import dev.latvian.kubejs.KubeJSPaths;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.script.data.KubeJSResourcePack;
 import dev.latvian.kubejs.util.KubeJSPlugins;
+import dev.latvian.mods.rhino.mod.util.JsonUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class KubeJSClientResourcePack extends KubeJSResourcePack {
 	public static List<PackResources> inject(List<PackResources> packs) {
@@ -61,6 +65,33 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		}
 
 		KubeJSPlugins.forEachPlugin(p -> p.generateLang(langMap));
+
+		//read lang json and add into lang event
+		try (var in = Files.list(KubeJSPaths.ASSETS)) {
+			for (var dir : in.filter(Files::isDirectory).collect(Collectors.toList())) {
+				var langDir = dir.resolve("lang");
+				if (!Files.exists(langDir) || !Files.isDirectory(langDir)) {
+					continue;
+				}
+				var namespace = dir.getFileName().toString();
+				for (var path : Files.list(langDir).filter(Files::isRegularFile).filter(Files::isReadable).collect(Collectors.toList())) {
+					var fileName = path.getFileName().toString();
+					if (!fileName.endsWith(".json")) {
+						continue;
+					}
+					try (var reader = Files.newBufferedReader(path)) {
+						var json = JsonUtils.GSON.fromJson(reader, Map.class);
+						var lang = fileName.substring(0, fileName.length() - 5);
+						langEvent.get(namespace, lang).addAll(json);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
 
 		//using a special namespace to keep backward equivalence
