@@ -70,7 +70,7 @@ public class LangEventJS extends EventJS {
 	}
 
 	public LangEntries get(String namespace, String lang) {
-		if (namespace == null || lang == null || namespace.isEmpty() || lang.isEmpty()) {
+		if (namespace == null || lang == null || namespace.isEmpty() || lang.isEmpty() || !PATTERN.matcher(lang).matches()) {
 			throw new IllegalArgumentException("Invalid namespace or lang: [" + namespace + ", " + lang + "]");
 		}
 		var namespaced = namespace2lang2entries.get(namespace);
