@@ -13,16 +13,9 @@ import java.util.Map;
  * @author LatvianModder
  */
 public class EventsJS {
-	private static class ScriptEventHandler {
-		private final IEventHandler handler;
-
-		private ScriptEventHandler(IEventHandler h) {
-			handler = h;
-		}
-	}
 
 	public final ScriptManager scriptManager;
-	private final Map<String, List<ScriptEventHandler>> map;
+	private final Map<String, List<IEventHandler>> map;
 
 	public EventsJS(ScriptManager t) {
 		scriptManager = t;
@@ -31,31 +24,34 @@ public class EventsJS {
 
 	public void listen(String id, IEventHandler handler) {
 		id = id.replace("yeet", "remove");
-		List<ScriptEventHandler> list = map.get(id);
 
+		var list = map.get(id);
 		if (list == null) {
 			list = new ObjectArrayList<>();
 			map.put(id, list);
 		}
 
-		list.add(new ScriptEventHandler(handler));
+		list.add(handler);
 	}
 
-	public List<ScriptEventHandler> handlers(String id) {
-		List<ScriptEventHandler> list = map.get(id);
+	public List<IEventHandler> handlers(String id) {
+		List<IEventHandler> list = map.get(id);
 		return list == null ? Collections.emptyList() : list;
 	}
 
-	public boolean postToHandlers(String id, List<ScriptEventHandler> list, EventJS event) {
+	/**
+	 * @return true if there's one handler tried to cancel the event, and the event is cancellable
+	 */
+	public boolean postToHandlers(String id, List<IEventHandler> list, EventJS event) {
 		if (list.isEmpty()) {
 			return false;
 		}
 
 		boolean c = event.canCancel();
 
-		for (ScriptEventHandler handler : list) {
+		for (var handler : list) {
 			try {
-				handler.handler.onEvent(event);
+				handler.onEvent(event);
 
 				if (c && event.isCancelled()) {
 					return true;
