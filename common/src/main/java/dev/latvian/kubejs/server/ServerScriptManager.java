@@ -40,7 +40,11 @@ import java.util.Map;
 public class ServerScriptManager {
 	public static ServerScriptManager instance;
 
-	public final ScriptManager scriptManager = new ScriptManager(ScriptType.SERVER, KubeJSPaths.SERVER_SCRIPTS, "/data/kubejs/example_server_script.js");
+	public final ScriptManager scriptManager;
+
+	public ServerScriptManager() {
+		scriptManager = new ScriptManager(ScriptType.SERVER, KubeJSPaths.SERVER_SCRIPTS, "/data/kubejs/example_server_script.js");
+	}
 
 	public void init(ServerResources serverResources) {
 		try {
@@ -50,6 +54,7 @@ public class ServerScriptManager {
 		} catch (Throwable ex) {
 			throw new RuntimeException("KubeJS failed to register it's script loader!", ex);
 		}
+		KubeJSReloadListener.resources = serverResources;
 	}
 
 	public void reloadScriptManager(ResourceManager resourceManager) {
@@ -91,19 +96,21 @@ public class ServerScriptManager {
 		scriptManager.load();
 	}
 
-	public List<PackResources> resourcePackList(List<PackResources> list0) {
+	public List<PackResources> resourcePackList(List<PackResources> original) {
 		VirtualKubeJSDataPack virtualDataPackLow = new VirtualKubeJSDataPack(false);
 		VirtualKubeJSDataPack virtualDataPackHigh = new VirtualKubeJSDataPack(true);
-		List<PackResources> list = new ArrayList<>();
+		List<PackResources> list = new ArrayList<>(1 + original.size() + 10 + 1);
+		//10 is expected kjs server resource size, obviously a little bit small
+
 		list.add(virtualDataPackLow);
-		list.addAll(list0);
+		list.addAll(original);
 		list.add(new KubeJSServerResourcePack());
 		list.add(virtualDataPackHigh);
 
-		SimpleReloadableResourceManager resourceManager = new SimpleReloadableResourceManager(PackType.SERVER_DATA);
+		var resourceManager = new SimpleReloadableResourceManager(PackType.SERVER_DATA);
 
-		for (PackResources p : list) {
-			resourceManager.add(p);
+		for (var resource : list) {
+			resourceManager.add(resource);
 		}
 
 		reloadScriptManager(resourceManager);

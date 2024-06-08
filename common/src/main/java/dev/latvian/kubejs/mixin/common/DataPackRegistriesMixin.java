@@ -17,11 +17,6 @@ import java.util.List;
 @Mixin(ServerResources.class)
 public abstract class DataPackRegistriesMixin {
 
-	@Inject(method = "<init>", at = @At("RETURN"))
-	private void init(CallbackInfo ci) {
-		ServerScriptManager.instance.init((ServerResources) (Object) this);
-	}
-
 	@ModifyArg(method = "loadResources", at = @At(value = "INVOKE", ordinal = 0,
 			target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;reload(Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)Ljava/util/concurrent/CompletableFuture;"),
 			index = 2)
