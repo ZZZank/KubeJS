@@ -9,7 +9,6 @@
 		"BlockStateBaseMixin",
 		"BucketItemMixin",
 		"ConstantIntValueMixin",
-		"DataPackRegistriesMixin",
 		"EntityMixin",
 		"EntityTargetMixin",
 		"FireworkRocketEntityMixin",
