@@ -72,12 +72,12 @@ dependencies {
     modLocalRuntime(files("devlib/letmetest-1.0.jar"))
 
 	modCompileOnly("mezz.jei:jei-1.16.5:${rootProject.forge_jei_version}")
-	modCompileOnly group: 'net.darkhax.bookshelf', name: "Bookshelf-Forge-1.16.5", version: "${rootProject.forge_bookshelf_version}"
-	modCompileOnly("net.darkhax.gamestages:GameStages-1.16.5:${rootProject.forge_gamestages_version}")
+	modCompileOnly("curse.maven:game-stages-268655:${rootProject.forge_gamestages_version_cmaven}")
+	modCompileOnly("curse.maven:bookshelf-228525:${rootProject.forge_bookshelf_version_cmaven}")
 
 	modLocalRuntime("mezz.jei:jei-1.16.5:${rootProject.forge_jei_version}")
-	modLocalRuntime("net.darkhax.bookshelf:Bookshelf-1.16.5:${rootProject.forge_bookshelf_version}")
-	modLocalRuntime("net.darkhax.gamestages:GameStages-1.16.5:${rootProject.forge_gamestages_version}")
+	modLocalRuntime("curse.maven:game-stages-268655:${rootProject.forge_gamestages_version_cmaven}")
+	modLocalRuntime("curse.maven:bookshelf-228525:${rootProject.forge_bookshelf_version_cmaven}")
 
 	// test mods, these are included at runtime only
 	// modRuntime("com.resourcefulbees:ResourcefulBees:1.16.5-0.6.4b")
