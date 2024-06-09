@@ -20,6 +20,7 @@ import dev.latvian.kubejs.script.data.VirtualKubeJSDataPack;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.KubeJSPlugins;
 import dev.latvian.kubejs.util.UtilsJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ServerResources;
@@ -37,13 +38,16 @@ import java.util.Map;
 /**
  * @author LatvianModder
  */
-public class ServerScriptManager {
+public class ServerScriptManager extends ScriptManager {
 	public static ServerScriptManager instance;
 
+	@JSInfo("use `ServerScriptManager.instance` directly")
+	@Deprecated
 	public final ScriptManager scriptManager;
 
 	public ServerScriptManager() {
-		scriptManager = new ScriptManager(ScriptType.SERVER, KubeJSPaths.SERVER_SCRIPTS, "/data/kubejs/example_server_script.js");
+		super(ScriptType.SERVER, KubeJSPaths.SERVER_SCRIPTS, "/data/kubejs/example_server_script.js");
+		scriptManager = this;
 	}
 
 	public void init(ServerResources serverResources) {
@@ -58,17 +62,16 @@ public class ServerScriptManager {
 	}
 
 	public void reloadScriptManager(ResourceManager resourceManager) {
-		scriptManager.unload();
-		scriptManager.loadFromDirectory();
+		unload();
+		loadFromDirectory();
 
-		Map<String, List<ResourceLocation>> packs = new HashMap<>();
-
+		Map<String, List<ResourceLocation>> resPacks = new HashMap<>();
 		for (ResourceLocation resource : resourceManager.listResources("kubejs", s -> s.endsWith(".js"))) {
-			packs.computeIfAbsent(resource.getNamespace(), s -> new ArrayList<>()).add(resource);
+			resPacks.computeIfAbsent(resource.getNamespace(), s -> new ArrayList<>()).add(resource);
 		}
 
-		for (Map.Entry<String, List<ResourceLocation>> entry : packs.entrySet()) {
-			ScriptPack pack = new ScriptPack(scriptManager, new ScriptPackInfo(entry.getKey(), "kubejs/"));
+		for (Map.Entry<String, List<ResourceLocation>> entry : resPacks.entrySet()) {
+			ScriptPack pack = new ScriptPack(this, new ScriptPackInfo(entry.getKey(), "kubejs/"));
 
 			for (ResourceLocation id : entry.getValue()) {
 				pack.info.scripts.add(new ScriptFileInfo(pack.info, id.getPath().substring(7)));
@@ -90,10 +93,10 @@ public class ServerScriptManager {
 			}
 
 			pack.scripts.sort(null);
-			scriptManager.packs.put(pack.info.namespace, pack);
+			this.packs.put(pack.info.namespace, pack);
 		}
 
-		scriptManager.load();
+		load();
 	}
 
 	public List<PackResources> resourcePackList(List<PackResources> original) {
