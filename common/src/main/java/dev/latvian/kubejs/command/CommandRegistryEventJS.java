@@ -21,8 +21,12 @@ public class CommandRegistryEventJS extends ServerEventJS {
 		this.selection = selection;
 	}
 
-	public boolean isSinglePlayer() {
-		return selection == Commands.CommandSelection.ALL || selection == Commands.CommandSelection.INTEGRATED;
+	public boolean isForSinglePlayer() {
+		return selection.includeIntegrated;
+	}
+
+	public boolean isForMultiPlayer() {
+		return selection.includeDedicated;
 	}
 
 	public CommandDispatcher<CommandSourceStack> getDispatcher() {

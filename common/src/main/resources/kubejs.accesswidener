@@ -2,3 +2,5 @@ accessWidener v2 named
 
 accessible field net/minecraft/commands/synchronization/ArgumentTypes BY_CLASS Ljava/util/Map;
 accessible field net/minecraft/commands/synchronization/ArgumentTypes$Entry name Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/commands/Commands$CommandSelection includeIntegrated Z
+accessible field net/minecraft/commands/Commands$CommandSelection includeDedicated Z
