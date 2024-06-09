@@ -17,7 +17,7 @@ license = "GNU LGPLv3"
 [[dependencies.kubejs]]
 modId = "forge"
 mandatory = true
-versionRange = "[32.0.75,)"
+versionRange = "[${forge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -38,20 +38,20 @@ side = "BOTH"
 [[dependencies.kubejs]]
 modId = "architectury"
 mandatory = true
-versionRange = "[1.20.28,)"
+versionRange = "[${architectury_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.kubejs]]
 modId = "gamestages"
 mandatory = false
-versionRange = "[1.0.0,)"
+versionRange = "[${gamestages_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.kubejs]]
 modId = "jei"
 mandatory = false
-versionRange = "[1.0.0,)"
+versionRange = "[${jei_version},)"
 ordering = "AFTER"
 side = "BOTH"

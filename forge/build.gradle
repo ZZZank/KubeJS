@@ -72,7 +72,7 @@ dependencies {
     modLocalRuntime(files("devlib/letmetest-1.0.jar"))
 
 	modCompileOnly("mezz.jei:jei-1.16.5:${rootProject.forge_jei_version}")
-	modCompileOnly("net.darkhax.bookshelf:Bookshelf-1.16.5:${rootProject.forge_bookshelf_version}")
+	modCompileOnly group: 'net.darkhax.bookshelf', name: "Bookshelf-Forge-1.16.5", version: "${rootProject.forge_bookshelf_version}"
 	modCompileOnly("net.darkhax.gamestages:GameStages-1.16.5:${rootProject.forge_gamestages_version}")
 
 	modLocalRuntime("mezz.jei:jei-1.16.5:${rootProject.forge_jei_version}")
@@ -92,7 +92,13 @@ processResources {
 	inputs.property "version", project.version
 
 	filesMatching("META-INF/mods.toml") {
-		expand "version": project.version
+		expand(
+			"version": project.version,
+			"forge_version": rootProject.forge_version,
+			"architectury_version": rootProject.architectury_version,
+			"gamestages_version": rootProject.forge_gamestages_version,
+			"jei_version": rootProject.forge_jei_version
+		)
 	}
 }
 
