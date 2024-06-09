@@ -1,5 +1,6 @@
 package dev.latvian.kubejs.mixin.common;
 
+import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.server.ServerScriptManager;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.ServerResources;
@@ -19,6 +20,7 @@ import java.util.List;
 public abstract class ServerResourcesMixin {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void init(Commands.CommandSelection commandSelection, int i, CallbackInfo ci) {
+		KubeJS.LOGGER.info("time stamping: ServerResources init");
 		ServerScriptManager.instance = new ServerScriptManager();
 		ServerScriptManager.instance.init((ServerResources) (Object) this);
 	}
