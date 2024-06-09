@@ -17,9 +17,15 @@ import java.util.List;
  * @author LatvianModder
  */
 @Mixin(ServerResources.class)
-public abstract class ServerResourcesMixin {
-	@Inject(method = "<init>", at = @At("RETURN"))
+public abstract class ServerResourcesMixin implements AutoCloseable {
+	@Inject(
+			method = "<init>",
+			at = @At(
+					value = "NEW",
+					target = "net/minecraft/server/packs/resources/SimpleReloadableResourceManager"))
 	private void init(Commands.CommandSelection commandSelection, int i, CallbackInfo ci) {
+		//TODO: exactly the problem, command registry event is posted when `new Commands(...)` is called
+		//so we need to make injection point targeting somewhere before `this.commands = new Commands(arg);` in `ServerResources.<init>`
 		KubeJS.LOGGER.info("time stamping: ServerResources init");
 		ServerScriptManager.instance = new ServerScriptManager();
 		ServerScriptManager.instance.init((ServerResources) (Object) this);
