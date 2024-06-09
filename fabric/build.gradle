@@ -55,7 +55,7 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand(
 				"version": project.version,
-				"fabric_version": rootProject.fabric_version,
+				"fabric_version": rootProject.fabric_loader_version,
 				"architectury_version": rootProject.architectury_version
 		)
 	}
