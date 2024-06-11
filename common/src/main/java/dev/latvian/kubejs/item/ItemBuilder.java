@@ -14,6 +14,7 @@ import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
 import dev.latvian.kubejs.item.custom.ItemType;
 import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.types.CreativeTabRegistryEventJS;
 import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.UtilsJS;
@@ -311,12 +312,14 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return this;
 	}
 
-	public ItemBuilder group(String g) {
-		for (CreativeModeTab ig : CreativeModeTab.TABS) {
-			if (ig.getRecipeFolderName().equals(g)) {
-				group = ig;
-				return this;
-			}
+	public ItemBuilder group(String groupId) {
+		var tab = CreativeTabRegistryEventJS.TABS.get(new ResourceLocation("minecraft", groupId));
+		if (tab == null) {
+			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.id(groupId));
+		}
+
+		if (tab != null) {
+			this.group = tab;
 		}
 		return this;
 	}

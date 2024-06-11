@@ -44,8 +44,4 @@ public class CreativeTabRegistryEventJS extends EventJS {
 
 		return tab;
 	}
-
-	public static String toTabIdentifier(ResourceLocation id) {
-		return id.toString().replace(':', '.');
-	}
 }

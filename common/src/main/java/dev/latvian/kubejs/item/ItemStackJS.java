@@ -19,6 +19,7 @@ import dev.latvian.kubejs.item.ingredient.WeakNBTIngredientJS;
 import dev.latvian.kubejs.player.PlayerJS;
 import dev.latvian.kubejs.recipe.RecipeExceptionJS;
 import dev.latvian.kubejs.recipe.RecipeJS;
+import dev.latvian.kubejs.registry.types.CreativeTabRegistryEventJS;
 import dev.latvian.kubejs.text.Text;
 import dev.latvian.kubejs.util.ListJS;
 import dev.latvian.kubejs.util.MapJS;
@@ -557,13 +558,11 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 
 	@Nullable
 	public static CreativeModeTab findGroup(String id) {
-		for (CreativeModeTab group : CreativeModeTab.TABS) {
-			if (id.equals(group.getRecipeFolderName())) {
-				return group;
-			}
+		var tab = CreativeTabRegistryEventJS.TABS.get(new ResourceLocation("minecraft", id));
+		if (tab == null) {
+			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.id(id));
 		}
-
-		return null;
+		return tab;
 	}
 
 	private final ItemStack stack;
