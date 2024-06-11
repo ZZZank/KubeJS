@@ -10,6 +10,7 @@ public class KubeJSEvents {
 	public static final String COMMAND_REGISTRY = "command.registry";
 	public static final String COMMAND_RUN = "command.run";
 	public static final String REGISTRY_SUFFIX = ".registry";
+	public static final String TAB_REGISTRY = "tab" + REGISTRY_SUFFIX;
 
 	public static final String CLIENT_INIT = "client.init";
 	public static final String CLIENT_DEBUG_INFO_LEFT = "client.debug_info.left";

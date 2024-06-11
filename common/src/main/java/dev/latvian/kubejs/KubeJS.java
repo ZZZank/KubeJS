@@ -5,11 +5,13 @@ import dev.latvian.kubejs.client.KubeJSClient;
 import dev.latvian.kubejs.entity.KubeJSEntityEventHandler;
 import dev.latvian.kubejs.event.StartupEventJS;
 import dev.latvian.kubejs.fluid.KubeJSFluidEventHandler;
+import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.item.KubeJSItemEventHandler;
 import dev.latvian.kubejs.net.KubeJSNet;
 import dev.latvian.kubejs.player.KubeJSPlayerEventHandler;
 import dev.latvian.kubejs.recipe.KubeJSRecipeEventHandler;
 import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.types.CreativeTabRegistryEventJS;
 import dev.latvian.kubejs.script.ScriptFileInfo;
 import dev.latvian.kubejs.script.ScriptManager;
 import dev.latvian.kubejs.script.ScriptPack;
@@ -23,7 +25,6 @@ import dev.latvian.kubejs.world.KubeJSWorldEventHandler;
 import dev.latvian.kubejs.world.gen.FlatChunkGeneratorKJS;
 import me.shedaniel.architectury.platform.Mod;
 import me.shedaniel.architectury.platform.Platform;
-import me.shedaniel.architectury.registry.CreativeTabs;
 import me.shedaniel.architectury.utils.EnvExecutor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +63,8 @@ public class KubeJS {
 	 */
 	public static CreativeModeTab tab = CreativeModeTab.TAB_MISC;
 
-	public static ScriptManager startupScriptManager, clientScriptManager;
+	public static ScriptManager startupScriptManager;
+	public static ScriptManager clientScriptManager;
 
 	public KubeJS() throws Throwable {
 		instance = this;
@@ -112,7 +114,6 @@ public class KubeJS {
 		clientScriptManager = new ScriptManager(ScriptType.CLIENT, KubeJSPaths.CLIENT_SCRIPTS, "/data/kubejs/example_client_script.js");
 
 		Path oldStartupFolder = KubeJSPaths.DIRECTORY.resolve("startup");
-
 		if (Files.exists(oldStartupFolder)) {
 			UtilsJS.tryIO(() -> Files.move(oldStartupFolder, KubeJSPaths.STARTUP_SCRIPTS));
 		}
@@ -120,7 +121,9 @@ public class KubeJS {
 		KubeJSPlugins.forEachPlugin(KubeJSPlugin::init);
 
 		if (!CommonProperties.get().serverOnly) {
-			tab = CreativeTabs.create(new ResourceLocation(KubeJS.MOD_ID, KubeJS.MOD_ID), () -> new ItemStack(Items.PURPLE_DYE));
+			var tabEvent = new CreativeTabRegistryEventJS();
+			tab = tabEvent.create(KubeJS.MOD_ID, () -> ItemStackJS.of(new ItemStack(Items.PURPLE_DYE)));
+			tabEvent.post(ScriptType.STARTUP, KubeJSEvents.TAB_REGISTRY);
 		}
 
 		startupScriptManager.unload();
