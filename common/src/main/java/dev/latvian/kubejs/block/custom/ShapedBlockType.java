@@ -21,10 +21,10 @@ public class ShapedBlockType extends BlockType {
 	private final Function<Block.Properties, Block> factory;
 	private final String[] suffixes;
 
-	public ShapedBlockType(String s, Function<Block.Properties, Block> f, String... su) {
-		super(s);
-		factory = f;
-		suffixes = su;
+	public ShapedBlockType(String name, Function<Block.Properties, Block> factory, String... suffixes) {
+		super(name);
+		this.factory = factory;
+		this.suffixes = suffixes;
 	}
 
 	@Override

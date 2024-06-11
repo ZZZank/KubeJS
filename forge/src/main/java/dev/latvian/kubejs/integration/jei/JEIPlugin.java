@@ -36,8 +36,8 @@ public class JEIPlugin implements IModPlugin {
 	}
 
 	@Override
-	public void onRuntimeAvailable(@NotNull IJeiRuntime r) {
-		runtime = r;
+	public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+		runtime = jeiRuntime;
 		BuiltinKubeJSPlugin.GLOBAL.put("jeiRuntime", runtime);
 
 		new HideJEIEventJS<>(runtime, VanillaTypes.ITEM, object -> IngredientJS.of(object)::testVanilla, stack -> !stack.isEmpty()).post(ScriptType.CLIENT, JEIIntegration.JEI_HIDE_ITEMS);

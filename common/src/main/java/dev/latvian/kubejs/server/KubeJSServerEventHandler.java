@@ -1,7 +1,6 @@
 package dev.latvian.kubejs.server;
 
 import com.mojang.brigadier.CommandDispatcher;
-import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.command.CommandRegistryEventJS;
 import dev.latvian.kubejs.command.KubeJSCommands;
@@ -74,9 +73,7 @@ public class KubeJSServerEventHandler {
 	}
 
 	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
-		KubeJS.LOGGER.info("time stamping: CommandRegistryEvent");
 		KubeJSCommands.register(dispatcher);
-		//TODO: custom command registry not working, why
 		new CommandRegistryEventJS(dispatcher, selection).post(ScriptType.SERVER, KubeJSEvents.COMMAND_REGISTRY);
 	}
 

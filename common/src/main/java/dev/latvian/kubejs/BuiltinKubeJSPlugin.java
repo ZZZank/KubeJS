@@ -293,8 +293,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		event.add("console", event.type.console);
 		event.add("events", new ScriptEventsWrapper(event.type.manager.get().events));
 
-		event.addFunction("onEvent", args -> onEvent(event, args), null, IEventHandler.class);
-		event.addFunction("java", args -> event.manager.loadJavaClass(event.scope, args), new Class[]{null});
+		event.addFunction("onEvent", args -> onEvent(event, args), String.class, IEventHandler.class);
+		event.addFunction("java", args -> event.manager.loadJavaClass(event.scope, args), String.class);
 
 		event.add("JavaMath", Math.class);
 		event.add("ResourceLocation", ResourceLocation.class);
@@ -469,8 +469,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 	@Override
 	public void addRecipes(RegisterRecipeHandlersEvent event) {
-		event.registerShaped(new ResourceLocation("kubejs:shaped"));
-		event.registerShapeless(new ResourceLocation("kubejs:shapeless"));
+		event.registerShaped(KubeJS.id("shaped"));
+		event.registerShapeless(KubeJS.id("shapeless"));
 		event.registerShaped(new ResourceLocation("minecraft:crafting_shaped"));
 		event.registerShapeless(new ResourceLocation("minecraft:crafting_shapeless"));
 		event.register(new ResourceLocation("minecraft:stonecutting"), StonecuttingRecipeJS::new);
@@ -527,8 +527,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 			};
 
 			for (String t : types) {
-				event.register(new ResourceLocation("artisanworktables:" + t + "_shaped"), ShapedArtisanRecipeJS::new);
-				event.register(new ResourceLocation("artisanworktables:" + t + "_shapeless"), ShapelessArtisanRecipeJS::new);
+				event.register(new ResourceLocation("artisanworktables", t + "_shaped"), ShapedArtisanRecipeJS::new);
+				event.register(new ResourceLocation("artisanworktables", t + "_shapeless"), ShapelessArtisanRecipeJS::new);
 			}
 		}
 
@@ -611,7 +611,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		lang.put("itemGroup.kubejs.kubejs", "KubeJS");
 
 		for (var builder : KubeJSObjects.ALL) {
-			if (builder.formattedDisplayName && builder.display != null) {
+			if (builder.overrideLangJson && builder.display != null) {
 				lang.put(builder.translationKey, builder.display.getString());
 			}
 		}
@@ -621,7 +621,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		}
 
 		for (var builder : KubeJSObjects.FLUIDS.values()) {
-			if (builder.formattedDisplayName && builder.display != null) {
+			if (builder.overrideLangJson && builder.display != null) {
 				lang.put(builder.translationKey, builder.display.getString());
 			}
 		}
