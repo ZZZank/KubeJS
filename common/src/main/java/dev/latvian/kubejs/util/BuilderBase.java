@@ -22,7 +22,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	public String displayName;
 	public Component display;
 	protected T object;
-	public boolean formattedDisplayName;
+	public boolean overrideLangJson;
 	public transient boolean dummyBuilder;
 	public transient Set<ResourceLocation> tags;
 
@@ -31,7 +31,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		object = null;
 		translationKey = ""; //compute lazily
 		display = null;
-		formattedDisplayName = false;
+		overrideLangJson = false;
 		dummyBuilder = false;
 		tags = new HashSet<>();
 	}
@@ -91,6 +91,8 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		Sets the display name for this object, e.g. `Stone`.
 
 		This will be overridden by a lang file if it exists.
+
+		If you want to make displayName() override language files, see `.overrideLangJson()`.
 		""")
 	public BuilderBase<T> display(Component name) {
 		display = name;
@@ -101,15 +103,15 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	@JSInfo("""
 		Makes displayName() override language files.
 		""")
-	public BuilderBase<T> formattedDisplayName() {
-		formattedDisplayName = true;
+	public BuilderBase<T> overrideLangJson() {
+		overrideLangJson = true;
 		return this;
 	}
 
 	@JSInfo("""
-			Combined method of formattedDisplayName().displayName(name).""")
-	public BuilderBase<T> formattedDisplayName(Component name) {
-		return formattedDisplayName().display(name);
+			Combined method of overrideLangJson().display(name).""")
+	public BuilderBase<T> displayWithLang(Component name) {
+		return overrideLangJson().display(name);
 	}
 
 	/**

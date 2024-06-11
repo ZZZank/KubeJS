@@ -78,6 +78,7 @@ import java.util.function.Supplier;
 /**
  * @author ZZZank
  */
+@SuppressWarnings({"rawtypes", "unused"})
 public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>, TypeWrapperFactory<T> {
 	public static final Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
 	public static final Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());

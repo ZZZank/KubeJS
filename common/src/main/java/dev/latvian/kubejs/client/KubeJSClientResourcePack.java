@@ -92,10 +92,9 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 			ex.printStackTrace();
 		}
 
-		langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
-
 		//using a special namespace to keep backward equivalence
 		langEvent.get("kubejs_generated", "en_us").addAll(langMap);
+		langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
 
 		for (var lang2entries : langEvent.namespace2lang2entries.values()) {
 			for (var entries : lang2entries.values()) {

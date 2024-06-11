@@ -1,6 +1,7 @@
 package dev.latvian.kubejs.event;
 
 import dev.latvian.kubejs.script.ScriptType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author LatvianModder
@@ -23,7 +24,7 @@ public class EventJS {
 	protected void afterPosted(boolean result) {
 	}
 
-	public final boolean post(ScriptType t, String id) {
+	public final boolean post(ScriptType t, @NotNull String id) {
 		if (t != ScriptType.STARTUP && post(ScriptType.STARTUP, id) && canCancel()) {
 			return true;
 		}

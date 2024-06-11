@@ -27,26 +27,27 @@ public class RegistryTypeWrapperFactory<T> implements TypeWrapperFactory<T> {
 
 			try {
 				for (Field field : net.minecraft.core.Registry.class.getDeclaredFields()) {
-					if (field.getType() == ResourceKey.class && Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
-						String id = "unknown";
+					if (field.getType() != ResourceKey.class || !Modifier.isPublic(field.getModifiers()) || !Modifier.isStatic(field.getModifiers())) {
+						continue;
+					}
+					String id = "unknown";
 
-						try {
-							field.setAccessible(true);
-							ResourceKey key = (ResourceKey) field.get(null);
-							id = key.location().getPath();
-							Type type = field.getGenericType(); // ResourceKey<Registry<T>>
-							Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0]; // Registry<T>
-							Type type2 = ((ParameterizedType) type1).getActualTypeArguments()[0]; // T
-							Class rawType = UtilsJS.getRawType(type2);
+					try {
+						field.setAccessible(true);
+						ResourceKey key = (ResourceKey) field.get(null);
+						id = key.location().getPath();
+						Type type = field.getGenericType(); // ResourceKey<Registry<T>>
+						Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0]; // Registry<T>
+						Type type2 = ((ParameterizedType) type1).getActualTypeArguments()[0]; // T
+						Class rawType = UtilsJS.getRawType(type2);
 
-							if (rawType == Item.class || rawType == ResourceLocation.class || rawType == ResourceKey.class || rawType == Codec.class) {
-								continue;
-							}
-
-							all.add(new RegistryTypeWrapperFactory(rawType, KubeJSRegistries.genericRegistry(key), key.location().toString()));
-						} catch (Throwable t) {
-							KubeJS.LOGGER.error("Failed to create TypeWrapper for registry " + id + ": " + t);
+						if (rawType == Item.class || rawType == ResourceLocation.class || rawType == ResourceKey.class || rawType == Codec.class) {
+							continue;
 						}
+
+						all.add(new RegistryTypeWrapperFactory(rawType, KubeJSRegistries.genericRegistry(key), key.location().toString()));
+					} catch (Throwable t) {
+						KubeJS.LOGGER.error("Failed to create TypeWrapper for registry " + id + ": " + t);
 					}
 				}
 			} catch (Exception ex) {

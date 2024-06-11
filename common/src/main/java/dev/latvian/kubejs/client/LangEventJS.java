@@ -73,17 +73,9 @@ public class LangEventJS extends EventJS {
 		if (namespace == null || lang == null || namespace.isEmpty() || lang.isEmpty() || !PATTERN.matcher(lang).matches()) {
 			throw new IllegalArgumentException("Invalid namespace or lang: [" + namespace + ", " + lang + "]");
 		}
-		var namespaced = namespace2lang2entries.get(namespace);
-		if (namespaced == null) {
-			namespaced = new HashMap<>();
-			namespace2lang2entries.put(namespace, namespaced);
-		}
-		var entries = namespaced.get(lang);
-		if (entries == null) {
-			entries = new LangEntries(namespace, lang);
-			namespaced.put(lang, entries);
-		}
-		return entries;
+		return namespace2lang2entries
+				.computeIfAbsent(namespace, k -> new HashMap<>())
+				.computeIfAbsent(lang, k -> new LangEntries(namespace, lang));
 	}
 
 	public LangEntries get(String lang) {

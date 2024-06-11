@@ -108,7 +108,6 @@ public abstract class KubeJSResourcePack implements PackResources {
 				cachedResources.put(new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath() + ".json"), entry.getValue());
 			}
 		}
-
 		return cachedResources;
 	}
 

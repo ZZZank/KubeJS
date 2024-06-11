@@ -90,7 +90,7 @@ public class ScriptManager {
 			if (error == null) {
 				pack.scripts.add(new ScriptFile(pack, fileInfo, scriptSource));
 			} else {
-				KubeJS.LOGGER.error("Failed to pre-load script file " + fileInfo.location + ": " + error);
+				KubeJS.LOGGER.error("Failed to pre-load script file {}: {}", fileInfo.location, error);
 			}
 		}
 
