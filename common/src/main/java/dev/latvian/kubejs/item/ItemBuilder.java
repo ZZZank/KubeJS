@@ -407,16 +407,6 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return attackSpeed;
 	}
 
-	@JSInfo("""
-			e.g. `minecraft:stone`, there shall not be `#`
-			
-			recommend using `addTag()` instead
-			""")
-	@Deprecated
-	public ItemBuilder tag(String tag) {
-		return (ItemBuilder) addTag(ResourceLocation.tryParse(tag));
-	}
-
 	@JSInfo("Makes the item fire resistant like netherite tools (or not).")
 	public ItemBuilder fireResistant(boolean isFireResistant) {
 		fireResistant = isFireResistant;

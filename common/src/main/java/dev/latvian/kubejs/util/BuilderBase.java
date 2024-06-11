@@ -112,10 +112,13 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		return formattedDisplayName().display(name);
 	}
 
+	/**
+	 * no need for a string variant, we have type wrapper
+	 */
 	@JSInfo("""
 		Adds a tag to this object, e.g. `minecraft:stone`.
 		""")
-	public BuilderBase<T> addTag(ResourceLocation tag) {
+	public BuilderBase<T> tag(ResourceLocation tag) {
 		tags.add(tag);
 		getRegistryType().hasDefaultTags = true;
 		return this;
