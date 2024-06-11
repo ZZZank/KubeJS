@@ -558,9 +558,9 @@ public class ItemStackJS implements IngredientJS, NBTSerializable, ChangeListene
 
 	@Nullable
 	public static CreativeModeTab findGroup(String id) {
-		var tab = CreativeTabRegistryEventJS.TABS.get(new ResourceLocation("minecraft", id));
+		var tab = CreativeTabRegistryEventJS.TABS.get(id);
 		if (tab == null) {
-			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.id(id));
+			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.MOD_ID + '.' + id);
 		}
 		return tab;
 	}

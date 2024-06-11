@@ -313,9 +313,9 @@ public class ItemBuilder extends BuilderBase<Item> {
 	}
 
 	public ItemBuilder group(String groupId) {
-		var tab = CreativeTabRegistryEventJS.TABS.get(new ResourceLocation("minecraft", groupId));
+		var tab = CreativeTabRegistryEventJS.TABS.get(groupId);
 		if (tab == null) {
-			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.id(groupId));
+			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.MOD_ID + '.' + groupId);
 		}
 
 		if (tab != null) {

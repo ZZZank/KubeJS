@@ -19,12 +19,15 @@ import java.util.function.Supplier;
 public class CreativeTabRegistryEventJS extends EventJS {
 
 	@JSInfo("""
-			Registered tabs from Vanilla and KubeJS.""")
-	public static final Map<ResourceLocation, CreativeModeTab> TABS = new HashMap<>();
+			Registered tabs from Vanilla and KubeJS.
+			
+			tabs registered by kubejs will be in `kubejs.{id}` format
+			""")
+	public static final Map<String, CreativeModeTab> TABS = new HashMap<>();
 
 	static {
 		for (var tab : CreativeModeTab.TABS) {
-			TABS.put(new ResourceLocation(tab.getRecipeFolderName()), tab);
+			TABS.put(tab.getRecipeFolderName(), tab);
 		}
 	}
 
@@ -33,14 +36,15 @@ public class CreativeTabRegistryEventJS extends EventJS {
 			""")
 	public CreativeModeTab create(String id, Supplier<ItemStackJS> icon) {
 		var fullId = new ResourceLocation(KubeJS.MOD_ID, id);
+		id = fullId.toString().replace(':', '.');
 
-		if (TABS.containsKey(fullId)) {
-			ConsoleJS.STARTUP.errorf("Tab with id '%s' already registered!", fullId);
-			return TABS.get(fullId);
+		if (TABS.containsKey(id)) {
+			ConsoleJS.STARTUP.errorf("Tab with id '%s' already registered!", id);
+			return TABS.get(id);
 		}
 
 		var tab = CreativeTabs.create(fullId, () -> icon.get().getItemStack());
-		TABS.put(fullId, tab);
+		TABS.put(id, tab);
 
 		return tab;
 	}
