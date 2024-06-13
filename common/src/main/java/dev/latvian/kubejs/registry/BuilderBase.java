@@ -1,10 +1,11 @@
-package dev.latvian.kubejs.util;
+package dev.latvian.kubejs.registry;
 
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.client.LangEventJS;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
-import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.util.ConsoleJS;
+import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;

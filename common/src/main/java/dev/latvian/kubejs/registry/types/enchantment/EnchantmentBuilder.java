@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.registry.types.enchantment;
 
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import it.unimi.dsi.fastutil.objects.Object2BooleanFunction;
 import net.minecraft.resources.ResourceLocation;

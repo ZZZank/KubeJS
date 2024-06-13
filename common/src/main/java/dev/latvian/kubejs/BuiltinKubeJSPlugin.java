@@ -78,7 +78,7 @@ import dev.latvian.kubejs.script.PlatformWrapper;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.text.Text;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.util.ClassFilter;
 import dev.latvian.kubejs.util.KubeJSPlugins;
 import dev.latvian.kubejs.util.ListJS;

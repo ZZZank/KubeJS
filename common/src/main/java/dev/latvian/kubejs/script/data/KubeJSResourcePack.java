@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSPaths;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.util.UtilsJS;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

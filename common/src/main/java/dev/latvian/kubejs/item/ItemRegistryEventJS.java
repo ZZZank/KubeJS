@@ -2,7 +2,7 @@ package dev.latvian.kubejs.item;
 
 import dev.latvian.kubejs.registry.RegistryEventJS;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import net.minecraft.world.item.Item;
 
 import java.util.function.Consumer;

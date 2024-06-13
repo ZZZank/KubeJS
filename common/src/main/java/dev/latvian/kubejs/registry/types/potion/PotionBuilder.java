@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.registry.types.potion;
 
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;

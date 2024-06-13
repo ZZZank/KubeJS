@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.registry.BuilderBase;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -89,14 +89,18 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 	}
 
 	public FluidBuilder textureThick(int color) {
-		return textureStill(KubeJS.id("fluid/fluid_thick")).textureFlowing(KubeJS.id("fluid/fluid_thick_flow")).color(color);
+		return textureStill(KubeJS.id("fluid/fluid_thick"))
+				.textureFlowing(KubeJS.id("fluid/fluid_thick_flow"))
+				.color(color);
 	}
 	public FluidBuilder thickTexture(int color) {
 		return textureThick(color);
 	}
 
 	public FluidBuilder textureThin(int color) {
-		return textureStill(KubeJS.id("fluid/fluid_thin")).textureFlowing(KubeJS.id("fluid/fluid_thin_flow")).color(color);
+		return textureStill(KubeJS.id("fluid/fluid_thin"))
+				.textureFlowing(KubeJS.id("fluid/fluid_thin_flow"))
+				.color(color);
 	}
 	public FluidBuilder thinTexture(int color) {
 		return textureThin(color);
