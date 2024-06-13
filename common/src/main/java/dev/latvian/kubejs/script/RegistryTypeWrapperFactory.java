@@ -5,6 +5,7 @@ import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.wrap.TypeWrapperFactory;
+import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import me.shedaniel.architectury.registry.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,53 +21,48 @@ import java.util.List;
 public class RegistryTypeWrapperFactory<T> implements TypeWrapperFactory<T> {
 	private static List<RegistryTypeWrapperFactory<?>> all;
 
+    public static void register(TypeWrappers wrappers) {
+        for (var wrapperFactory : getAll()) {
+            try {
+                wrappers.register(wrapperFactory.type, UtilsJS.cast(wrapperFactory));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+    }
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static List<RegistryTypeWrapperFactory<?>> getAll() {
-		if (all == null) {
-			all = new ArrayList<>();
+        if (all != null) {
+            return all;
+        }
+        all = new ArrayList<>();
+        try {
+            for(var registry : KubeJSRegistries.registries()) {
+                var key = registry.key();
+                var type = (ParameterizedType) registry.getClass().getGenericSuperclass(); // Registry<T> in `? extends Registry<T>`
+                var T = type.getActualTypeArguments()[0]; //T in `Registry<T>`
+                Class raw = UtilsJS.getRawType(T);
+                if (raw == Item.class || raw == ResourceLocation.class || raw == ResourceKey.class || raw == Codec.class) {
+                    continue;
+                }
+                all.add(new RegistryTypeWrapperFactory(raw, KubeJSRegistries.genericRegistry(UtilsJS.cast(key)), key.location().toString()));
+            }
+        } catch (Exception ex) {
+            KubeJS.LOGGER.error("Failed to register TypeWrappers for registries!");
+            ex.printStackTrace();
+        }
 
-			try {
-				for (Field field : net.minecraft.core.Registry.class.getDeclaredFields()) {
-					if (field.getType() != ResourceKey.class || !Modifier.isPublic(field.getModifiers()) || !Modifier.isStatic(field.getModifiers())) {
-						continue;
-					}
-					String id = "unknown";
-
-					try {
-						field.setAccessible(true);
-						ResourceKey key = (ResourceKey) field.get(null);
-						id = key.location().getPath();
-						Type type = field.getGenericType(); // ResourceKey<Registry<T>>
-						Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0]; // Registry<T>
-						Type type2 = ((ParameterizedType) type1).getActualTypeArguments()[0]; // T
-						Class rawType = UtilsJS.getRawType(type2);
-
-						if (rawType == Item.class || rawType == ResourceLocation.class || rawType == ResourceKey.class || rawType == Codec.class) {
-							continue;
-						}
-
-						all.add(new RegistryTypeWrapperFactory(rawType, KubeJSRegistries.genericRegistry(key), key.location().toString()));
-					} catch (Throwable t) {
-						KubeJS.LOGGER.error("Failed to create TypeWrapper for registry " + id + ": " + t);
-					}
-				}
-			} catch (Exception ex) {
-				KubeJS.LOGGER.error("Failed to register TypeWrappers for registries!");
-				ex.printStackTrace();
-			}
-		}
-
-		return all;
+        return all;
 	}
 
 	public final Class<T> type;
 	public final Registry<T> registry;
 	public final String name;
 
-	private RegistryTypeWrapperFactory(Class<T> t, Registry<T> r, String n) {
-		type = t;
-		registry = r;
-		name = n;
+	private RegistryTypeWrapperFactory(Class<T> type, Registry<T> registry, String name) {
+		this.type = type;
+		this.registry = registry;
+		this.name = name;
 	}
 
 	@Override

@@ -115,12 +115,7 @@ public class ScriptManager {
 		KubeJSPlugins.forEachPlugin(plugin -> plugin.addTypeWrappers(type, typeWrappers));
 		CURRENT_CONTEXT.set(context);
 
-		for (RegistryTypeWrapperFactory<?> registryTypeWrapperFactory : RegistryTypeWrapperFactory.getAll()) {
-			try {
-				typeWrappers.register(registryTypeWrapperFactory.type, UtilsJS.cast(registryTypeWrapperFactory));
-			} catch (IllegalArgumentException ignored) {
-			}
-		}
+		RegistryTypeWrapperFactory.register(typeWrappers);
 
 		long startAll = System.currentTimeMillis();
 
