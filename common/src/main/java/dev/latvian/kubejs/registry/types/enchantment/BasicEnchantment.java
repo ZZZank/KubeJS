@@ -10,27 +10,27 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class BasicEnchantment extends Enchantment {
-	public final EnchantmentBuilder enchantmentBuilder;
+	public final EnchantmentBuilder builder;
 
 	public BasicEnchantment(EnchantmentBuilder b) {
 		super(b.rarity, b.category, b.slots);
-		enchantmentBuilder = b;
+		builder = b;
 	}
 
 	@Override
 	public int getMinLevel() {
-		return enchantmentBuilder.minLevel;
+		return builder.minLevel;
 	}
 
 	@Override
 	public int getMaxLevel() {
-		return enchantmentBuilder.maxLevel;
+		return builder.maxLevel;
 	}
 
 	@Override
 	public int getMinCost(int i) {
-		if (enchantmentBuilder.minCost != null) {
-			return enchantmentBuilder.minCost.get(i);
+		if (builder.minCost != null) {
+			return builder.minCost.get(i);
 		}
 
 		return super.getMinCost(i);
@@ -38,8 +38,8 @@ public class BasicEnchantment extends Enchantment {
 
 	@Override
 	public int getMaxCost(int i) {
-		if (enchantmentBuilder.maxCost != null) {
-			return enchantmentBuilder.maxCost.get(i);
+		if (builder.maxCost != null) {
+			return builder.maxCost.get(i);
 		}
 
 		return super.getMaxCost(i);
@@ -47,8 +47,8 @@ public class BasicEnchantment extends Enchantment {
 
 	@Override
 	public int getDamageProtection(int i, DamageSource damageSource) {
-		if (enchantmentBuilder.damageProtection != null) {
-			return enchantmentBuilder.damageProtection.getDamageProtection(i, damageSource);
+		if (builder.damageProtection != null) {
+			return builder.damageProtection.getDamageProtection(i, damageSource);
 		}
 
 		return super.getDamageProtection(i, damageSource);
@@ -57,8 +57,8 @@ public class BasicEnchantment extends Enchantment {
 
 	@Override
 	public float getDamageBonus(int bonusLevel, MobType mobType) {
-		if (enchantmentBuilder.damageBonus != null) {
-			return enchantmentBuilder.damageBonus.getDamageBonus(bonusLevel, UtilsJS.getMobTypeId(mobType));
+		if (builder.damageBonus != null) {
+			return builder.damageBonus.getDamageBonus(bonusLevel, UtilsJS.getMobTypeId(mobType));
 		}
 
 		return super.getDamageBonus(bonusLevel, mobType);
@@ -68,8 +68,8 @@ public class BasicEnchantment extends Enchantment {
 	protected boolean checkCompatibility(Enchantment enchantment) {
 		if (enchantment == this) {
 			return false;
-		} else if (enchantmentBuilder.checkCompatibility != null) {
-			return enchantmentBuilder.checkCompatibility.apply(RegistryInfo.ENCHANTMENT.getId(enchantment));
+		} else if (builder.checkCompatibility != null) {
+			return builder.checkCompatibility.apply(RegistryInfo.ENCHANTMENT.getId(enchantment));
 		}
 
 		return true;
@@ -79,8 +79,8 @@ public class BasicEnchantment extends Enchantment {
 	public boolean canEnchant(ItemStack itemStack) {
 		if (super.canEnchant(itemStack)) {
 			return true;
-		} else if (enchantmentBuilder.canEnchant != null) {
-			return enchantmentBuilder.canEnchant.apply(itemStack);
+		} else if (builder.canEnchant != null) {
+			return builder.canEnchant.apply(itemStack);
 		}
 
 		return false;
@@ -88,35 +88,35 @@ public class BasicEnchantment extends Enchantment {
 
 	@Override
 	public void doPostAttack(LivingEntity entity, Entity target, int level) {
-		if (enchantmentBuilder.postAttack != null) {
-			enchantmentBuilder.postAttack.apply(entity, target, level);
+		if (builder.postAttack != null) {
+			builder.postAttack.apply(entity, target, level);
 		}
 	}
 
 	@Override
 	public void doPostHurt(LivingEntity entity, Entity target, int level) {
-		if (enchantmentBuilder.postHurt != null) {
-			enchantmentBuilder.postHurt.apply(entity, target, level);
+		if (builder.postHurt != null) {
+			builder.postHurt.apply(entity, target, level);
 		}
 	}
 
 	@Override
 	public boolean isTreasureOnly() {
-		return enchantmentBuilder.treasureOnly;
+		return builder.treasureOnly;
 	}
 
 	@Override
 	public boolean isCurse() {
-		return enchantmentBuilder.curse;
+		return builder.curse;
 	}
 
 	@Override
 	public boolean isTradeable() {
-		return enchantmentBuilder.tradeable;
+		return builder.tradeable;
 	}
 
 	@Override
 	public boolean isDiscoverable() {
-		return enchantmentBuilder.discoverable;
+		return builder.discoverable;
 	}
 }

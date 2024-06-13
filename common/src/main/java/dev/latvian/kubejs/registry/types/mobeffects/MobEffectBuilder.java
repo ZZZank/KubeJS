@@ -34,7 +34,7 @@ public abstract class MobEffectBuilder extends BuilderBase<MobEffect> {
 	}
 
 	@Override
-	public final RegistryInfo getRegistryType() {
+	public final RegistryInfo<MobEffect> getRegistryType() {
 		return RegistryInfo.MOB_EFFECT;
 	}
 

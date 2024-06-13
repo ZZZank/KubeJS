@@ -20,6 +20,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	public final ResourceLocation id;
 	public String translationKey;
 	@Deprecated
+	@JSInfo("use `display` instead")
 	public String displayName;
 	public Component display;
 	protected T object;

@@ -219,7 +219,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 
 		if (isDefault) {
 			if (defaultType != null) {
-				ConsoleJS.STARTUP.warn("Previous default type '" + defaultType.type() + "' for registry '" + key.location() + "' replaced with '" + type + "'!");
+				ConsoleJS.STARTUP.warnf("Previous default type '%s' for registry '%s' replaced with '%s'!", defaultType.type(), key.location(), type);
 			}
 
 			defaultType = b;

@@ -30,7 +30,7 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		List<PackResources> injected = new ArrayList<>(packs);
 		//KubeJS injected resources should have lower priority then user resources packs, which means file pack
 		int pos = injected.size();
-		for (int i = 0; i < injected.size(); i++) {
+		for (int i = 0; i < pos; i++) {
 			if (injected.get(i) instanceof FilePackResources) {
 				pos = i;
 				break;
@@ -58,12 +58,12 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 
 	private void generateLang(AssetJsonGenerator generator) {
 		var langEvent = new LangEventJS();
-		Map<String, String> langMap = new HashMap<>();
 
 		for (var builder : RegistryInfo.ALL_BUILDERS) {
 			builder.generateLang(langEvent);
 		}
 
+		Map<String, String> langMap = new HashMap<>();
 		KubeJSPlugins.forEachPlugin(p -> p.generateLang(langMap));
 
 		//read lang json and add into lang event

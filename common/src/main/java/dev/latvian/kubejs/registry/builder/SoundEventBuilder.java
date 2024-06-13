@@ -11,7 +11,7 @@ public class SoundEventBuilder extends BuilderBase<SoundEvent> {
 	}
 
 	@Override
-	public final RegistryInfo getRegistryType() {
+	public final RegistryInfo<SoundEvent> getRegistryType() {
 		return RegistryInfo.SOUND_EVENT;
 	}
 

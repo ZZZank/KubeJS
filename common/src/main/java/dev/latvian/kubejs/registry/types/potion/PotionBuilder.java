@@ -20,7 +20,7 @@ public class PotionBuilder extends BuilderBase<Potion> {
 	}
 
 	@Override
-	public RegistryInfo getRegistryType() {
+	public RegistryInfo<Potion> getRegistryType() {
 		return RegistryInfo.POTION;
 	}
 

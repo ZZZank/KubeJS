@@ -19,9 +19,11 @@ import java.util.function.Supplier;
 public class CreativeTabRegistryEventJS extends EventJS {
 
 	@JSInfo("""
-			Registered tabs from Vanilla and KubeJS.
+			Registered tabs from Vanilla and KesseractJS.
 			
-			tabs registered by kubejs will be in `kubejs.{id}` format
+			Vanilla tabs are indexed by their recipe folder name.
+			
+			Tabs registered by us will be indexed by `kubejs.{id}`.
 			""")
 	public static final Map<String, CreativeModeTab> TABS = new HashMap<>();
 

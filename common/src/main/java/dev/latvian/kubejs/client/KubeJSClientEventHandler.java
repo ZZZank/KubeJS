@@ -98,15 +98,9 @@ public class KubeJSClientEventHandler {
 	private void renderLayers() {
 		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
 			switch (builder.renderType) {
-				case "cutout":
-					RenderTypes.register(RenderType.cutout(), builder.block);
-					break;
-				case "cutout_mipped":
-					RenderTypes.register(RenderType.cutoutMipped(), builder.block);
-					break;
-				case "translucent":
-					RenderTypes.register(RenderType.translucent(), builder.block);
-					break;
+				case "cutout" -> RenderTypes.register(RenderType.cutout(), builder.block);
+				case "cutout_mipped" -> RenderTypes.register(RenderType.cutoutMipped(), builder.block);
+				case "translucent" -> RenderTypes.register(RenderType.translucent(), builder.block);
 				//default:
 				//	RenderTypeLookup.setRenderLayer(block, RenderType.getSolid());
 			}

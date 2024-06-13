@@ -66,7 +66,7 @@ public class BasicMobEffect extends MobEffect {
 	@Override
 	public void addAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int i) {
 		this.applyAttributeModifications();
-		for (Map.Entry<Attribute, AttributeModifier> attributeAttributeModifierEntry : this.attributeMap.entrySet()) {
+		for (var attributeAttributeModifierEntry : this.attributeMap.entrySet()) {
 			AttributeInstance attributeInstance = attributeMap.getInstance(attributeAttributeModifierEntry.getKey());
 			if (attributeInstance != null) {
 				AttributeModifier attributeModifier = attributeAttributeModifierEntry.getValue();

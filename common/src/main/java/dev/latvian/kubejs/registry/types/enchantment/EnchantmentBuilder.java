@@ -69,7 +69,7 @@ public class EnchantmentBuilder extends BuilderBase<Enchantment> {
 	}
 
 	@Override
-	public final RegistryInfo getRegistryType() {
+	public final RegistryInfo<Enchantment> getRegistryType() {
 		return RegistryInfo.ENCHANTMENT;
 	}
 
