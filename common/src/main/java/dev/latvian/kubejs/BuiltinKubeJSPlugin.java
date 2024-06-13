@@ -71,6 +71,7 @@ import dev.latvian.kubejs.recipe.mod.ShapedArtisanRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapelessArtisanRecipeJS;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.builder.SoundEventBuilder;
+import dev.latvian.kubejs.registry.types.enchantment.EnchantmentBuilder;
 import dev.latvian.kubejs.registry.types.potion.PotionBuilder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
@@ -184,7 +185,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
 		//misc
 //		RegistryInfo.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
-//		RegistryInfo.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
+		RegistryInfo.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
 //		RegistryInfo.MOB_EFFECT.addType("basic", BasicMobEffect.Builder.class, BasicMobEffect.Builder::new);
 		RegistryInfo.POTION.addType("basic", PotionBuilder.class, PotionBuilder::new);
 //		RegistryInfo.PARTICLE_TYPE.addType("basic", ParticleTypeBuilder.class, ParticleTypeBuilder::new);

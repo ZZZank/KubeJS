@@ -35,6 +35,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -557,6 +558,21 @@ public class UtilsJS {
 		} else {
 			String className = type == null ? "null" : type.getClass().getName();
 			throw new IllegalArgumentException("Expected a Class, ParameterizedType, or GenericArrayType, but <" + type + "> is of type " + className);
+		}
+	}
+
+
+	public static String getMobTypeId(MobType type) {
+		if (type == MobType.UNDEAD) {
+			return "undead";
+		} else if (type == MobType.ARTHROPOD) {
+			return "arthropod";
+		} else if (type == MobType.ILLAGER) {
+			return "illager";
+		} else if (type == MobType.WATER) {
+			return "water";
+		} else {
+			return "unknown";
 		}
 	}
 
