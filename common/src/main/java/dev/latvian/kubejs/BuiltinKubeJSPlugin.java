@@ -74,6 +74,9 @@ import dev.latvian.kubejs.registry.builder.SoundEventBuilder;
 import dev.latvian.kubejs.registry.types.enchantment.EnchantmentBuilder;
 import dev.latvian.kubejs.registry.types.mobeffects.BasicMobEffect;
 import dev.latvian.kubejs.registry.types.potion.PotionBuilder;
+import dev.latvian.kubejs.registry.types.villagers.PoiTypeBuilder;
+import dev.latvian.kubejs.registry.types.villagers.VillagerProfessionBuilder;
+import dev.latvian.kubejs.registry.types.villagers.VillagerTypeBuilder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
 import dev.latvian.kubejs.script.ScriptType;
@@ -191,9 +194,9 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		RegistryInfo.POTION.addType("basic", PotionBuilder.class, PotionBuilder::new);
 //		RegistryInfo.PARTICLE_TYPE.addType("basic", ParticleTypeBuilder.class, ParticleTypeBuilder::new);
 //		RegistryInfo.CUSTOM_STAT.addType("basic", CustomStatBuilder.class, CustomStatBuilder::new);
-//		RegistryInfo.POINT_OF_INTEREST_TYPE.addType("basic", PoiTypeBuilder.class, PoiTypeBuilder::new);
-//		RegistryInfo.VILLAGER_TYPE.addType("basic", VillagerTypeBuilder.class, VillagerTypeBuilder::new);
-//		RegistryInfo.VILLAGER_PROFESSION.addType("basic", VillagerProfessionBuilder.class, VillagerProfessionBuilder::new);
+		RegistryInfo.POINT_OF_INTEREST_TYPE.addType("basic", PoiTypeBuilder.class, PoiTypeBuilder::new);
+		RegistryInfo.VILLAGER_TYPE.addType("basic", VillagerTypeBuilder.class, VillagerTypeBuilder::new);
+		RegistryInfo.VILLAGER_PROFESSION.addType("basic", VillagerProfessionBuilder.class, VillagerProfessionBuilder::new);
 //		RegistryInfo.CREATIVE_MODE_TAB.addType("basic", CreativeTabBuilder.class, CreativeTabBuilder::new);
 		//TODO: ENTITY_TYPE
 		//TODO: BLOCK_ENTITY_TYPE

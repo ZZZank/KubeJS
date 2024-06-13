@@ -1,6 +1,11 @@
 accessWidener v2 named
 
+#command
 accessible field net/minecraft/commands/synchronization/ArgumentTypes BY_CLASS Ljava/util/Map;
 accessible field net/minecraft/commands/synchronization/ArgumentTypes$Entry name Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/commands/Commands$CommandSelection includeIntegrated Z
 accessible field net/minecraft/commands/Commands$CommandSelection includeDedicated Z
+#villager
+accessible method net/minecraft/world/entity/npc/VillagerType <init> (Ljava/lang/String;)V
+accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/village/poi/PoiType;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
+accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/lang/String;Ljava/util/Set;II)V
