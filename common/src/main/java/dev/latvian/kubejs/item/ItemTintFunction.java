@@ -1,7 +1,10 @@
 package dev.latvian.kubejs.item;
 
 import com.github.bsideup.jabel.Desugar;
+import dev.latvian.kubejs.core.BlockKJS;
+import dev.latvian.mods.rhino.BaseFunction;
 import dev.latvian.mods.rhino.Context;
+import dev.latvian.mods.rhino.NativeJavaObject;
 import dev.latvian.mods.rhino.Undefined;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
@@ -9,6 +12,7 @@ import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -42,19 +46,18 @@ public interface ItemTintFunction {
 		}
 	}
 
-	//TODO: this requires a block builder
-//	ItemTintFunction BLOCK = (stack, index) -> {
-//		if (stack.getItem() instanceof BlockItem block) {
-//			var s = block.getBlock().defaultBlockState();
-//			var internal = ((BlockKJS) s.getBlock()).kjs$getBlockBuilder();
-//
-//			if (internal != null && internal.tint != null) {
-//				return internal.tint.getColor(s, null, null, index);
-//			}
-//		}
-//
-//		return null;
-//	};
+	ItemTintFunction BLOCK = (stack, index) -> {
+		if (stack.getItem() instanceof BlockItem block) {
+			var s = block.getBlock().defaultBlockState();
+			var internal = ((BlockKJS) s.getBlock()).getBlockBuilderKJS();
+
+			if (internal != null && internal.tint != null) {
+				return internal.tint.getColor(s, null, null, index);
+			}
+		}
+
+		return null;
+	};
 
 	ItemTintFunction POTION = (stack, index) -> new SimpleColor(PotionUtils.getColor(stack));
 	ItemTintFunction MAP = (stack, index) -> new SimpleColor(MapItem.getColor(stack));
@@ -69,7 +72,7 @@ public interface ItemTintFunction {
 	};
 
 	@Nullable
-	static ItemTintFunction of(Context cx, Object o) {
+	static ItemTintFunction of(Object o) {
 		if (o == null || Undefined.isUndefined(o)) {
 			return null;
 		} else if (o instanceof ItemTintFunction f) {
@@ -78,7 +81,7 @@ public interface ItemTintFunction {
 			var map = new Mapped();
 
 			for (int i = 0; i < list.size(); i++) {
-				var f = of(cx, list.get(i));
+				var f = of(list.get(i));
 
 				if (f != null) {
 					map.map.put(i, f);
@@ -98,9 +101,8 @@ public interface ItemTintFunction {
 			if (f != null) {
 				return f;
 			}
-			//TODO: rhizo problem, need to expose more api
-//		} else if (o instanceof BaseFunction function) {
-//			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(cx, ItemTintFunction.class, function);
+		} else if (o instanceof BaseFunction function) {
+			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(ItemTintFunction.class, function);
 		}
 
 		return new Fixed(ColorWrapper.of(o));

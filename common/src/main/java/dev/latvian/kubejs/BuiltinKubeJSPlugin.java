@@ -17,12 +17,8 @@ import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.bindings.ScriptEventsWrapper;
 import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.bindings.UtilsWrapper;
-import dev.latvian.kubejs.block.BlockBuilder;
+import dev.latvian.kubejs.block.*;
 import dev.latvian.kubejs.block.events.BlockRegistryEventJS;
-import dev.latvian.kubejs.block.BlockStatePredicate;
-import dev.latvian.kubejs.block.DetectorInstance;
-import dev.latvian.kubejs.block.MaterialJS;
-import dev.latvian.kubejs.block.MaterialListJS;
 import dev.latvian.kubejs.block.custom.BasicBlockType;
 import dev.latvian.kubejs.block.custom.BlockType;
 import dev.latvian.kubejs.block.custom.BlockTypes;
@@ -43,6 +39,7 @@ import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.item.ItemStackJS;
+import dev.latvian.kubejs.item.ItemTintFunction;
 import dev.latvian.kubejs.item.custom.ArmorItemType;
 import dev.latvian.kubejs.item.custom.BasicItemType;
 import dev.latvian.kubejs.item.custom.ItemArmorTierEventJS;
@@ -469,6 +466,9 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		typeWrappers.register(Color.class, ColorWrapper::of);
 		typeWrappers.register(ToolType.class, o -> ToolType.create(o.toString(), () -> null));
 		typeWrappers.register(IngredientActionFilter.class, IngredientActionFilter::filterOf);
+        //tint
+        typeWrappers.register(BlockTintFunction.class, BlockTintFunction::of);
+        typeWrappers.register(ItemTintFunction.class, ItemTintFunction::of);
 
 		KubeJS.PROXY.clientTypeWrappers(typeWrappers);
 	}
