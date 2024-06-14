@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
+import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.item.ItemRegistryEventJS;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ConsoleJS;
@@ -82,10 +83,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	public static final Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());
 	public static final List<BuilderBase<?>> ALL_BUILDERS = new LinkedList<>();
 
-//	@Info("Platform-agnostic wrapper of minecraft registries, can be used to register content or get objects from the registry")
-	private static final Registries REGISTRIES = Registries.get(KubeJS.MOD_ID);
-
-	public static <T> RegistryInfo<T> of(ResourceKey<? extends Registry<?>> key, Class<T> type) {
+    public static <T> RegistryInfo<T> of(ResourceKey<? extends Registry<?>> key, Class<T> type) {
 		var r = MAP.get(key);
 
 		if (r == null) {
@@ -171,7 +169,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	public static final LinkedList<RegistryInfo<?>> AFTER_VANILLA = new LinkedList<>();
 
 	public final ResourceKey<? extends Registry<T>> key;
-	public final Class<?> objectBaseClass;
+	public final Class<T> objectBaseClass;
 	public final Map<String, BuilderType<T>> types;
 	public final Map<ResourceLocation, BuilderBase<? extends T>> objects;
 	public boolean hasDefaultTags = false;
@@ -180,6 +178,7 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 	public boolean autoWrap;
 	private me.shedaniel.architectury.registry.Registry<T> archRegistry;
 	public String languageKeyPrefix;
+	//used for backward compatibility
 	public Supplier<RegistryEventJS<T>> customRegEvent;
 
 	private RegistryInfo(ResourceKey<? extends Registry<T>> key, Class<T> objectBaseClass) {
@@ -317,10 +316,10 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 		return objects.values().iterator();
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked"})
 	public me.shedaniel.architectury.registry.Registry<T> getArchRegistry() {
 		if (archRegistry == null) {
-			archRegistry = REGISTRIES.get((ResourceKey) key);
+			archRegistry = KubeJSRegistries.genericRegistry((ResourceKey<Registry<T>>) key);
 		}
 		return archRegistry;
 	}
@@ -367,8 +366,8 @@ public final class RegistryInfo<T> implements Iterable<BuilderBase<? extends T>>
 
 	public void fireRegistryEvent() {
 		var event = customRegEvent == null
-				?new RegistryEventJS<>(this)
-				:customRegEvent.get();
+				? new RegistryEventJS<>(this)
+				: customRegEvent.get();
 		event.post(ScriptType.STARTUP, key.location().getPath() + KubeJSEvents.REGISTRY_SUFFIX);
 		event.created.forEach(BuilderBase::createAdditionalObjects);
 	}

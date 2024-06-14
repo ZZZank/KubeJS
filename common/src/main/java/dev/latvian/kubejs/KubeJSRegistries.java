@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import me.shedaniel.architectury.registry.Registries;
 import me.shedaniel.architectury.registry.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -27,7 +26,7 @@ public class KubeJSRegistries {
 	}
 
 	public static Registry<net.minecraft.core.Registry<?>> registries() {
-		return genericRegistry(ResourceKey.createRegistryKey(new ResourceLocation("root")));
+		return genericRegistry(ResourceKey.createRegistryKey(ROOT_REGISTRY_NAME));
 	}
 
 	public static Registry<Block> blocks() {
