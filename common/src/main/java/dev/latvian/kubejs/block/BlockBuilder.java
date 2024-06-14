@@ -8,6 +8,7 @@ import dev.latvian.kubejs.loot.LootBuilder;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.registry.BuilderBase;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.BlockProperties;
 import me.shedaniel.architectury.registry.ToolType;
@@ -44,6 +45,7 @@ public class BlockBuilder extends BuilderBase<Block> {
 	public transient boolean requiresTool;
 	public transient String renderType;
 	public transient Int2IntOpenHashMap color;
+    public transient BlockTintFunction tint;
 	public transient final JsonObject textures;
 	public transient String model;
 	public transient BlockItemBuilder itemBuilder;
@@ -185,6 +187,26 @@ public class BlockBuilder extends BuilderBase<Block> {
 		color.put(index, 0xFF000000 | c);
 		return this;
 	}
+
+    @JSInfo("""
+		Set the color of a specific layer of the block.
+		""")
+    public BlockBuilder color(int index, BlockTintFunction color) {
+        if (!(tint instanceof BlockTintFunction.Mapped)) {
+            tint = new BlockTintFunction.Mapped();
+        }
+
+        ((BlockTintFunction.Mapped) tint).map.put(index, color);
+        return this;
+    }
+
+    @JSInfo("""
+		Set the color of a specific layer of the block.
+		""")
+    public BlockBuilder color(BlockTintFunction color) {
+        tint = color;
+        return this;
+    }
 
 	@Deprecated
 	public BlockBuilder texture(String tex) {
