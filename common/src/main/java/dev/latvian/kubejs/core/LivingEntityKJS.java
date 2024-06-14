@@ -2,7 +2,7 @@ package dev.latvian.kubejs.core;
 
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.item.ItemBuilder;
-import dev.latvian.kubejs.item.ItemFoodEatenEventJS;
+import dev.latvian.kubejs.item.events.ItemFoodEatenEventJS;
 import dev.latvian.kubejs.script.ScriptType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;

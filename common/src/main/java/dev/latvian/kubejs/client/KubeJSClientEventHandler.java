@@ -15,7 +15,7 @@ import dev.latvian.kubejs.core.BucketItemKJS;
 import dev.latvian.kubejs.core.ImageButtonKJS;
 import dev.latvian.kubejs.fluid.FluidBuilder;
 import dev.latvian.kubejs.item.ItemBuilder;
-import dev.latvian.kubejs.item.ItemTooltipEventJS;
+import dev.latvian.kubejs.item.events.ItemTooltipEventJS;
 import dev.latvian.kubejs.item.OldItemTooltipEventJS;
 import dev.latvian.kubejs.player.AttachPlayerDataEvent;
 import dev.latvian.kubejs.registry.RegistryInfo;

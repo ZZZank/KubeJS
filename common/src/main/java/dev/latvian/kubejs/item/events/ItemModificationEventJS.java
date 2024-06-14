@@ -1,7 +1,8 @@
-package dev.latvian.kubejs.item;
+package dev.latvian.kubejs.item.events;
 
 import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.event.EventJS;
+import dev.latvian.kubejs.item.ItemModificationProperties;
 import dev.latvian.kubejs.item.ingredient.IngredientJS;
 import net.minecraft.world.item.Item;
 

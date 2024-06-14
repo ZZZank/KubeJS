@@ -1,6 +1,7 @@
-package dev.latvian.kubejs.item;
+package dev.latvian.kubejs.item.events;
 
 import dev.latvian.kubejs.event.EventJS;
+import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.kubejs.text.Text;
 import dev.latvian.kubejs.util.ListJS;

@@ -10,7 +10,7 @@ import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.block.BlockModificationEventJS;
 import dev.latvian.kubejs.core.JsonSerializableKJS;
 import dev.latvian.kubejs.entity.EntityJS;
-import dev.latvian.kubejs.item.ItemModificationEventJS;
+import dev.latvian.kubejs.item.events.ItemModificationEventJS;
 import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerJS;

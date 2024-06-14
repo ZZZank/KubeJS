@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * @author LatvianModder
  */
+@Deprecated
 public class OldItemTooltipEventJS extends EventJS {
 	private final ItemStack stack;
 	private final List<Component> lines;

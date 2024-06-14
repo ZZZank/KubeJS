@@ -1,6 +1,7 @@
-package dev.latvian.kubejs.item;
+package dev.latvian.kubejs.item.events;
 
 import dev.latvian.kubejs.entity.EntityJS;
+import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.player.PlayerEventJS;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;

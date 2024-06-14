@@ -1,5 +1,6 @@
-package dev.latvian.kubejs.item;
+package dev.latvian.kubejs.item.events;
 
+import dev.latvian.kubejs.item.FoodBuilder;
 import dev.latvian.kubejs.registry.RegistryEventJS;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.BuilderBase;
