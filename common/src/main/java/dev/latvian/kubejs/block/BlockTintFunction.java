@@ -81,7 +81,7 @@ public interface BlockTintFunction {
 
 			return map;
 		} else if (o instanceof CharSequence) {
-            return switch (o.toString()) {
+            var fn = switch (o.toString()) {
                 case "grass" -> GRASS;
                 case "foliage" -> FOLIAGE;
                 case "evergreen_foliage" -> EVERGREEN_FOLIAGE;
@@ -90,8 +90,11 @@ public interface BlockTintFunction {
                 case "redstone" -> REDSTONE;
                 default -> null;
             };
-		} else if (o instanceof BaseFunction function) {
-			return (BlockTintFunction) NativeJavaObject.createInterfaceAdapter(BlockTintFunction.class, function);
+            if (fn != null) {
+                return fn;
+            }
+//		} else if (o instanceof BaseFunction function) {
+//			return (BlockTintFunction) NativeJavaObject.createInterfaceAdapter(BlockTintFunction.class, function);
 		}
 
 		return new Fixed(ColorWrapper.of(o));

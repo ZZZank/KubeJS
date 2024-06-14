@@ -114,10 +114,12 @@ public class ScriptManager {
         //context related
         context.setClassShutter(this.classFilter);
         context.setApplicationClassLoader(KubeJS.class.getClassLoader());
+//        context.setCustomProp("console", type.console);
+//        context.setCustomProp("type", type);
 
         //type wrapper / binding
         TypeWrappers typeWrappers = context.getTypeWrappers();
-        // typeWrappers.removeAll();
+//        typeWrappers.removeAll();
         RegistryTypeWrapperFactory.register(typeWrappers);
         var bindingEvent = new BindingsEvent(this, context, topScope);
         BindingsEvent.EVENT.invoker().accept(bindingEvent);

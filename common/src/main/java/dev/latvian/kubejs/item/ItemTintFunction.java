@@ -90,19 +90,18 @@ public interface ItemTintFunction {
 
 			return map;
 		} else if (o instanceof CharSequence) {
-			var f = switch (o.toString()) {
-//				case "block" -> BLOCK; //TODO
+			var fn = switch (o.toString()) {
+				case "block" -> BLOCK;
 				case "potion" -> POTION;
 				case "map" -> MAP;
 				case "display_color_nbt" -> DISPLAY_COLOR_NBT;
 				default -> null;
 			};
-
-			if (f != null) {
-				return f;
+			if (fn != null) {
+				return fn;
 			}
-		} else if (o instanceof BaseFunction function) {
-			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(ItemTintFunction.class, function);
+//		} else if (o instanceof BaseFunction function) {
+//			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(ItemTintFunction.class, function);
 		}
 
 		return new Fixed(ColorWrapper.of(o));
