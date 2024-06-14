@@ -9,7 +9,6 @@ import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashSet;
@@ -19,9 +18,6 @@ import java.util.function.Supplier;
 public abstract class BuilderBase<T> implements Supplier<T> {
 	public final ResourceLocation id;
 	public String translationKey;
-	@Deprecated
-	@JSInfo("use `display` instead")
-	public String displayName;
 	public Component display;
 	protected T object;
 	public boolean overrideLangJson;
@@ -83,12 +79,6 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		return this;
 	}
 
-	@JSInfo("Deprecated, use `.display()` instead")
-	@Deprecated
-	public BuilderBase<T> displayName(String name) {
-		return display(new TextComponent(name));
-	}
-
 	@JSInfo("""
 		Sets the display name for this object, e.g. `Stone`.
 
@@ -96,9 +86,8 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 
 		If you want to make displayName() override language files, see `.overrideLangJson()`.
 		""")
-	public BuilderBase<T> display(Component name) {
+	public BuilderBase<T> displayName(Component name) {
 		display = name;
-		displayName = display.getString();
 		return this;
 	}
 
@@ -111,9 +100,9 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	}
 
 	@JSInfo("""
-			Combined method of overrideLangJson().display(name).""")
+			Combined method of overrideLangJson().displayName(name).""")
 	public BuilderBase<T> displayWithLang(Component name) {
-		return overrideLangJson().display(name);
+		return overrideLangJson().displayName(name);
 	}
 
 	/**
@@ -172,4 +161,16 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 
 		return n + "[" + id + "]";
 	}
+
+    @Deprecated
+    @JSInfo("use `display` instead")
+    public String getDisplayName() {
+        return display.getString();
+    }
+
+    @Deprecated
+    @JSInfo("use `display` instead")
+    public void setDisplayName(String displayName) {
+        this.display = Component.nullToEmpty(displayName);
+    }
 }
