@@ -1,6 +1,7 @@
 package dev.latvian.kubejs.util;
 
 import dev.latvian.kubejs.CommonProperties;
+import dev.latvian.mods.rhino.ClassShutter;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClassFilter {
+public class ClassFilter implements ClassShutter {
 	private static final byte V_DEF = -1;
 	private static final byte V_DENY = 0;
 	private static final byte V_ALLOW = 1;
@@ -94,4 +95,9 @@ public class ClassFilter {
 
 		return b == V_ALLOW;
 	}
+
+    @Override
+    public boolean visibleToScripts(String fullClassName, int type) {
+        return type != ClassShutter.TYPE_CLASS_IN_PACKAGE || isAllowed(fullClassName);
+    }
 }

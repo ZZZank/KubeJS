@@ -21,6 +21,10 @@ public class KubeJSPlugins {
 	private static final List<KubeJSPlugin> LIST = new ArrayList<>();
 	private static final List<String> GLOBAL_CLASS_FILTER = new ArrayList<>();
 
+    public static List<KubeJSPlugin> all() {
+        return LIST;
+    }
+
 	public static void load(String id, Path path) throws Exception {
 		if (Files.isDirectory(path)) {
 			Path pp = path.resolve("kubejs.plugins.txt");

@@ -3,16 +3,13 @@ package dev.latvian.kubejs.script;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
+import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.event.EventsJS;
 import dev.latvian.kubejs.event.StartupEventJS;
 import dev.latvian.kubejs.util.ClassFilter;
 import dev.latvian.kubejs.util.KubeJSPlugins;
 import dev.latvian.kubejs.util.UtilsJS;
-import dev.latvian.mods.rhino.ClassShutter;
-import dev.latvian.mods.rhino.Context;
-import dev.latvian.mods.rhino.NativeJavaClass;
-import dev.latvian.mods.rhino.RhinoException;
-import dev.latvian.mods.rhino.Scriptable;
+import dev.latvian.mods.rhino.*;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +39,9 @@ public class ScriptManager {
 	public boolean firstLoad;
 	private Map<String, Optional<NativeJavaClass>> javaClassCache;
 	public Context context;
+    public ScriptableObject topScope;
 
-	public ScriptManager(ScriptType t, Path p, String e) {
+    public ScriptManager(ScriptType t, Path p, String e) {
 		type = t;
 		directory = p;
 		exampleScript = e;
@@ -51,7 +49,7 @@ public class ScriptManager {
 		packs = new LinkedHashMap<>();
 		firstLoad = true;
 		classFilter = KubeJSPlugins.createClassFilter(type);
-	}
+    }
 
 	public void unload() {
 		events.clear();
@@ -107,17 +105,29 @@ public class ScriptManager {
 		return CURRENT_CONTEXT.get();
 	}
 
-	public void load() {
-		this.context = Context.enterWithNewFactory();
-		context.setClassShutter((fullClassName, type) -> type != ClassShutter.TYPE_CLASS_IN_PACKAGE || isClassAllowed(fullClassName));
-		TypeWrappers typeWrappers = context.getTypeWrappers();
-		// typeWrappers.removeAll();
-		KubeJSPlugins.forEachPlugin(plugin -> plugin.addTypeWrappers(type, typeWrappers));
-		CURRENT_CONTEXT.set(context);
+    public void load() {
+        //top level
+        this.context = Context.enterWithNewFactory();
+        CURRENT_CONTEXT.set(context);
+        topScope = context.initStandardObjects();
 
-		RegistryTypeWrapperFactory.register(typeWrappers);
+        //context related
+        context.setClassShutter(this.classFilter);
+        context.setApplicationClassLoader(KubeJS.class.getClassLoader());
 
-		long startAll = System.currentTimeMillis();
+        //type wrapper / binding
+        TypeWrappers typeWrappers = context.getTypeWrappers();
+        // typeWrappers.removeAll();
+        RegistryTypeWrapperFactory.register(typeWrappers);
+        var bindingEvent = new BindingsEvent(this, context, topScope);
+        BindingsEvent.EVENT.invoker().accept(bindingEvent);
+
+        for (KubeJSPlugin plugin : KubeJSPlugins.all()) {
+            plugin.addTypeWrappers(type, typeWrappers);
+            plugin.addBindings(bindingEvent);
+        }
+
+        long startAll = System.currentTimeMillis();
 
 		int i = 0;
 		int t = 0;
@@ -126,10 +136,7 @@ public class ScriptManager {
 			try {
 				pack.context = context;
 				pack.scope = context.initStandardObjects();
-
-				BindingsEvent event = new BindingsEvent(this, pack.context, pack.scope);
-				KubeJSPlugins.forEachPlugin(plugin -> plugin.addBindings(event));
-				BindingsEvent.EVENT.invoker().accept(event);
+                pack.scope.setParentScope(topScope);
 
 				for (ScriptFile file : pack.scripts) {
 					t++;
