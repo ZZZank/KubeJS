@@ -1,5 +1,6 @@
 package dev.latvian.kubejs.block;
 
+import com.github.bsideup.jabel.Desugar;
 import dev.latvian.mods.rhino.BaseFunction;
 import dev.latvian.mods.rhino.NativeJavaObject;
 import dev.latvian.mods.rhino.Undefined;
@@ -25,6 +26,7 @@ import java.util.List;
 public interface BlockTintFunction {
 	Color getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int index);
 
+    @Desugar
 	record Fixed(Color color) implements BlockTintFunction {
 		@Override
 		public Color getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int index) {
@@ -42,13 +44,15 @@ public interface BlockTintFunction {
 		}
 	}
 
-	BlockTintFunction GRASS = (s, l, p, i) -> new SimpleColor(l == null || p == null ? GrassColor.get(0.5, 1.0) : BiomeColors.getAverageGrassColor(l, p));
+    //colors
 	Color DEFAULT_FOLIAGE_COLOR = new SimpleColor(FoliageColor.getDefaultColor());
+	Color[] REDSTONE_COLORS = new Color[16];
+    //tint
+	BlockTintFunction GRASS = (s, l, p, i) -> new SimpleColor(l == null || p == null ? GrassColor.get(0.5, 1.0) : BiomeColors.getAverageGrassColor(l, p));
 	BlockTintFunction FOLIAGE = (s, l, p, i) -> l == null || p == null ? DEFAULT_FOLIAGE_COLOR : new SimpleColor(BiomeColors.getAverageFoliageColor(l, p));
 	Fixed EVERGREEN_FOLIAGE = new Fixed(new SimpleColor(FoliageColor.getEvergreenColor()));
 	Fixed BIRCH_FOLIAGE = new Fixed(new SimpleColor(FoliageColor.getBirchColor()));
 	BlockTintFunction WATER = (s, l, p, i) -> l == null || p == null ? null : new SimpleColorWithAlpha(BiomeColors.getAverageWaterColor(l, p));
-	Color[] REDSTONE_COLORS = new Color[16];
 	BlockTintFunction REDSTONE = (state, level, pos, index) -> {
 		if (REDSTONE_COLORS[0] == null) {
 			for (int i = 0; i < REDSTONE_COLORS.length; i++) {
@@ -68,29 +72,24 @@ public interface BlockTintFunction {
 		} else if (o instanceof List<?> list) {
 			var map = new Mapped();
 
-			for (int i = 0; i < list.size(); i++) {
-				var f = of(list.get(i));
-
-				if (f != null) {
-					map.map.put(i, f);
+			for (int i = 0, size = list.size(); i < size; i++) {
+				var fn = of(list.get(i));
+				if (fn != null) {
+					map.map.put(i, fn);
 				}
 			}
 
 			return map;
 		} else if (o instanceof CharSequence) {
-			var f = switch (o.toString()) {
-				case "grass" -> GRASS;
-				case "foliage" -> FOLIAGE;
-				case "evergreen_foliage" -> EVERGREEN_FOLIAGE;
-				case "birch_foliage" -> BIRCH_FOLIAGE;
-				case "water" -> WATER;
-				case "redstone" -> REDSTONE;
-				default -> null;
-			};
-
-			if (f != null) {
-				return f;
-			}
+            return switch (o.toString()) {
+                case "grass" -> GRASS;
+                case "foliage" -> FOLIAGE;
+                case "evergreen_foliage" -> EVERGREEN_FOLIAGE;
+                case "birch_foliage" -> BIRCH_FOLIAGE;
+                case "water" -> WATER;
+                case "redstone" -> REDSTONE;
+                default -> null;
+            };
 		} else if (o instanceof BaseFunction function) {
 			return (BlockTintFunction) NativeJavaObject.createInterfaceAdapter(BlockTintFunction.class, function);
 		}
