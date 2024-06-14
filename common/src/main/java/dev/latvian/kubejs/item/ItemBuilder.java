@@ -14,8 +14,8 @@ import dev.latvian.kubejs.item.custom.BasicItemJS;
 import dev.latvian.kubejs.item.custom.BasicItemType;
 import dev.latvian.kubejs.item.custom.ItemType;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.registry.types.CreativeTabRegistryEventJS;
 import dev.latvian.kubejs.registry.BuilderBase;
+import dev.latvian.kubejs.registry.types.tab.KjsTabs;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
@@ -313,11 +313,7 @@ public class ItemBuilder extends BuilderBase<Item> {
 	}
 
 	public ItemBuilder group(String groupId) {
-		var tab = CreativeTabRegistryEventJS.TABS.get(groupId);
-		if (tab == null) {
-			tab = CreativeTabRegistryEventJS.TABS.get(KubeJS.MOD_ID + '.' + groupId);
-		}
-
+		var tab = KjsTabs.get(groupId);
 		if (tab != null) {
 			this.group = tab;
 		}

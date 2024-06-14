@@ -11,7 +11,7 @@ import dev.latvian.kubejs.net.KubeJSNet;
 import dev.latvian.kubejs.player.KubeJSPlayerEventHandler;
 import dev.latvian.kubejs.recipe.KubeJSRecipeEventHandler;
 import dev.latvian.kubejs.registry.RegistryInfo;
-import dev.latvian.kubejs.registry.types.CreativeTabRegistryEventJS;
+import dev.latvian.kubejs.registry.types.tab.CreativeTabRegistryEventJS;
 import dev.latvian.kubejs.script.ScriptFileInfo;
 import dev.latvian.kubejs.script.ScriptManager;
 import dev.latvian.kubejs.script.ScriptPack;
