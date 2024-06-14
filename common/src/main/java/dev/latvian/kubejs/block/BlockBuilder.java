@@ -183,11 +183,6 @@ public class BlockBuilder extends BuilderBase<Block> {
 		return this;
 	}
 
-	public BlockBuilder color(int index, int c) {
-		color.put(index, 0xFF000000 | c);
-		return this;
-	}
-
     @JSInfo("""
 		Set the color of a specific layer of the block.
 		""")
