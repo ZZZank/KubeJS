@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.item.fabric;
+package dev.latvian.kubejs.item.events.fabric;
 
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.fluid.FluidBuilder;

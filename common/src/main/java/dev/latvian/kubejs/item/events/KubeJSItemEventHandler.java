@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.item;
+package dev.latvian.kubejs.item.events;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.latvian.kubejs.CommonProperties;
@@ -10,7 +10,8 @@ import dev.latvian.kubejs.block.BlockBuilder;
 import dev.latvian.kubejs.block.DetectorInstance;
 import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.fluid.FluidBuilder;
-import dev.latvian.kubejs.item.events.*;
+import dev.latvian.kubejs.item.BlockItemJS;
+import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.player.InventoryChangedEventJS;
 import me.shedaniel.architectury.event.events.InteractionEvent;
 import me.shedaniel.architectury.event.events.PlayerEvent;

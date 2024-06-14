@@ -6,7 +6,7 @@ import dev.latvian.kubejs.entity.KubeJSEntityEventHandler;
 import dev.latvian.kubejs.event.StartupEventJS;
 import dev.latvian.kubejs.fluid.KubeJSFluidEventHandler;
 import dev.latvian.kubejs.item.ItemStackJS;
-import dev.latvian.kubejs.item.KubeJSItemEventHandler;
+import dev.latvian.kubejs.item.events.KubeJSItemEventHandler;
 import dev.latvian.kubejs.net.KubeJSNet;
 import dev.latvian.kubejs.player.KubeJSPlayerEventHandler;
 import dev.latvian.kubejs.recipe.KubeJSRecipeEventHandler;

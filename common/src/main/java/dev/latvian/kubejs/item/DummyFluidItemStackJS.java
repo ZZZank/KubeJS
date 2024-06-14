@@ -2,6 +2,7 @@ package dev.latvian.kubejs.item;
 
 import com.google.gson.JsonElement;
 import dev.latvian.kubejs.fluid.FluidStackJS;
+import dev.latvian.kubejs.item.events.KubeJSItemEventHandler;
 import net.minecraft.world.item.ItemStack;
 
 public class DummyFluidItemStackJS extends ItemStackJS {

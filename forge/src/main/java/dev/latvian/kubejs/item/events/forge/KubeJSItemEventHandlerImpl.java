@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.item.forge;
+package dev.latvian.kubejs.item.events.forge;
 
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.fluid.FluidBuilder;
