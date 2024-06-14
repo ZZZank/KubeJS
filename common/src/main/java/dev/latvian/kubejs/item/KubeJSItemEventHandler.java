@@ -130,12 +130,12 @@ public class KubeJSItemEventHandler {
 	}
 
 	private static InteractionResult entityInteract(Player player, Entity entity, InteractionHand hand) {
-		if (player != null && entity != null && player.level != null && new ItemEntityInteractEventJS(player, entity, hand).post(KubeJSEvents.ITEM_ENTITY_INTERACT)) {
-			return InteractionResult.FAIL;
-		}
-
-		return InteractionResult.PASS;
-	}
+        if (player == null || entity == null || player.level == null) {
+            return InteractionResult.PASS;
+        }
+        boolean cancelled = new ItemEntityInteractEventJS(player, entity, hand).post(KubeJSEvents.ITEM_ENTITY_INTERACT);
+        return cancelled ? InteractionResult.FAIL : InteractionResult.PASS;
+    }
 
 	private static void crafted(Player player, ItemStack crafted, Container grid) {
 		if (player instanceof ServerPlayer && !crafted.isEmpty()) {

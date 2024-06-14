@@ -79,7 +79,7 @@ public class BlockWrapper {
 	public static List<String> getTaggedIds(ResourceLocation tag) {
 		Tag<Block> t = Tags.blocks().getTag(tag);
 
-		if (t != null && t.getValues().size() > 0) {
+		if (t != null && !t.getValues().isEmpty()) {
 			List<String> list = new ArrayList<>();
 
 			for (Block b : t.getValues()) {

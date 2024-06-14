@@ -4,14 +4,24 @@ package dev.latvian.kubejs;
  * @author LatvianModder
  */
 public class KubeJSEvents {
+    //startup
 	public static final String INIT = "init";
 	public static final String POSTINIT = "postinit";
 	public static final String LOADED = "loaded";
+    //command
 	public static final String COMMAND_REGISTRY = "command.registry";
 	public static final String COMMAND_RUN = "command.run";
+    //registry
 	public static final String REGISTRY_SUFFIX = ".registry";
 	public static final String TAB_REGISTRY = "tab" + REGISTRY_SUFFIX;
-
+    public static final String ITEM_REGISTRY_TOOL_TIERS = "item.registry.tool_tiers";
+    public static final String ITEM_REGISTRY_ARMOR_TIERS = "item.registry.armor_tiers";
+    //registry(to be deprecated)
+    public static final String BLOCK_REGISTRY = "block.registry";
+    public static final String ITEM_REGISTRY = "item.registry";
+    public static final String FLUID_REGISTRY = "fluid.registry";
+    public static final String SOUND_REGISTRY = "sound.registry";
+    //client
 	public static final String CLIENT_INIT = "client.init";
 	public static final String CLIENT_DEBUG_INFO_LEFT = "client.debug_info.left";
 	public static final String CLIENT_DEBUG_INFO_RIGHT = "client.debug_info.right";
@@ -22,7 +32,7 @@ public class KubeJSEvents {
 	public static final String CLIENT_PAINT_WORLD = "client.paint_world";
 	public static final String CLIENT_PAINTER_UPDATED = "client.painter_updated";
 	public static final String CLIENT_LANG = "client.lang";
-
+    //server
 	public static final String SERVER_LOAD = "server.load";
 	public static final String SERVER_UNLOAD = "server.unload";
 	public static final String SERVER_TICK = "server.tick";
@@ -36,13 +46,13 @@ public class KubeJSEvents {
 	public static final String RECIPES_TYPE_REGISTRY = "recipes.type_registry";
 	public static final String WORLDGEN_ADD = "worldgen.add";
 	public static final String WORLDGEN_REMOVE = "worldgen.remove";
-
+    //world
 	public static final String WORLD_LOAD = "world.load";
 	public static final String WORLD_UNLOAD = "world.unload";
 	public static final String WORLD_TICK = "world.tick";
 	public static final String WORLD_EXPLOSION_PRE = "world.explosion.pre";
 	public static final String WORLD_EXPLOSION_POST = "world.explosion.post";
-
+    //player
 	public static final String PLAYER_LOGGED_IN = "player.logged_in";
 	public static final String PLAYER_LOGGED_OUT = "player.logged_out";
 	public static final String PLAYER_TICK = "player.tick";
@@ -56,28 +66,22 @@ public class KubeJSEvents {
 	public static final String PLAYER_CHEST_OPENED = "player.chest.opened";
 	public static final String PLAYER_CHEST_CLOSED = "player.chest.closed";
 	public static final String PLAYER_CHECK_LOGIN = "player.check_login";
-
+    //entity
 	public static final String ENTITY_DEATH = "entity.death";
 	public static final String ENTITY_ATTACK = "entity.attack";
 	public static final String ENTITY_DROPS = "entity.drops";
 	public static final String ENTITY_CHECK_SPAWN = "entity.check_spawn";
 	public static final String ENTITY_SPAWNED = "entity.spawned";
-
-	public static final String BLOCK_REGISTRY = "block.registry";
+    //block
 	public static final String BLOCK_MISSING_MAPPINGS = "block.missing_mappings";
-	public static final String BLOCK_TAGS = "block.tags";
 	public static final String BLOCK_RIGHT_CLICK = "block.right_click";
 	public static final String BLOCK_LEFT_CLICK = "block.left_click";
 	public static final String BLOCK_PLACE = "block.place";
 	public static final String BLOCK_BREAK = "block.break";
 	public static final String BLOCK_DROPS = "block.drops";
 	public static final String BLOCK_MODIFICATION = "block.modification";
-
-	public static final String ITEM_REGISTRY = "item.registry";
-	public static final String ITEM_REGISTRY_TOOL_TIERS = "item.registry.tool_tiers";
-	public static final String ITEM_REGISTRY_ARMOR_TIERS = "item.registry.armor_tiers";
+    //item
 	public static final String ITEM_MISSING_MAPPINGS = "item.missing_mappings";
-	public static final String ITEM_TAGS = "item.tags";
 	public static final String ITEM_RIGHT_CLICK = "item.right_click";
 	public static final String ITEM_RIGHT_CLICK_EMPTY = "item.right_click_empty";
 	public static final String ITEM_LEFT_CLICK = "item.left_click";
@@ -90,11 +94,9 @@ public class KubeJSEvents {
 	public static final String ITEM_FOOD_EATEN = "item.food_eaten";
 	public static final String ITEM_TOOLTIP = "item.tooltip";
 	public static final String ITEM_MODIFICATION = "item.modification";
-
-	public static final String FLUID_REGISTRY = "fluid.registry";
+    //deprecated
+    public static final String BLOCK_TAGS = "block.tags";
+    public static final String ITEM_TAGS = "item.tags";
 	public static final String FLUID_TAGS = "fluid.tags";
-
 	public static final String ENTITY_TYPE_TAGS = "entity_type.tags";
-
-	public static final String SOUND_REGISTRY = "sound.registry";
 }

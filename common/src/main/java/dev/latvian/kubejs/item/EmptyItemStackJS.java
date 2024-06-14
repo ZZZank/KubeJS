@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
+ * @see ItemStackJS#EMPTY
  * @author ZZZank
  */
 class EmptyItemStackJS extends ItemStackJS {

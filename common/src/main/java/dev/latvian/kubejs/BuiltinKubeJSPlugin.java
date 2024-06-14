@@ -177,7 +177,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.BLOCK.addType("cardinal", HorizontalDirectionalBlockBuilder.class, HorizontalDirectionalBlockBuilder::new);
 		//item
 		RegistryInfo.ITEM.addType("basic", ItemBuilder.class, ItemBuilder::new);
-//		RegistryInfo.ITEM.addType("basic", BasicItemJS.Builder.class, BasicItemJS.Builder::new);
 //		RegistryInfo.ITEM.addType("sword", SwordItemBuilder.class, SwordItemBuilder::new);
 //		RegistryInfo.ITEM.addType("pickaxe", PickaxeItemBuilder.class, PickaxeItemBuilder::new);
 //		RegistryInfo.ITEM.addType("axe", AxeItemBuilder.class, AxeItemBuilder::new);
@@ -199,7 +198,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		RegistryInfo.POINT_OF_INTEREST_TYPE.addType("basic", PoiTypeBuilder.class, PoiTypeBuilder::new);
 		RegistryInfo.VILLAGER_TYPE.addType("basic", VillagerTypeBuilder.class, VillagerTypeBuilder::new);
 		RegistryInfo.VILLAGER_PROFESSION.addType("basic", VillagerProfessionBuilder.class, VillagerProfessionBuilder::new);
-//		RegistryInfo.CREATIVE_MODE_TAB.addType("basic", CreativeTabBuilder.class, CreativeTabBuilder::new);
 		//TODO: ENTITY_TYPE
 		//TODO: BLOCK_ENTITY_TYPE
 	}
