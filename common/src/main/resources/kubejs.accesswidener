@@ -9,5 +9,3 @@ accessible field net/minecraft/commands/Commands$CommandSelection includeDedicat
 accessible method net/minecraft/world/entity/npc/VillagerType <init> (Ljava/lang/String;)V
 accessible method net/minecraft/world/entity/npc/VillagerProfession <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/village/poi/PoiType;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
 accessible method net/minecraft/world/entity/ai/village/poi/PoiType <init> (Ljava/lang/String;Ljava/util/Set;II)V
-#rhizo, temporary before updating
-accessible method dev/latvian/mods/rhino/NativeJavaObject createInterfaceAdapter (Ljava/lang/Class;Ldev/latvian/mods/rhino/ScriptableObject;)Ljava/lang/Object;
