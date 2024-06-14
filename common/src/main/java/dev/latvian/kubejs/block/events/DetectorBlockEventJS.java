@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.block;
+package dev.latvian.kubejs.block.events;
 
 import dev.latvian.kubejs.world.BlockContainerJS;
 import dev.latvian.kubejs.world.WorldEventJS;

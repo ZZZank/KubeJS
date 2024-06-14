@@ -1,11 +1,11 @@
-package dev.latvian.kubejs.block;
+package dev.latvian.kubejs.block.events;
 
-import dev.latvian.kubejs.entity.EntityEventJS;
 import dev.latvian.kubejs.entity.EntityJS;
+import dev.latvian.kubejs.player.PlayerEventJS;
 import dev.latvian.kubejs.world.BlockContainerJS;
-import dev.latvian.kubejs.world.WorldJS;
+import me.shedaniel.architectury.utils.IntValue;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -13,17 +13,20 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author LatvianModder
  */
-public class BlockPlaceEventJS extends EntityEventJS {
-	private final Entity entity;
+public class BlockBreakEventJS extends PlayerEventJS {
+	private final ServerPlayer entity;
 	private final Level world;
 	private final BlockPos pos;
 	private final BlockState state;
+	@Nullable
+	private final IntValue xp;
 
-	public BlockPlaceEventJS(@Nullable Entity entity, Level world, BlockPos pos, BlockState state) {
+	public BlockBreakEventJS(ServerPlayer entity, Level world, BlockPos pos, BlockState state, @Nullable IntValue xp) {
 		this.entity = entity;
 		this.world = world;
 		this.pos = pos;
 		this.state = state;
+		this.xp = xp;
 	}
 
 	@Override
@@ -32,13 +35,8 @@ public class BlockPlaceEventJS extends EntityEventJS {
 	}
 
 	@Override
-	public WorldJS getWorld() {
-		return worldOf(world);
-	}
-
-	@Override
 	public EntityJS getEntity() {
-		return entity == null ? null : entityOf(entity);
+		return entityOf(entity);
 	}
 
 	public BlockContainerJS getBlock() {
@@ -48,5 +46,18 @@ public class BlockPlaceEventJS extends EntityEventJS {
 				return state;
 			}
 		};
+	}
+
+	public int getXp() {
+		if (xp == null) {
+			return 0;
+		}
+		return xp.getAsInt();
+	}
+
+	public void setXp(int xp) {
+		if (this.xp != null) {
+			this.xp.accept(xp);
+		}
 	}
 }

@@ -1,6 +1,6 @@
 package dev.latvian.kubejs;
 
-import dev.latvian.kubejs.block.KubeJSBlockEventHandler;
+import dev.latvian.kubejs.block.events.KubeJSBlockEventHandler;
 import dev.latvian.kubejs.client.KubeJSClient;
 import dev.latvian.kubejs.entity.KubeJSEntityEventHandler;
 import dev.latvian.kubejs.event.StartupEventJS;

@@ -1,6 +1,8 @@
-package dev.latvian.kubejs.block;
+package dev.latvian.kubejs.block.events;
 
 import dev.latvian.kubejs.KubeJSObjects;
+import dev.latvian.kubejs.block.BlockBuilder;
+import dev.latvian.kubejs.block.DetectorInstance;
 import dev.latvian.kubejs.event.StartupEventJS;
 
 import java.util.function.Consumer;

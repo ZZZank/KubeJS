@@ -18,7 +18,7 @@ import dev.latvian.kubejs.bindings.ScriptEventsWrapper;
 import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.bindings.UtilsWrapper;
 import dev.latvian.kubejs.block.BlockBuilder;
-import dev.latvian.kubejs.block.BlockRegistryEventJS;
+import dev.latvian.kubejs.block.events.BlockRegistryEventJS;
 import dev.latvian.kubejs.block.BlockStatePredicate;
 import dev.latvian.kubejs.block.DetectorInstance;
 import dev.latvian.kubejs.block.MaterialJS;

@@ -7,7 +7,7 @@ import com.google.gson.JsonPrimitive;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.KubeJSRegistries;
-import dev.latvian.kubejs.block.BlockModificationEventJS;
+import dev.latvian.kubejs.block.events.BlockModificationEventJS;
 import dev.latvian.kubejs.core.JsonSerializableKJS;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.item.events.ItemModificationEventJS;
