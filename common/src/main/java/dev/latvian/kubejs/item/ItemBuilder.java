@@ -19,7 +19,6 @@ import dev.latvian.kubejs.registry.types.tab.KjsTabs;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
-import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.network.chat.Component;
@@ -320,23 +319,17 @@ public class ItemBuilder extends BuilderBase<Item> {
 		return this;
 	}
 
-	@JSInfo("use `tint(...)` instead")
-	@Deprecated
-	public ItemBuilder color(int index, int c) {
-		return tint(index, new ItemTintFunction.Fixed(new SimpleColor(c)));
-	}
-
 	@JSInfo("Colorizes item's texture of the given index. Index is used when you have multiple layers, e.g. a crushed ore (of rock + ore).")
-	public ItemBuilder tint(int index, ItemTintFunction color) {
-		if (!(tint instanceof ItemTintFunction.Mapped)) {
+	public ItemBuilder color(int index, ItemTintFunction color) {
+		if (!(tint instanceof ItemTintFunction.Mapped mapped)) {
 			tint = new ItemTintFunction.Mapped();
 		}
 		((ItemTintFunction.Mapped) tint).map.put(index, color);
 		return this;
 	}
 
-	@JSInfo("Colorizes item's texture of the given index. Useful for coloring items, like GT ores ore dusts.")
-	public ItemBuilder tint(ItemTintFunction callback) {
+	@JSInfo("Colorizes item's texture. Useful for coloring items, like GT ores ore dusts.")
+	public ItemBuilder color(ItemTintFunction callback) {
 		tint = callback;
 		return this;
 	}
