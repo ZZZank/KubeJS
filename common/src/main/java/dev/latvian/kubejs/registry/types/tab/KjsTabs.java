@@ -10,15 +10,10 @@ import java.util.Map;
 /**
  * @author ZZZank
  */
-public class KjsTabs {
+public abstract class KjsTabs {
     @JSInfo("""
-        Registered tabs from Vanilla and KesseractJS.
-        
-        Vanilla tabs are indexed by their recipe folder name.
-        
-        Tabs registered by us will be indexed by `kubejs.{id}`.
-        """)
-    public static final Map<String, CreativeModeTab> TABS = new HashMap<>();
+        Registered tabs from Vanilla and KesseractJS.""")
+    private static final Map<String, CreativeModeTab> TABS = new HashMap<>();
 
     static {
         for (var tab : CreativeModeTab.TABS) {
@@ -27,10 +22,17 @@ public class KjsTabs {
     }
 
     public static CreativeModeTab get(String id) {
-        var tab = TABS.get(id);
-        if (tab == null) {
-            tab = KjsTabs.TABS.get(KubeJS.MOD_ID + '.' + id);
-        }
-        return tab;
+        return TABS.get(id);
+    }
+
+    public static boolean has(String id) {
+        return TABS.containsKey(id);
+    }
+
+    /**
+     * @return last value associated with provided {@code id}, or null if none associated
+     */
+    static CreativeModeTab put(String id, CreativeModeTab tab) {
+        return TABS.put(id, tab);
     }
 }

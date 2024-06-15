@@ -20,16 +20,21 @@ public class CreativeTabRegistryEventJS extends EventJS {
 			register a CreativeModeTab. Its namespace will always be `kubejs`
 			""")
 	public CreativeModeTab create(String id, Supplier<ItemStackJS> icon) {
-		var fullId = new ResourceLocation(KubeJS.MOD_ID, id);
-		id = fullId.toString().replace(':', '.');
+        ResourceLocation fullId = null;
+        try {
+            fullId = new ResourceLocation(KubeJS.MOD_ID, id);
+        } catch (Exception e) {
+            ConsoleJS.STARTUP.error(String.format("Tab id '%s' is not valid!", id), e);
+            return null;
+        }
 
-		if (KjsTabs.TABS.containsKey(id)) {
+		if (KjsTabs.has(id)) {
 			ConsoleJS.STARTUP.errorf("Tab with id '%s' already registered!", id);
-			return KjsTabs.TABS.get(id);
+			return KjsTabs.get(id);
 		}
 
 		var tab = CreativeTabs.create(fullId, () -> icon.get().getItemStack());
-		KjsTabs.TABS.put(id, tab);
+		KjsTabs.put(id, tab);
 
 		return tab;
 	}
