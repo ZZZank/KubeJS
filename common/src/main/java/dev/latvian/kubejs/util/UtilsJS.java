@@ -246,75 +246,25 @@ public class UtilsJS {
 		} else if (o instanceof Wrapper) {
 			return wrap(((Wrapper) o).unwrap(), type);
 		}
-		// Vanilla text component
-		else if (o instanceof Component) {
-			Text t = new TextString("");
-
-			List<Component> list = new ArrayList<>();
-			list.add((Component) o);
-			list.addAll(((Component) o).getSiblings());
-
-			for (Component c : list) {
-				Text t1;
-
-				if (c instanceof TranslatableComponent) {
-					t1 = new TextTranslate(((TranslatableComponent) c).getKey(), ((TranslatableComponent) c).getArgs());
-				} else {
-					t1 = new TextString(c.getContents());
-				}
-
-				//TODO: Replace with AT
-				t1.bold(c.getStyle().isBold());
-				t1.italic(c.getStyle().isItalic());
-				t1.underlined(c.getStyle().isUnderlined());
-				t1.strikethrough(c.getStyle().isStrikethrough());
-				t1.obfuscated(c.getStyle().isObfuscated());
-				t1.insertion(c.getStyle().getInsertion());
-
-				ClickEvent ce = c.getStyle().getClickEvent();
-
-				if (ce != null) {
-					if (ce.getAction() == ClickEvent.Action.RUN_COMMAND) {
-						t1.click("command:" + ce.getValue());
-					} else if (ce.getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
-						t1.click("suggest_command:" + ce.getValue());
-					} else if (ce.getAction() == ClickEvent.Action.COPY_TO_CLIPBOARD) {
-						t1.click("copy:" + ce.getValue());
-					} else if (ce.getAction() == ClickEvent.Action.OPEN_URL) {
-						t1.click(ce.getValue());
-					}
-				}
-
-				HoverEvent he = c.getStyle().getHoverEvent();
-
-				if (he != null && he.getAction() == HoverEvent.Action.SHOW_TEXT) {
-					t1.hover(Text.of(he.getValue(HoverEvent.Action.SHOW_TEXT)));
-				}
-
-				t.append(t1);
-			}
-
-			return t;
-		}
 		// Maps
-		else if (o instanceof Map) {
+		else if (o instanceof Map m) {
 			if (!type.checkMap()) {
 				return null;
 			}
 
-			MapJS map = new MapJS(((Map) o).size());
-			map.putAll((Map) o);
+			MapJS map = new MapJS(m.size());
+			map.putAll(m);
 			return map;
 		}
 		// Lists, Collections, Iterables, GSON Arrays
-		else if (o instanceof Iterable) {
+		else if (o instanceof Iterable itr) {
 			if (!type.checkList()) {
 				return null;
 			}
 
 			ListJS list = new ListJS();
 
-			for (Object o1 : (Iterable) o) {
+			for (Object o1 : itr) {
 				list.add(o1);
 			}
 
@@ -349,26 +299,6 @@ public class UtilsJS {
 		// GSON and NBT Null
 		else if (o instanceof JsonNull || o instanceof EndTag) {
 			return null;
-		}
-		// NBT
-		else if (o instanceof CompoundTag) {
-			if (!type.checkMap()) {
-				return null;
-			}
-
-			CompoundTag nbt = (CompoundTag) o;
-
-			MapJS map = new MapJS(nbt.size());
-
-			for (String s : nbt.getAllKeys()) {
-				map.put(s, nbt.get(s));
-			}
-
-			return map;
-		} else if (o instanceof NumericTag) {
-			return ((NumericTag) o).getAsNumber();
-		} else if (o instanceof StringTag) {
-			return ((StringTag) o).getAsString();
 		}
 
 		return o;
