@@ -10,6 +10,7 @@ import dev.latvian.kubejs.util.ClassFilter;
 import dev.latvian.kubejs.util.KubeJSPlugins;
 import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.*;
+import dev.latvian.mods.rhino.util.remapper.RemapperManager;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Nullable;
@@ -112,10 +113,11 @@ public class ScriptManager {
         topScope = context.initStandardObjects();
 
         //context related
+        context.setRemapper(RemapperManager.getDefault());
         context.setClassShutter(this.classFilter);
         context.setApplicationClassLoader(KubeJS.class.getClassLoader());
-//        context.setCustomProp("console", type.console);
-//        context.setCustomProp("type", type);
+        context.setCustomProperty("console", type.console);
+        context.setCustomProperty("type", type);
 
         //type wrapper / binding
         TypeWrappers typeWrappers = context.getTypeWrappers();
@@ -131,9 +133,8 @@ public class ScriptManager {
 
         long startAll = System.currentTimeMillis();
 
-		int i = 0;
-		int t = 0;
-
+		int loaded = 0;
+		int total = 0;
 		for (ScriptPack pack : packs.values()) {
 			try {
 				pack.context = context;
@@ -141,11 +142,11 @@ public class ScriptManager {
                 pack.scope.setParentScope(topScope);
 
 				for (ScriptFile file : pack.scripts) {
-					t++;
+					total++;
 					long start = System.currentTimeMillis();
 
 					if (file.load()) {
-						i++;
+						loaded++;
 						type.console.info("Loaded script " + file.info.location + " in " + (System.currentTimeMillis() - start) / 1000D + " s");
 					} else if (file.getError() != null) {
 						if (file.getError() instanceof RhinoException) {
@@ -161,12 +162,11 @@ public class ScriptManager {
 			}
 		}
 
-		type.console.info("Loaded " + i + "/" + t + " KubeJS " + type.name + " scripts in " + (System.currentTimeMillis() - startAll) / 1000D + " s");
-		Context.exit();
+		type.console.info("Loaded " + loaded + "/" + total + " KubeJS " + type.name + " scripts in " + (System.currentTimeMillis() - startAll) / 1000D + " s");
 
 		events.postToHandlers(KubeJSEvents.LOADED, events.handlers(KubeJSEvents.LOADED), new StartupEventJS());
 
-		if (i != t && type == ScriptType.STARTUP) {
+		if (loaded != total && type == ScriptType.STARTUP) {
 			throw new RuntimeException("There were startup script syntax errors! See logs/kubejs/startup.txt for more info");
 		}
 

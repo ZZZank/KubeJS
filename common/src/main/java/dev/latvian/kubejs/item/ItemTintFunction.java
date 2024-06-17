@@ -100,8 +100,8 @@ public interface ItemTintFunction {
 			if (fn != null) {
 				return fn;
 			}
-//		} else if (o instanceof BaseFunction function) {
-//			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(ItemTintFunction.class, function);
+		} else if (o instanceof BaseFunction function) {
+			return (ItemTintFunction) NativeJavaObject.createInterfaceAdapter(ItemTintFunction.class, function);
 		}
 
 		return new Fixed(ColorWrapper.of(o));

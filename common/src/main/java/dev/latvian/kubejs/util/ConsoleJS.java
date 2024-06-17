@@ -32,8 +32,7 @@ public class ConsoleJS {
 	public static ConsoleJS CLIENT;
 
     public static ConsoleJS byContext(Context cx) {
-//        return cx.getCustomProp("console", STARTUP);
-        return null;
+        return (ConsoleJS) cx.getCustomProperty("console", STARTUP);
     }
 
 	private static class StackTracePrintStream extends PrintStream {
