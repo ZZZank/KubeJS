@@ -1,0 +1,10 @@
+{
+	"injected_interfaces": {
+		"net/minecraft/class_310": [
+			"dev/latvian/kubejs/core/MinecraftClientKJS"
+		],
+		"net.minecraft.class_5250": [
+			"dev/latvian/kubejs/core/MutableComponentKJS"
+		]
+	}
+}
