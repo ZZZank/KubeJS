@@ -51,7 +51,7 @@ public class PlatformWrapper {
 	@ExpectPlatform
 	@HideFromJS
 	@Contract(value = "_,_ -> _")
-	public static boolean setModName(ModInfo info, String newName) {
+    static boolean setModName(ModInfo info, String newName) {
 		throw new AssertionError("Not Implemented");
 	}
 

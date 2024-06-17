@@ -36,8 +36,6 @@ allprojects {
 	group = project.maven_group
 	archivesBaseName = project.archives_base_name
 
-	sourceCompatibility = compileJava.sourceCompatibility = '16'
-
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
 		sourceCompatibility = 17
