@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * @see dev.latvian.kubejs.util.JsonIO
  * @author LatvianModder
  */
+@Deprecated
 public class JsonIOWrapper {
 	@Nullable
 	public static MapJS read(File file) throws IOException {
