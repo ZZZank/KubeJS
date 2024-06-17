@@ -3,28 +3,39 @@ package dev.latvian.kubejs.world;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerJS;
+import dev.latvian.kubejs.world.events.LightningStrikeEventJS;
 import me.shedaniel.architectury.event.events.ExplosionEvent;
 import me.shedaniel.architectury.event.events.LifecycleEvent;
+import me.shedaniel.architectury.event.events.LightningEvent;
 import me.shedaniel.architectury.event.events.TickEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
 /**
  * @author LatvianModder
  */
-public class KubeJSWorldEventHandler {
+public abstract class KubeJSWorldEventHandler {
 	public static void init() {
 		LifecycleEvent.SERVER_WORLD_LOAD.register(KubeJSWorldEventHandler::worldLoaded);
 		LifecycleEvent.SERVER_WORLD_UNLOAD.register(KubeJSWorldEventHandler::worldUnloaded);
 		TickEvent.SERVER_WORLD_POST.register(KubeJSWorldEventHandler::worldTick);
 		ExplosionEvent.PRE.register(KubeJSWorldEventHandler::explosionStart);
 		ExplosionEvent.DETONATE.register(KubeJSWorldEventHandler::explosionDetonate);
+        LightningEvent.STRIKE.register(KubeJSWorldEventHandler::lightingStrike);
 	}
+
+    private static void lightingStrike(LightningBolt bolt, Level level, Vec3 pos, List<Entity> toStrike) {
+        if (ServerJS.instance != null) {
+            new LightningStrikeEventJS(bolt, level, pos, toStrike).post(ScriptType.SERVER, KubeJSEvents.WORLD_LIGHTNING_STRIKE);
+        }
+    }
 
 	private static void worldLoaded(ServerLevel level) {
 		if (ServerJS.instance != null && ServerJS.instance.overworld != null && !ServerJS.instance.levelMap.containsKey(level.dimension().location().toString())) {
