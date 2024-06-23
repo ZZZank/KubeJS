@@ -19,14 +19,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Writer;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.util.Collection;
-import java.util.HexFormat;
 import java.util.Map;
-import java.util.Objects;
 
 public class JsonIO {
 	@HideFromJS
@@ -185,12 +181,12 @@ public class JsonIO {
 		return baos.toByteArray();
 	}
 
-	public static String getJsonHashString(JsonElement json) {
-		try {
-			var messageDigest = Objects.requireNonNull(MessageDigest.getInstance("MD5"));
-			return new BigInteger(HexFormat.of().formatHex(messageDigest.digest(JsonIO.getJsonHashBytes(json))), 16).toString(36);
-		} catch (Exception ex) {
-			return "%08x".formatted(json.hashCode());
-		}
-	}
+//	public static String getJsonHashString(JsonElement json) {
+//		try {
+//			var messageDigest = Objects.requireNonNull(MessageDigest.getInstance("MD5"));
+//			return new BigInteger(HexFormat.of().formatHex(messageDigest.digest(JsonIO.getJsonHashBytes(json))), 16).toString(36);
+//		} catch (Exception ex) {
+//			return "%08x".formatted(json.hashCode());
+//		}
+//	}
 }

@@ -1,5 +1,6 @@
 package dev.latvian.kubejs.util;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -22,10 +23,7 @@ import dev.latvian.mods.rhino.Wrapper;
 import dev.latvian.mods.rhino.mod.util.Copyable;
 import dev.latvian.mods.rhino.regexp.NativeRegExp;
 import me.shedaniel.architectury.registry.ToolType;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.EndTag;
-import net.minecraft.nbt.NumericTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -60,7 +58,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -127,29 +124,15 @@ public class UtilsJS {
 			String f = matcher.group(2);
 
 			for (int i = 0; i < f.length(); i++) {
-				switch (f.charAt(i)) {
-					case 'd':
-						flags |= Pattern.UNIX_LINES;
-						break;
-					case 'i':
-						flags |= Pattern.CASE_INSENSITIVE;
-						break;
-					case 'x':
-						flags |= Pattern.COMMENTS;
-						break;
-					case 'm':
-						flags |= Pattern.MULTILINE;
-						break;
-					case 's':
-						flags |= Pattern.DOTALL;
-						break;
-					case 'u':
-						flags |= Pattern.UNICODE_CASE;
-						break;
-					case 'U':
-						flags |= Pattern.UNICODE_CHARACTER_CLASS;
-						break;
-				}
+                switch (f.charAt(i)) {
+                    case 'd' -> flags |= Pattern.UNIX_LINES;
+                    case 'i' -> flags |= Pattern.CASE_INSENSITIVE;
+                    case 'x' -> flags |= Pattern.COMMENTS;
+                    case 'm' -> flags |= Pattern.MULTILINE;
+                    case 's' -> flags |= Pattern.DOTALL;
+                    case 'u' -> flags |= Pattern.UNICODE_CASE;
+                    case 'U' -> flags |= Pattern.UNICODE_CHARACTER_CLASS;
+                }
 			}
 
 			return Pattern.compile(matcher.group(1), flags);
@@ -247,14 +230,13 @@ public class UtilsJS {
 			return wrap(((Wrapper) o).unwrap(), type);
 		}
         // Vanilla text component
-        else if (o instanceof Component) {
+        else if (o instanceof Component component) {
             Text t = new TextString("");
 
-            List<Component> list = new ArrayList<>();
-            list.add((Component) o);
-            list.addAll(((Component) o).getSiblings());
-
-            for (Component c : list) {
+            for (Component c : ImmutableList.<Component>builder()
+                .add(component)
+                .addAll(component.getSiblings())
+                .build()) {
                 Text t1;
 
                 if (c instanceof TranslatableComponent) {

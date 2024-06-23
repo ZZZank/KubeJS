@@ -41,11 +41,22 @@ public class TextWrapper {
 		return new TextTranslate(key, objects);
 	}
 
+    @JSInfo("Returns a keybinding component of the input keybinding descriptor")
 	public static Text keybind(String keybind) {
 		return new TextKeybind(keybind);
 	}
 
-	public static Text black(Object text) {
+    @JSInfo("Returns a score component of the input objective, for the provided selector")
+    public static MutableComponent score(String selector, String objective) {
+        return new ScoreComponent(selector, objective);
+    }
+
+    @JSInfo("Returns a component displaying all entities matching the input selector")
+    public static MutableComponent selector(String selector) {
+        return new SelectorComponent(selector);
+    }
+
+    public static Text black(Object text) {
 		return of(text).black();
 	}
 
