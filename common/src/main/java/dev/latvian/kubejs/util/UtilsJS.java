@@ -263,32 +263,23 @@ public class UtilsJS {
                     t1 = new TextString(c.getContents());
                 }
 
-                //TODO: Replace with AT
-                t1.bold(c.getStyle().isBold());
-                t1.italic(c.getStyle().isItalic());
-                t1.underlined(c.getStyle().isUnderlined());
-                t1.strikethrough(c.getStyle().isStrikethrough());
-                t1.obfuscated(c.getStyle().isObfuscated());
-                t1.insertion(c.getStyle().getInsertion());
+                var style = c.getStyle();
 
-                ClickEvent ce = c.getStyle().getClickEvent();
+                t1.bold(style.isBold())
+                    .italic(style.isItalic())
+                    .underlined(style.isUnderlined())
+                    .strikethrough(style.isStrikethrough())
+                    .obfuscated(style.isObfuscated())
+                    .insertion(style.getInsertion());
 
+                ClickEvent ce = style.getClickEvent();
                 if (ce != null) {
-                    if (ce.getAction() == ClickEvent.Action.RUN_COMMAND) {
-                        t1.click("command:" + ce.getValue());
-                    } else if (ce.getAction() == ClickEvent.Action.SUGGEST_COMMAND) {
-                        t1.click("suggest_command:" + ce.getValue());
-                    } else if (ce.getAction() == ClickEvent.Action.COPY_TO_CLIPBOARD) {
-                        t1.click("copy:" + ce.getValue());
-                    } else if (ce.getAction() == ClickEvent.Action.OPEN_URL) {
-                        t1.click(ce.getValue());
-                    }
+                    t1.click(ce);
                 }
 
                 HoverEvent he = c.getStyle().getHoverEvent();
-
-                if (he != null && he.getAction() == HoverEvent.Action.SHOW_TEXT) {
-                    t1.hover(Text.of(he.getValue(HoverEvent.Action.SHOW_TEXT)));
+                if (he != null) {
+                    t1.hover(he);
                 }
 
                 t.append(t1);

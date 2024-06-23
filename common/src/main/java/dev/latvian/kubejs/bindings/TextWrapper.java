@@ -158,9 +158,10 @@ public class TextWrapper {
         if (json != null) {
             var action = GsonHelper.getAsString(json, "action");
             var value = GsonHelper.getAsString(json, "value");
-            return new ClickEvent(Objects.requireNonNull(ClickEvent.Action.getByName(action),
-                "Invalid click event action " + action + "!"
-            ), value);
+            return new ClickEvent(
+                Objects.requireNonNull(ClickEvent.Action.getByName(action), "Invalid click event action " + action + "!"),
+                value
+            );
         }
 
         var s = o.toString();

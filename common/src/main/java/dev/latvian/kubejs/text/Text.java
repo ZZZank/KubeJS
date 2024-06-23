@@ -15,11 +15,7 @@ import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +30,7 @@ import java.util.Objects;
  * @author LatvianModder
  */
 public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSerializable, WrappedJS {
+    @JSInfo("Returns a Component based on the input")
 	public static Component componentOf(@Nullable Object o) {
 		if (o == null) {
 			return new TextComponent("null");
@@ -79,61 +76,59 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 			}
 
 			return text;
-		} else if (o instanceof MapJS map) {
+		} else if (o instanceof MapJS map && (map.containsKey("text") || map.containsKey("translate"))) {
+            Text text;
 
-			if (map.containsKey("text") || map.containsKey("translate")) {
-				Text text;
+            if (map.containsKey("text")) {
+                text = new TextString(map.get("text").toString());
+            } else { //map.containsKey("translate")
+                Object[] with;
 
-				if (map.containsKey("text")) {
-					text = new TextString(map.get("text").toString());
-				} else {
-					Object[] with;
+                if (map.containsKey("with")) {
+                    ListJS a = map.getOrNewList("with");
+                    with = new Object[a.size()];
+                    int i = 0;
 
-					if (map.containsKey("with")) {
-						ListJS a = map.getOrNewList("with");
-						with = new Object[a.size()];
-						int i = 0;
+                    for (Object e1 : a) {
+                        with[i] = e1;
 
-						for (Object e1 : a) {
-							with[i] = e1;
+                        if (with[i] instanceof MapJS || with[i] instanceof ListJS) {
+                            with[i] = ofWrapped(e1);
+                        }
 
-							if (with[i] instanceof MapJS || with[i] instanceof ListJS) {
-								with[i] = ofWrapped(e1);
-							}
+                        i++;
+                    }
+                } else {
+                    with = new Object[0];
+                }
 
-							i++;
-						}
-					} else {
-						with = new Object[0];
-					}
+                text = new TextTranslate(map.get("translate").toString(), with);
+            }
 
-					text = new TextTranslate(map.get("translate").toString(), with);
-				}
+            if (map.containsKey("color")) {
+                text.color = ColorWrapper.of(map.get("color")).getRgbKJS();
+            }
 
-				if (map.containsKey("color")) {
-					text.color = ColorWrapper.of(map.get("color")).getRgbKJS();
-				}
+            text.bold = (Boolean) map.getOrDefault("bold", null);
+            text.italic = (Boolean) map.getOrDefault("italic", null);
+            text.underlined = (Boolean) map.getOrDefault("underlined", null);
+            text.strikethrough = (Boolean) map.getOrDefault("strikethrough", null);
+            text.obfuscated = (Boolean) map.getOrDefault("obfuscated", null);
+            text.insertion = (String) map.getOrDefault("insertion", null);
+            text.font = map.containsKey("font") ? new ResourceLocation(map.get("font").toString()) : null;
+            text.click = map.containsKey("click") ? TextWrapper.clickEventOf(map.get("click")) : null;
+            text.hover = map.containsKey("hover") ? HoverEvent.deserialize(UtilsJS.cast(map.get("hover"))) : null;
 
-				text.bold = (Boolean) map.getOrDefault("bold", null);
-				text.italic = (Boolean) map.getOrDefault("italic", null);
-				text.underlined = (Boolean) map.getOrDefault("underlined", null);
-				text.strikethrough = (Boolean) map.getOrDefault("strikethrough", null);
-				text.obfuscated = (Boolean) map.getOrDefault("obfuscated", null);
-				text.insertion = (String) map.getOrDefault("insertion", null);
-				text.font = map.containsKey("font") ? new ResourceLocation(map.get("font").toString()) : null;
-				text.click = map.containsKey("click") ? map.get("click").toString() : null;
-				text.hover = map.containsKey("hover") ? ofWrapped(map.get("hover")) : null;
+            text.siblings = null;
 
-				text.siblings = null;
+            if (map.containsKey("extra")) {
+                for (Object e : map.getOrNewList("extra")) {
+                    text.append(ofWrapped(e));
+                }
+            }
+            return text;
 
-				if (map.containsKey("extra")) {
-					for (Object e : map.getOrNewList("extra")) {
-						text.append(ofWrapped(e));
-					}
-				}
-				return text;
-			}
-		}
+        }
 
 		return new TextString(o.toString());
 	}
@@ -167,7 +162,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	private Boolean obfuscated;
 	private String insertion;
 	private ResourceLocation font;
-	private String click;
+	private ClickEvent click;
 	private HoverEvent hover;
 	private List<Text> siblings;
 
@@ -253,24 +248,8 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 
 		if (click != null) {
 			JsonObject o = new JsonObject();
-
-			if (click.startsWith("command:")) {
-				o.addProperty("action", "run_command");
-				o.addProperty("value", click.substring(8));
-			} else if (click.startsWith("suggest_command:")) {
-				o.addProperty("action", "suggest_command");
-				o.addProperty("value", click.substring(16));
-			} else if (click.startsWith("copy:")) {
-				o.addProperty("action", "copy_to_clipboard");
-				o.addProperty("value", click.substring(5));
-			} else if (click.startsWith("file:")) {
-				o.addProperty("action", "open_file");
-				o.addProperty("value", click.substring(5));
-			} else {
-				o.addProperty("action", "open_url");
-				o.addProperty("value", click);
-			}
-
+            o.addProperty("action", click.getAction().getName());
+            o.addProperty("value", click.getValue());
 			json.add("clickEvent", o);
 		}
 
@@ -282,8 +261,9 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	}
 
 	public boolean hasStyle() {
-		return color != -1 || bold != null || italic != null || underlined != null || strikethrough != null || obfuscated != null || insertion != null || font != null || click != null || hover != null;
-	}
+        return color != -1 || bold != null || italic != null || underlined != null || strikethrough != null
+            || obfuscated != null || insertion != null || font != null || click != null || hover != null;
+    }
 
 	public Style createStyle() {
 		return new Style.Serializer().deserialize(createStyleJson(), Style.class, null);
@@ -452,8 +432,8 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		return this;
 	}
 
-	public final Text click(@Nullable String value) {
-		click = value;
+	public final Text click(@Nullable Object o) {
+		click = TextWrapper.clickEventOf(o);
 		return this;
 	}
 
