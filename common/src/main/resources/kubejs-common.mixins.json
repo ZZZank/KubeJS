@@ -19,7 +19,6 @@
     "LivingEntityMixin",
     "LootTablesMixin",
     "MinecraftServerMixin",
-    "MutableComponentMixin",
     "PlayerInteractionManagerMixin",
     "PlayerListMixin",
     "PlayerMixin",
