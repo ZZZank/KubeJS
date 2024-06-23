@@ -25,34 +25,51 @@ public class TextWrapper {
 		return Text.of(object);
 	}
 
+    @JSInfo("Joins all components in the list with the separator")
 	public static Text join(Text separator, Iterable<Text> texts) {
 		return Text.join(separator, texts);
 	}
 
+    @JSInfo("Checks if the passed in component, and all its children are empty")
+    public static boolean isEmpty(Component component) {
+        return component.getContents().isEmpty() && component.getSiblings().isEmpty();
+    }
+
+    @JSInfo("get a new, empty text")
+    public static Text empty() {
+        return new TextString("");
+    }
+
+    @JSInfo("""
+        Returns a plain text of the input
+        
+        non-string object will be force-converted into string""")
 	public static Text string(Object text) {
 		return new TextString(text);
 	}
 
+    @JSInfo("Returns a translatable text of the input key")
 	public static Text translate(String key) {
 		return new TextTranslate(key, new Object[0]);
 	}
 
+    @JSInfo("Returns a translatable text of the input key, with args of the key")
 	public static Text translate(String key, Object... objects) {
 		return new TextTranslate(key, objects);
 	}
 
-    @JSInfo("Returns a keybinding component of the input keybinding descriptor")
+    @JSInfo("Returns a keybinding Text of the input keybinding descriptor")
 	public static Text keybind(String keybind) {
 		return new TextKeybind(keybind);
 	}
 
     @JSInfo("Returns a score component of the input objective, for the provided selector")
-    public static MutableComponent score(String selector, String objective) {
+    public static ScoreComponent score(String selector, String objective) {
         return new ScoreComponent(selector, objective);
     }
 
     @JSInfo("Returns a component displaying all entities matching the input selector")
-    public static MutableComponent selector(String selector) {
+    public static SelectorComponent selector(String selector) {
         return new SelectorComponent(selector);
     }
 
@@ -193,4 +210,14 @@ public class TextWrapper {
             }
         };
     }
+
+//    @JSInfo("Returns a component displaying all entities matching the input selector, with a custom separator")
+//    public static MutableComponent selector(String selector, Component separator) {
+//        return new SelectorComponent(selector, Optional.of(separator));
+//    }
+
+//    @JSInfo("Returns a colorful representation of the input nbt. Useful for displaying NBT to the player")
+//    public static Component prettyPrintNbt(Tag tag) {
+//        return NbtUtils.toPrettyComponent(tag);
+//    }
 }
