@@ -3,6 +3,7 @@ package dev.latvian.kubejs.event.forge;
 import dev.latvian.kubejs.event.PlatformEventHandler;
 import dev.latvian.kubejs.forge.KubeJSForgeEventHandlerWrapper;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +16,7 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 
 	@Override
 	public void unregister() {
-		for (KubeJSForgeEventHandlerWrapper listener : this.listeners) {
+		for (var listener : this.listeners) {
 			MinecraftForge.EVENT_BUS.unregister(listener);
 		}
 		this.listeners.clear();
@@ -30,14 +31,17 @@ public class PlatformEventHandlerImpl extends PlatformEventHandler {
 
 	@Override
 	public @Nullable Object call(Object[] params) {
-		if (params.length < 2 || !(params[0] instanceof CharSequence)) {
-			throw new RuntimeException("Invalid syntax! onPlatformEvent(string, function) required event class and handler");
+		if (params.length < 2) {
+			throw new RuntimeException("Invalid syntax! onForgeEvent(string | Class, function) required event class and handler");
 		}
 
 		try {
-			final Class type = Class.forName(params[0].toString());
-			final var handler = secured((KubeJSForgeEventHandlerWrapper) params[1],type);
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, type, handler);
+            var clazz = params[0] instanceof Class c ? c : Class.forName(params[0].toString());
+            if (!Event.class.isAssignableFrom(clazz)) {
+                throw new RuntimeException("The first parameter of onForgeEvent() must represent a class that is a subclass of `net.minecraftforge.eventbus.api.Event`");
+            }
+            var handler = secured((KubeJSForgeEventHandlerWrapper) params[1],clazz);
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, clazz, handler);
 			listeners.add(handler);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
