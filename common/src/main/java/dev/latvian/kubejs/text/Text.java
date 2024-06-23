@@ -3,11 +3,13 @@ package dev.latvian.kubejs.text;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.util.JSObjectType;
 import dev.latvian.kubejs.util.ListJS;
 import dev.latvian.kubejs.util.MapJS;
 import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.kubejs.util.WrappedJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import dev.latvian.mods.rhino.mod.util.JsonSerializable;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
@@ -166,7 +168,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	private String insertion;
 	private ResourceLocation font;
 	private String click;
-	private Text hover;
+	private HoverEvent hover;
 	private List<Text> siblings;
 
 	public abstract MutableComponent rawComponent();
@@ -205,7 +207,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		t.insertion = insertion;
 		t.font = font;
 		t.click = click;
-		t.hover = hover == null ? null : hover.copy();
+		t.hover = hover;
 
 		for (Text child : getSiblings()) {
 			t.append(child.copy());
@@ -273,7 +275,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		}
 
 		if (hover != null) {
-			json.add("hoverEvent", new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover.component()).serialize());
+			json.add("hoverEvent", hover.serialize());
 		}
 
 		return json;
@@ -455,9 +457,9 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		return this;
 	}
 
-	public final Text hover(Object text) {
-		hover = of(text);
-		return this;
+	public final Text hover(Object o) {
+        hover = TextWrapper.hoverEventOf(o);
+        return this;
 	}
 
 	public final Text append(Object sibling) {
@@ -477,24 +479,44 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		return siblings != null && !siblings.isEmpty();
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		} else if (obj instanceof Text t) {
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else if (obj instanceof Text t) {
+            if (color == t.color
+                && bold == t.bold
+                && italic == t.italic
+                && underlined == t.underlined
+                && strikethrough == t.strikethrough
+                && obfuscated == t.obfuscated) {
+                return Objects.equals(insertion, t.insertion)
+                    && Objects.equals(font, t.font)
+                    && Objects.equals(click, t.click)
+                    && Objects.equals(hover, t.hover)
+                    && Objects.equals(siblings, t.siblings);
+            }
+        }
 
-			if (color == t.color && bold == t.bold && italic == t.italic && underlined == t.underlined && strikethrough == t.strikethrough && obfuscated == t.obfuscated) {
-				return Objects.equals(insertion, t.insertion) && Objects.equals(font, t.font) && Objects.equals(click, t.click) && Objects.equals(hover, t.hover) && Objects.equals(siblings, t.siblings);
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(color, bold, italic, underlined, strikethrough, obfuscated, insertion, font, click, hover, siblings);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            color,
+            bold,
+            italic,
+            underlined,
+            strikethrough,
+            obfuscated,
+            insertion,
+            font,
+            click,
+            hover,
+            siblings
+        );
+    }
 
 	@Override
 	public String toString() {

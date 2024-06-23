@@ -1,9 +1,21 @@
 package dev.latvian.kubejs.bindings;
 
+import com.google.gson.JsonObject;
+import dev.latvian.kubejs.fluid.FluidStackJS;
+import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.text.Text;
 import dev.latvian.kubejs.text.TextKeybind;
 import dev.latvian.kubejs.text.TextString;
 import dev.latvian.kubejs.text.TextTranslate;
+import dev.latvian.kubejs.util.MapJS;
+import dev.latvian.mods.rhino.annotations.typing.JSInfo;
+import net.minecraft.network.chat.*;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+
+import java.util.Objects;
 
 /**
  * @author LatvianModder
@@ -96,4 +108,77 @@ public class TextWrapper {
 	public static Text white(Object text) {
 		return of(text).white();
 	}
+
+    @JSInfo("Returns a HoverEvent of the input")
+    public static HoverEvent hoverEventOf(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof HoverEvent hoverEvent) {
+            return hoverEvent;
+        }
+        //vanilla json / kjs map
+        else if (o instanceof JsonObject || o instanceof MapJS) {
+            return HoverEvent.deserialize(MapJS.json(o));
+        }
+        //item / block / fluid
+        else if (o instanceof ItemLike || o instanceof ItemStack || o instanceof ItemStackJS
+            || o instanceof FluidStackJS) {
+            return new HoverEvent(
+                HoverEvent.Action.SHOW_ITEM,
+                new HoverEvent.ItemStackInfo(ItemStackJS.of(o).getItemStack())
+            );
+        }
+        //entity
+        else if (o instanceof Entity entity) {
+            return new HoverEvent(
+                HoverEvent.Action.SHOW_ENTITY,
+                new HoverEvent.EntityTooltipInfo(entity.getType(), entity.getUUID(), entity.getName())
+            );
+        }
+        //fallback to text
+        else {
+            return new HoverEvent(
+                HoverEvent.Action.SHOW_TEXT,
+                of(o).component()
+            );
+        }
+    }
+
+    @JSInfo("""
+        Returns a ClickEvent of the input""")
+    public static ClickEvent clickEventOf(Object o) {
+        if (o == null) {
+            return null;
+        } else if (o instanceof ClickEvent ce) {
+            return ce;
+        }
+
+        var json = MapJS.json(o);
+        if (json != null) {
+            var action = GsonHelper.getAsString(json, "action");
+            var value = GsonHelper.getAsString(json, "value");
+            return new ClickEvent(Objects.requireNonNull(ClickEvent.Action.getByName(action),
+                "Invalid click event action " + action + "!"
+            ), value);
+        }
+
+        var s = o.toString();
+
+        var split = s.split(":", 2);
+
+        return switch (split[0]) {
+            case "command" -> new ClickEvent(ClickEvent.Action.RUN_COMMAND, split[1]);
+            case "suggest_command" -> new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, split[1]);
+            case "copy" -> new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, split[1]);
+            case "file" -> new ClickEvent(ClickEvent.Action.OPEN_FILE, split[1]);
+            default -> {
+                var action = ClickEvent.Action.getByName(split[0]);
+                if (action != null) {
+                    yield new ClickEvent(action, split[1]);
+                }
+                yield new ClickEvent(ClickEvent.Action.OPEN_URL, s);
+            }
+        };
+    }
 }
