@@ -114,7 +114,11 @@ public class ScriptManager {
 
         //context related
         context.setRemapper(RemapperManager.getDefault());
-        context.setClassShutter(this.classFilter);
+        try {
+            context.setClassShutter(this.classFilter);
+        } catch (Exception e) {
+            KubeJS.LOGGER.error("class shutter already exist: '{}'", context.getClassShutter().toString());
+        }
         context.setApplicationClassLoader(KubeJS.class.getClassLoader());
         context.setCustomProperty("console", type.console);
         context.setCustomProperty("type", type);

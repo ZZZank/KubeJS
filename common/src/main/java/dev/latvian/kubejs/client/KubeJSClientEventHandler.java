@@ -18,7 +18,7 @@ import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.item.events.ItemTooltipEventJS;
 import dev.latvian.kubejs.item.OldItemTooltipEventJS;
 import dev.latvian.kubejs.player.AttachPlayerDataEvent;
-import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.Tags;
 import dev.latvian.kubejs.world.AttachWorldDataEvent;
@@ -280,7 +280,7 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void itemColors() {
-		RegistryInfo.ITEM.objects
+		RegistryInfos.ITEM.objects
 				.values()
 				.stream()
 				.map(o -> (ItemBuilder) o)

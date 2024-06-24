@@ -6,6 +6,7 @@ import dev.latvian.kubejs.block.custom.BasicBlockType;
 import dev.latvian.kubejs.block.custom.BlockType;
 import dev.latvian.kubejs.loot.LootBuilder;
 import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
@@ -112,7 +113,7 @@ public class BlockBuilder extends BuilderBase<Block> {
 
 	@Override
 	public RegistryInfo getRegistryType() {
-		return RegistryInfo.BLOCK;
+		return RegistryInfos.BLOCK;
 	}
 
 	@Override

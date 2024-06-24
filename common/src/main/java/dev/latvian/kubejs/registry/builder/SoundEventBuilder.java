@@ -2,6 +2,7 @@ package dev.latvian.kubejs.registry.builder;
 
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.BuilderBase;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
@@ -12,7 +13,7 @@ public class SoundEventBuilder extends BuilderBase<SoundEvent> {
 
 	@Override
 	public final RegistryInfo<SoundEvent> getRegistryType() {
-		return RegistryInfo.SOUND_EVENT;
+		return RegistryInfos.SOUND_EVENT;
 	}
 
 	@Override

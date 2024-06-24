@@ -5,6 +5,7 @@ import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.BuilderBase;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -42,8 +43,8 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 	}
 
 	@Override
-	public RegistryInfo getRegistryType() {
-		return RegistryInfo.FLUID;
+	public RegistryInfo<Fluid> getRegistryType() {
+		return RegistryInfos.FLUID;
 	}
 
 	@Override

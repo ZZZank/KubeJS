@@ -5,7 +5,7 @@ import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.KubeJSPaths;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
-import dev.latvian.kubejs.registry.RegistryInfo;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.script.data.KubeJSResourcePack;
 import dev.latvian.kubejs.util.KubeJSPlugins;
@@ -49,7 +49,7 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		AssetJsonGenerator generator = new AssetJsonGenerator(map);
 		KubeJSPlugins.forEachPlugin(p -> p.generateAssetJsons(generator));
 
-		for (var builder : RegistryInfo.ALL_BUILDERS) {
+		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateAssetJsons(generator);
 		}
 
@@ -59,7 +59,7 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 	private void generateLang(AssetJsonGenerator generator) {
 		var langEvent = new LangEventJS();
 
-		for (var builder : RegistryInfo.ALL_BUILDERS) {
+		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateLang(langEvent);
 		}
 
