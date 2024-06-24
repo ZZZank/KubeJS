@@ -114,18 +114,13 @@ public class ScriptManager {
 
         //context related
         context.setRemapper(RemapperManager.getDefault());
-        try {
-            context.setClassShutter(this.classFilter);
-        } catch (Exception e) {
-            KubeJS.LOGGER.error("class shutter already exist: '{}'", context.getClassShutter().toString());
-        }
+        context.setClassShutter(this.classFilter);
         context.setApplicationClassLoader(KubeJS.class.getClassLoader());
         context.setCustomProperty("console", type.console);
         context.setCustomProperty("type", type);
 
         //type wrapper / binding
         TypeWrappers typeWrappers = context.getTypeWrappers();
-//        typeWrappers.removeAll();
         var bindingEvent = new BindingsEvent(this, context, topScope);
         BindingsEvent.EVENT.invoker().accept(bindingEvent);
 

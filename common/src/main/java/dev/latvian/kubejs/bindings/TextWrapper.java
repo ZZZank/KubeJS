@@ -8,6 +8,7 @@ import dev.latvian.kubejs.text.TextKeybind;
 import dev.latvian.kubejs.text.TextString;
 import dev.latvian.kubejs.text.TextTranslate;
 import dev.latvian.kubejs.util.MapJS;
+import dev.latvian.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import net.minecraft.network.chat.*;
 import net.minecraft.util.GsonHelper;
@@ -36,7 +37,7 @@ public class TextWrapper {
     }
 
     @JSInfo("get a new, empty text")
-    public static Text empty() {
+    public static TextString empty() {
         return new TextString("");
     }
 
@@ -44,22 +45,22 @@ public class TextWrapper {
         Returns a plain text of the input
         
         non-string object will be force-converted into string""")
-	public static Text string(Object text) {
+	public static TextString string(Object text) {
 		return new TextString(text);
 	}
 
     @JSInfo("Returns a translatable text of the input key")
-	public static Text translate(String key) {
-		return new TextTranslate(key, new Object[0]);
+	public static TextTranslate translate(String key) {
+		return new TextTranslate(key, UtilsJS.EMPTY_OBJECT_ARRAY);
 	}
 
     @JSInfo("Returns a translatable text of the input key, with args of the key")
-	public static Text translate(String key, Object... objects) {
+	public static TextTranslate translate(String key, Object... objects) {
 		return new TextTranslate(key, objects);
 	}
 
     @JSInfo("Returns a keybinding Text of the input keybinding descriptor")
-	public static Text keybind(String keybind) {
+	public static TextKeybind keybind(String keybind) {
 		return new TextKeybind(keybind);
 	}
 
@@ -200,10 +201,12 @@ public class TextWrapper {
     public static ClickEvent clickEventOf(Object o) {
         if (o == null) {
             return null;
-        } else if (o instanceof ClickEvent ce) {
+        }
+        //raw
+        if (o instanceof ClickEvent ce) {
             return ce;
         }
-
+        //json
         var json = MapJS.json(o);
         if (json != null) {
             var action = GsonHelper.getAsString(json, "action");
@@ -213,11 +216,9 @@ public class TextWrapper {
                 value
             );
         }
-
+        //string
         var s = o.toString();
-
         var split = s.split(":", 2);
-
         return switch (split[0]) {
             case "command" -> new ClickEvent(ClickEvent.Action.RUN_COMMAND, split[1]);
             case "suggest_command" -> new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, split[1]);

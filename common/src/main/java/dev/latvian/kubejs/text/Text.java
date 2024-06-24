@@ -64,8 +64,8 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 			return new TextString("null");
 		} else if (o instanceof CharSequence || o instanceof Number || o instanceof Character) {
 			return new TextString(o.toString());
-		} else if (o instanceof Enum) {
-			return new TextString(((Enum) o).name());
+		} else if (o instanceof Enum e) {
+			return new TextString(e.name());
 		} else if (o instanceof Text) {
 			return (Text) o;
 		} else if (o instanceof ListJS) {
@@ -82,24 +82,17 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
             if (map.containsKey("text")) {
                 text = new TextString(map.get("text").toString());
             } else { //map.containsKey("translate")
-                Object[] with;
+                Object[] with = UtilsJS.EMPTY_OBJECT_ARRAY;
 
                 if (map.containsKey("with")) {
                     ListJS a = map.getOrNewList("with");
                     with = new Object[a.size()];
-                    int i = 0;
-
-                    for (Object e1 : a) {
-                        with[i] = e1;
-
-                        if (with[i] instanceof MapJS || with[i] instanceof ListJS) {
-                            with[i] = ofWrapped(e1);
-                        }
-
-                        i++;
+                    for (int i = 0, size = a.size(); i < size; i++) {
+                        var elem = a.get(i);
+                        with[i] = elem instanceof MapJS || elem instanceof ListJS
+                            ? ofWrapped(elem)
+                            : elem;
                     }
-                } else {
-                    with = new Object[0];
                 }
 
                 text = new TextTranslate(map.get("translate").toString(), with);
@@ -127,7 +120,6 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
                 }
             }
             return text;
-
         }
 
 		return new TextString(o.toString());
@@ -437,7 +429,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		return this;
 	}
 
-	public final Text hover(Object o) {
+	public final Text hover(@Nullable Object o) {
         hover = TextWrapper.hoverEventOf(o);
         return this;
 	}
