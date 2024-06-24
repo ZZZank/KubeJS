@@ -231,43 +231,7 @@ public class UtilsJS {
 		}
         // Vanilla text component
         else if (o instanceof Component component) {
-            Text t = new TextString("");
-
-            for (Component c : ImmutableList.<Component>builder()
-                .add(component)
-                .addAll(component.getSiblings())
-                .build()) {
-                Text t1;
-
-                if (c instanceof TranslatableComponent) {
-                    t1 = new TextTranslate(((TranslatableComponent) c).getKey(), ((TranslatableComponent) c).getArgs());
-                } else {
-                    t1 = new TextString(c.getContents());
-                }
-
-                var style = c.getStyle();
-
-                t1.bold(style.isBold())
-                    .italic(style.isItalic())
-                    .underlined(style.isUnderlined())
-                    .strikethrough(style.isStrikethrough())
-                    .obfuscated(style.isObfuscated())
-                    .insertion(style.getInsertion());
-
-                ClickEvent ce = style.getClickEvent();
-                if (ce != null) {
-                    t1.click(ce);
-                }
-
-                HoverEvent he = c.getStyle().getHoverEvent();
-                if (he != null) {
-                    t1.hover(he);
-                }
-
-                t.append(t1);
-            }
-
-            return t;
+            return TextWrapper.fromComponent(component);
         }
 		// Maps
 		else if (o instanceof Map m) {

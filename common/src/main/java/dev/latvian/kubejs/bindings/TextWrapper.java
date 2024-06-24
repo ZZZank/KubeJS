@@ -63,14 +63,36 @@ public class TextWrapper {
 		return new TextKeybind(keybind);
 	}
 
-    @JSInfo("Returns a score component of the input objective, for the provided selector")
-    public static ScoreComponent score(String selector, String objective) {
-        return new ScoreComponent(selector, objective);
-    }
+//    @JSInfo("Returns a score component of the input objective, for the provided selector")
+//    public static ScoreComponent score(String selector, String objective) {
+//        return new ScoreComponent(selector, objective);
+//    }
 
-    @JSInfo("Returns a component displaying all entities matching the input selector")
-    public static SelectorComponent selector(String selector) {
-        return new SelectorComponent(selector);
+//    @JSInfo("Returns a component displaying all entities matching the input selector")
+//    public static SelectorComponent selector(String selector) {
+//        return new SelectorComponent(selector);
+//    }
+
+    public static Text fromComponent(Component c) {
+        var t = c instanceof TranslatableComponent transl
+            ? new TextTranslate(transl.getKey(), transl.getArgs())
+            : new TextString(c.getContents());
+
+        var style = c.getStyle();
+        t.bold(style.isBold())
+            .italic(style.isItalic())
+            .underlined(style.isUnderlined())
+            .strikethrough(style.isStrikethrough())
+            .obfuscated(style.isObfuscated())
+            .insertion(style.getInsertion())
+            .click(style.getClickEvent())
+            .hover(style.getHoverEvent());
+
+        for (var sibling : c.getSiblings()) {
+            t.append(fromComponent(sibling));
+        }
+
+        return t;
     }
 
     public static Text black(Object text) {
