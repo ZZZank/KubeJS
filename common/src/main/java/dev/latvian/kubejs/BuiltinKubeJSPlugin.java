@@ -77,6 +77,7 @@ import dev.latvian.kubejs.registry.types.villagers.VillagerProfessionBuilder;
 import dev.latvian.kubejs.registry.types.villagers.VillagerTypeBuilder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.PlatformWrapper;
+import dev.latvian.kubejs.script.RegistryTypeWrapperFactory;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.text.Text;
@@ -464,6 +465,9 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
         //tint
         typeWrappers.register(BlockTintFunction.class, BlockTintFunction::of);
         typeWrappers.register(ItemTintFunction.class, ItemTintFunction::of);
+
+        //registry
+        RegistryTypeWrapperFactory.register(typeWrappers);
 
 		KubeJS.PROXY.clientTypeWrappers(typeWrappers);
 	}
