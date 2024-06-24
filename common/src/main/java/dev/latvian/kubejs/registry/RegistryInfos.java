@@ -60,6 +60,16 @@ import java.util.*;
  * @author ZZZank
  */
 public interface RegistryInfos {
+
+    /**
+     * Add your registry to these to make sure it comes after vanilla registries, if it depends on them.
+     * Only works on Fabric, since Forge already has ordered registries.
+     */
+    LinkedList<RegistryInfo<?>> AFTER_VANILLA = new LinkedList<>();
+    Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
+    Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());
+    List<BuilderBase<?>> ALL_BUILDERS = new LinkedList<>();
+
     RegistryInfo<SoundEvent> SOUND_EVENT = RegistryInfo.of(Registry.SOUND_EVENT, SoundEvent.class);
     RegistryInfo<Fluid> FLUID = RegistryInfo.of(Registry.FLUID, Fluid.class);
     RegistryInfo<MobEffect> MOB_EFFECT = RegistryInfo.of(Registry.MOB_EFFECT, MobEffect.class).languageKeyPrefix("effect");
@@ -117,13 +127,4 @@ public interface RegistryInfos {
     RegistryInfo<LootItemFunctionType> LOOT_FUNCTION_TYPE = RegistryInfo.of(Registry.LOOT_FUNCTION_TYPE, LootItemFunctionType.class);
     RegistryInfo<LootPoolEntryType> LOOT_POOL_ENTRY_TYPE = RegistryInfo.of(Registry.LOOT_POOL_ENTRY_TYPE, LootPoolEntryType.class);
     RegistryInfo<NoiseGeneratorSettings> NOISE_SETTINGS = RegistryInfo.of(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY, NoiseGeneratorSettings.class);
-
-    /**
-     * Add your registry to these to make sure it comes after vanilla registries, if it depends on them.
-     * Only works on Fabric, since Forge already has ordered registries.
-     */
-    LinkedList<RegistryInfo<?>> AFTER_VANILLA = new LinkedList<>();
-    Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
-    Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());
-    List<BuilderBase<?>> ALL_BUILDERS = new LinkedList<>();
 }
