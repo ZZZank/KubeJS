@@ -1,14 +1,11 @@
 package dev.latvian.kubejs.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSPaths;
 import dev.latvian.kubejs.block.BlockBuilder;
 import dev.latvian.kubejs.client.painter.Painter;
-import dev.latvian.kubejs.client.painter.screen.ScreenPaintEventJS;
-import dev.latvian.kubejs.client.painter.screen.ScreenPainterObject;
 import dev.latvian.kubejs.client.painter.world.WorldPaintEventJS;
 import dev.latvian.kubejs.client.painter.world.WorldPainterObject;
 import dev.latvian.kubejs.core.BucketItemKJS;
@@ -83,8 +80,8 @@ public class KubeJSClientEventHandler {
 		ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(this::loggedIn);
 		ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(this::loggedOut);
 		ClientPlayerEvent.CLIENT_PLAYER_RESPAWN.register(this::respawn);
-		GuiEvent.RENDER_HUD.register(this::inGameScreenDraw);
-		GuiEvent.RENDER_POST.register(this::guiScreenDraw);
+		GuiEvent.RENDER_HUD.register(Painter.INSTANCE::inGameScreenDraw);
+		GuiEvent.RENDER_POST.register(Painter.INSTANCE::guiScreenDraw);
 		GuiEvent.INIT_POST.register(this::guiPostInit);
 		TextureStitchEvent.POST.register(this::postAtlasStitch);
 	}
@@ -197,75 +194,7 @@ public class KubeJSClientEventHandler {
 		new AttachPlayerDataEvent(ClientWorldJS.getInstance().clientPlayerData).invoke();
 	}
 
-	private void inGameScreenDraw(PoseStack matrices, float delta) {
-		Minecraft mc = Minecraft.getInstance();
-
-		if (mc.player == null || mc.options.renderDebug || mc.screen != null) {
-			return;
-		}
-
-		RenderSystem.enableBlend();
-		//RenderSystem.disableLighting();
-
-		ScreenPaintEventJS event = new ScreenPaintEventJS(mc, matrices, delta);
-		Painter.INSTANCE.deltaUnit.set(delta);
-		Painter.INSTANCE.screenWidthUnit.set(event.width);
-		Painter.INSTANCE.screenHeightUnit.set(event.height);
-		Painter.INSTANCE.mouseXUnit.set(event.mouseX);
-		Painter.INSTANCE.mouseYUnit.set(event.mouseY);
-		event.post(KubeJSEvents.CLIENT_PAINT_SCREEN);
-
-		for (ScreenPainterObject object : Painter.INSTANCE.getScreenObjects()) {
-			if (object.visible && (object.draw == Painter.DRAW_ALWAYS || object.draw == Painter.DRAW_INGAME)) {
-				object.preDraw(event);
-			}
-		}
-
-		for (ScreenPainterObject object : Painter.INSTANCE.getScreenObjects()) {
-			if (object.visible && (object.draw == Painter.DRAW_ALWAYS || object.draw == Painter.DRAW_INGAME)) {
-				object.draw(event);
-			}
-		}
-	}
-
-	private void guiScreenDraw(Screen screen, PoseStack matrices, int mouseX, int mouseY, float delta) {
-		Minecraft mc = Minecraft.getInstance();
-
-		if (mc.player == null) {
-			return;
-		}
-
-		RenderSystem.enableBlend();
-		//RenderSystem.disableLighting();
-
-		ScreenPaintEventJS event = new ScreenPaintEventJS(mc, screen, matrices, mouseX, mouseY, delta);
-		event.post(KubeJSEvents.CLIENT_PAINT_SCREEN);
-
-		for (ScreenPainterObject object : Painter.INSTANCE.getScreenObjects()) {
-			if (object.visible && (object.draw == Painter.DRAW_ALWAYS || object.draw == Painter.DRAW_GUI)) {
-				object.preDraw(event);
-			}
-		}
-
-		for (ScreenPainterObject object : Painter.INSTANCE.getScreenObjects()) {
-			if (object.visible && (object.draw == Painter.DRAW_ALWAYS || object.draw == Painter.DRAW_GUI)) {
-				object.draw(event);
-			}
-		}
-	}
-
-	private boolean isOver(List<AbstractWidget> list, int x, int y) {
-		for (AbstractWidget w : list) {
-			if (w.visible && x >= w.x && y >= w.y && x < w.x + w.getWidth() && y < w.y + w.getHeight()) //getWidth_CLASH = getHeight
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private void guiPostInit(Screen screen, List<AbstractWidget> widgets, List<GuiEventListener> children) {
+    private void guiPostInit(Screen screen, List<AbstractWidget> widgets, List<GuiEventListener> children) {
 		if (ClientProperties.get().getDisableRecipeBook() && screen instanceof RecipeUpdateListener) {
 			Iterator<GuiEventListener> iterator = children.iterator();
 			while (iterator.hasNext()) {
