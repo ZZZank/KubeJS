@@ -36,7 +36,7 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 			return new TextComponent("null");
 		} else if (o instanceof Component) {
 			return (Component) o;
-		} else if (o instanceof CharSequence) {
+        } else if (o instanceof CharSequence || o instanceof Number || o instanceof Character) {
 			return new TextComponent(o.toString());
 		} else if (o instanceof StringTag) {
 			String s = ((StringTag) o).getAsString();
