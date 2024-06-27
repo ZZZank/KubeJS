@@ -23,11 +23,7 @@ import dev.latvian.kubejs.block.custom.BlockType;
 import dev.latvian.kubejs.block.custom.BlockTypes;
 import dev.latvian.kubejs.block.custom.ShapedBlockType;
 import dev.latvian.kubejs.client.painter.Painter;
-import dev.latvian.kubejs.client.painter.screen.AtlasTextureObject;
-import dev.latvian.kubejs.client.painter.screen.GradientObject;
-import dev.latvian.kubejs.client.painter.screen.RectangleObject;
-import dev.latvian.kubejs.client.painter.screen.ScreenGroup;
-import dev.latvian.kubejs.client.painter.screen.TextObject;
+import dev.latvian.kubejs.client.painter.screen.*;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.event.IEventHandler;
 import dev.latvian.kubejs.fluid.FluidBuilder;
@@ -216,6 +212,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		Painter.INSTANCE.registerObject("text", TextObject::new);
 		Painter.INSTANCE.registerObject("atlas_texture", AtlasTextureObject::new);
 		Painter.INSTANCE.registerObject("gradient", GradientObject::new);
+        Painter.INSTANCE.registerObject("item", ItemObject::new);
 	}
 
 	@Override
