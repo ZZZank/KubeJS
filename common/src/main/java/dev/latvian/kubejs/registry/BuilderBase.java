@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.registry;
 
 import dev.latvian.kubejs.KubeJS;
-import dev.latvian.kubejs.client.LangEventJS;
+import dev.latvian.kubejs.client.asset.LangEventJS;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.util.ConsoleJS;
