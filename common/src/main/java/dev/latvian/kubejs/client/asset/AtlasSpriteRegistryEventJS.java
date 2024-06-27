@@ -13,6 +13,9 @@ public class AtlasSpriteRegistryEventJS extends EventJS {
 	}
 
 	public void register(ResourceLocation id) {
+        if (id == null) {
+            return;
+        }
 		registry.accept(id);
 	}
 }

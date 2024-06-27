@@ -90,7 +90,14 @@ public class KubeJSClientEventHandler {
 	}
 
     private void preAtlasStitch(TextureAtlas atlas, Consumer<ResourceLocation> consumer) {
-        new AtlasSpriteRegistryEventJS(consumer).post(ScriptType.CLIENT, KubeJSEvents.CLIENT_ATLAS_STITCH);
+        var stitchEvent = new AtlasSpriteRegistryEventJS(consumer);
+        for (var builder : RegistryInfos.FLUID) {
+            if (builder instanceof FluidBuilder f) {
+                stitchEvent.register(ResourceLocation.tryParse(f.flowingTexture));
+                stitchEvent.register(ResourceLocation.tryParse(f.stillTexture));
+            }
+        }
+        stitchEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_ATLAS_STITCH);
     }
 
     private void clientSetup(Minecraft minecraft) {
