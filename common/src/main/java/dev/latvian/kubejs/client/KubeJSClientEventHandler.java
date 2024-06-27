@@ -5,6 +5,7 @@ import dev.latvian.kubejs.KubeJSEvents;
 import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSPaths;
 import dev.latvian.kubejs.block.BlockBuilder;
+import dev.latvian.kubejs.client.asset.AtlasSpriteRegistryEventJS;
 import dev.latvian.kubejs.client.painter.Painter;
 import dev.latvian.kubejs.client.painter.world.WorldPaintEventJS;
 import dev.latvian.kubejs.client.painter.world.WorldPainterObject;
@@ -62,6 +63,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author LatvianModder
@@ -83,10 +85,15 @@ public class KubeJSClientEventHandler {
 		GuiEvent.RENDER_HUD.register(Painter.INSTANCE::inGameScreenDraw);
 		GuiEvent.RENDER_POST.register(Painter.INSTANCE::guiScreenDraw);
 		GuiEvent.INIT_POST.register(this::guiPostInit);
+        TextureStitchEvent.PRE.register(this::preAtlasStitch);
 		TextureStitchEvent.POST.register(this::postAtlasStitch);
 	}
 
-	private void clientSetup(Minecraft minecraft) {
+    private void preAtlasStitch(TextureAtlas atlas, Consumer<ResourceLocation> consumer) {
+        new AtlasSpriteRegistryEventJS(consumer).post(ScriptType.CLIENT, KubeJSEvents.CLIENT_ATLAS_STITCH);
+    }
+
+    private void clientSetup(Minecraft minecraft) {
 		renderLayers();
 		blockColors();
 		itemColors();
