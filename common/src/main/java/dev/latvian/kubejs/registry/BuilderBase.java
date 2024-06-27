@@ -25,6 +25,10 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 	public transient Set<ResourceLocation> tags;
 
 	public BuilderBase(ResourceLocation i) {
+        //the default namespace is "minecraft", but we should never overwrite vanilla one
+        if (i.getNamespace().equals("minecraft")) {
+            i = new ResourceLocation(KubeJS.MOD_ID, i.getPath());
+        }
 		id = i;
 		object = null;
 		translationKey = ""; //compute lazily
@@ -34,6 +38,7 @@ public abstract class BuilderBase<T> implements Supplier<T> {
 		tags = new HashSet<>();
 	}
 
+    @Deprecated
 	public BuilderBase(String s) {
 		this(UtilsJS.getMCID(KubeJS.appendModId(s)));
 //		displayName = Arrays.stream(id.getPath().split("_")).map(UtilsJS::toTitleCase).collect(Collectors.joining(" "));
