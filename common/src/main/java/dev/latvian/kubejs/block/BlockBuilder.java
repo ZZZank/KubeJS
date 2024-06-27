@@ -4,6 +4,10 @@ import com.google.gson.JsonObject;
 import dev.latvian.kubejs.block.custom.BasicBlockJS;
 import dev.latvian.kubejs.block.custom.BasicBlockType;
 import dev.latvian.kubejs.block.custom.BlockType;
+import dev.latvian.kubejs.client.ModelGenerator;
+import dev.latvian.kubejs.client.VariantBlockStateGenerator;
+import dev.latvian.kubejs.generator.AssetJsonGenerator;
+import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.loot.LootBuilder;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.RegistryInfos;
@@ -16,6 +20,7 @@ import me.shedaniel.architectury.registry.ToolType;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -70,8 +75,8 @@ public class BlockBuilder extends BuilderBase<Block> {
 
 	public transient Block block;
 
-	public BlockBuilder(String i) {
-		super(i);
+	public BlockBuilder(ResourceLocation id) {
+		super(id);
 		type = BasicBlockType.INSTANCE;
 		material = MaterialListJS.INSTANCE.map.get("wood");
 		hardness = 0.5F;
@@ -88,7 +93,7 @@ public class BlockBuilder extends BuilderBase<Block> {
 		textures = new JsonObject();
 		textureAll(id.getNamespace() + ":block/" + id.getPath());
 		model = "";
-		itemBuilder = new BlockItemBuilder(i);
+		itemBuilder = new BlockItemBuilder(id);
 		itemBuilder.blockBuilder = this;
 		customShape = new ArrayList<>();
 		noCollission = false;
@@ -183,6 +188,114 @@ public class BlockBuilder extends BuilderBase<Block> {
 		renderType = l;
 		return this;
 	}
+
+    @Override
+    public void generateDataJsons(DataJsonGenerator generator) {
+        if (this.lootTable == null) {
+            return;
+        }
+
+        var lootBuilder = new LootBuilder(null);
+        lootBuilder.type = "minecraft:block";
+
+        if (lootTable != null) {
+            lootTable.accept(lootBuilder);
+        } else if (get().asItem() != Items.AIR) {
+            lootBuilder.addPool(pool -> {
+                pool.survivesExplosion();
+                pool.addItem(new ItemStack(get()));
+            });
+        }
+
+        var json = lootBuilder.toJson();
+        generator.json(newID("loot_tables/blocks/", ""), json);
+    }
+
+    @Override
+    public void generateAssetJsons(AssetJsonGenerator generator) {
+        if (blockstateJson != null) {
+            generator.json(newID("blockstates/", ""), blockstateJson);
+        } else {
+            generator.blockState(id, this::generateBlockStateJson);
+        }
+
+        if (modelJson != null) {
+            generator.json(newID("models/block/", ""), modelJson);
+        } else {
+            // This is different because there can be multiple models, so we should let the block handle those
+            generateBlockModelJsons(generator);
+        }
+
+        if (itemBuilder != null) {
+            if (itemBuilder.modelJson != null) {
+                generator.json(newID("models/item/", ""), itemBuilder.modelJson);
+            } else {
+                generator.itemModel(itemBuilder.id, this::generateItemModelJson);
+            }
+        }
+
+    }
+
+    protected void generateItemModelJson(ModelGenerator m) {
+        if (!model.isEmpty()) {
+            m.parent(model);
+        } else {
+            m.parent(newID("block/", "").toString());
+        }
+    }
+
+    protected void generateBlockModelJsons(AssetJsonGenerator generator) {
+        generator.blockModel(id, mg -> {
+            var particle = textures.get("particle").getAsString();
+
+            if (areAllTexturesEqual(textures, particle)) {
+                mg.parent("minecraft:block/cube_all");
+                mg.texture("all", particle);
+            } else {
+                mg.parent("block/cube");
+                mg.textures(textures);
+            }
+
+            if (tint != null || !customShape.isEmpty()) {
+                List<AABB> boxes = new ArrayList<>(customShape);
+
+                if (boxes.isEmpty()) {
+                    boxes.add(new AABB(0D, 0D, 0D, 1D, 1D, 1D));
+                }
+
+                for (var box : boxes) {
+                    mg.element(e -> {
+                        e.box(box);
+
+                        for (var direction : Direction.values()) {
+                            e.face(direction, face -> {
+                                face.tex("#" + direction.getSerializedName());
+                                face.cull();
+
+                                if (tint != null) {
+                                    face.tintindex(0);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    protected void generateBlockStateJson(VariantBlockStateGenerator bs) {
+        bs.variant("", model.isEmpty() ? (id.getNamespace() + ":block/" + id.getPath()) : model);
+    }
+
+    protected boolean areAllTexturesEqual(JsonObject tex, String t) {
+        for (var direction : Direction.values()) {
+            if (!tex.get(direction.getSerializedName()).getAsString().equals(t)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     @JSInfo("""
 		Set the color of a specific layer of the block.

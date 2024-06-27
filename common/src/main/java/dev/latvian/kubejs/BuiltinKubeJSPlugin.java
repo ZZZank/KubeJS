@@ -17,11 +17,7 @@ import dev.latvian.kubejs.bindings.ScriptEventsWrapper;
 import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.bindings.UtilsWrapper;
 import dev.latvian.kubejs.block.*;
-import dev.latvian.kubejs.block.events.BlockRegistryEventJS;
-import dev.latvian.kubejs.block.custom.BasicBlockType;
-import dev.latvian.kubejs.block.custom.BlockType;
-import dev.latvian.kubejs.block.custom.BlockTypes;
-import dev.latvian.kubejs.block.custom.ShapedBlockType;
+import dev.latvian.kubejs.block.custom.*;
 import dev.latvian.kubejs.client.painter.Painter;
 import dev.latvian.kubejs.client.painter.screen.*;
 import dev.latvian.kubejs.entity.EntityJS;
@@ -152,8 +148,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		//sound
 		RegistryInfos.SOUND_EVENT.addType("basic", SoundEventBuilder.class, SoundEventBuilder::new);
 		//block
-//		RegistryInfo.BLOCK.addType("basic", BasicBlockJS.Builder.class, BasicBlockJS.Builder::new);
-//		RegistryInfo.BLOCK.addType("detector", DetectorBlock.Builder.class, DetectorBlock.Builder::new);
+		RegistryInfos.BLOCK.addType("basic", BlockBuilder.class, BlockBuilder::new);
+		RegistryInfos.BLOCK.addType("detector", DetectorBlock.Builder.class, DetectorBlock.Builder::new);
 //		RegistryInfo.BLOCK.addType("slab", SlabBlockBuilder.class, SlabBlockBuilder::new);
 //		RegistryInfo.BLOCK.addType("stairs", StairBlockBuilder.class, StairBlockBuilder::new);
 //		RegistryInfo.BLOCK.addType("fence", FenceBlockBuilder.class, FenceBlockBuilder::new);
@@ -199,7 +195,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		for (var registryInfo : RegistryInfos.WITH_TYPE.values()) {
 			registryInfo.fireRegistryEvent();
 		}
-		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
+//		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
 //		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
 		new FluidRegistryEventJS().post(KubeJSEvents.FLUID_REGISTRY);
 	}
@@ -578,17 +574,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 			builder.generateAssetJsons(generator);
 		}
 
-		for (DetectorInstance detector : KubeJSObjects.DETECTORS.values()) {
-			generator.blockState(new ResourceLocation(KubeJS.MOD_ID, "detector_" + detector.id), bs -> {
-				bs.variant("powered=false", "kubejs:block/detector");
-				bs.variant("powered=true", "kubejs:block/detector_on");
-			});
-
-			generator.itemModel(new ResourceLocation(KubeJS.MOD_ID, "detector_" + detector.id), m -> {
-				m.parent(KubeJS.MOD_ID + ":block/detector");
-			});
-		}
-
 		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
 			builder.type.generateAssets(builder, generator);
 		}
@@ -616,10 +601,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 			if (builder.overrideLangJson && builder.display != null) {
 				lang.put(builder.translationKey, builder.display.getString());
 			}
-		}
-
-		for (var detector : KubeJSObjects.DETECTORS.values()) {
-			lang.put("block.kubejs.detector_" + detector.id, "KubeJS Detector [" + detector.id + "]");
 		}
 
 		for (var builder : KubeJSObjects.FLUIDS.values()) {

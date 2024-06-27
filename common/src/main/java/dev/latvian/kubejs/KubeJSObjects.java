@@ -1,7 +1,6 @@
 package dev.latvian.kubejs;
 
 import dev.latvian.kubejs.block.BlockBuilder;
-import dev.latvian.kubejs.block.DetectorInstance;
 import dev.latvian.kubejs.fluid.FluidBuilder;
 import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.registry.BuilderBase;
@@ -20,9 +19,8 @@ public class KubeJSObjects {
 	public static final Map<ResourceLocation, ItemBuilder> ITEMS = new LinkedHashMap<>();
 	public static final Map<ResourceLocation, BlockBuilder> BLOCKS = new LinkedHashMap<>();
 	public static final Map<ResourceLocation, FluidBuilder> FLUIDS = new LinkedHashMap<>();
-	public static final Map<String, DetectorInstance> DETECTORS = new LinkedHashMap<>();
 
-	public static void register() {
+    public static void register() {
 		ALL.clear();
 		ITEMS.clear();
 		BLOCKS.clear();
