@@ -107,11 +107,12 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void renderLayers() {
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			switch (builder.renderType) {
-				case "cutout" -> RenderTypes.register(RenderType.cutout(), builder.block);
-				case "cutout_mipped" -> RenderTypes.register(RenderType.cutoutMipped(), builder.block);
-				case "translucent" -> RenderTypes.register(RenderType.translucent(), builder.block);
+		for (var builder : RegistryInfos.BLOCK.objects.values()) {
+            var bBuilder = (BlockBuilder) builder;
+			switch (bBuilder.renderType) {
+				case "cutout" -> RenderTypes.register(RenderType.cutout(), bBuilder.block);
+				case "cutout_mipped" -> RenderTypes.register(RenderType.cutoutMipped(), bBuilder.block);
+				case "translucent" -> RenderTypes.register(RenderType.translucent(), bBuilder.block);
 				//default:
 				//	RenderTypeLookup.setRenderLayer(block, RenderType.getSolid());
 			}
@@ -223,22 +224,27 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void itemColors() {
-		RegistryInfos.ITEM.objects
-				.values()
-				.stream()
-				.map(o -> (ItemBuilder) o)
-				.filter(b -> b.tint != null)
-				.forEach(builder -> ColorHandlers.registerItemColors(
-						builder.tint.asItemColor(),
-						Objects.requireNonNull(builder.get(), "Item " + builder.id + " is null!")
-						)
-				);
+        RegistryInfos.ITEM.objects
+            .values()
+            .stream()
+            .map(o -> (ItemBuilder) o)
+            .filter(b -> b.tint != null)
+            .forEach(builder -> ColorHandlers.registerItemColors(
+                    builder.tint.asItemColor(),
+                    Objects.requireNonNull(builder.get(), "Item " + builder.id + " is null!")
+                )
+            );
 
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			if (builder.itemBuilder != null && !builder.color.isEmpty()) {
-				ColorHandlers.registerItemColors((stack, index) -> builder.color.get(index), Objects.requireNonNull(builder.itemBuilder.blockItem, "Block Item " + builder.id + " is null!"));
-			}
-		}
+        RegistryInfos.BLOCK.objects.values()
+            .stream()
+            .map(o -> (BlockBuilder) o)
+            .filter(builder -> builder.itemBuilder != null && !builder.color.isEmpty())
+            .forEach(builder ->
+                ColorHandlers.registerItemColors(
+                    (stack, index) -> builder.color.get(index),
+                    Objects.requireNonNull(builder.itemBuilder.blockItem, "Block Item " + builder.id + " is null!")
+                )
+            );
 
 		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
 			if (builder.bucketColor != 0xFFFFFFFF) {
@@ -248,11 +254,10 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void blockColors() {
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			if (!builder.color.isEmpty()) {
-				ColorHandlers.registerBlockColors((state, world, pos, index) -> builder.color.get(index), builder.block);
-			}
-		}
+        RegistryInfos.BLOCK.objects.values()
+            .stream().map(o -> (BlockBuilder) o)
+            .filter(builder -> !builder.color.isEmpty())
+            .forEach(builder -> ColorHandlers.registerBlockColors((state, world, pos, index) -> builder.color.get(index), builder.block));
 	}
 
 	private void postAtlasStitch(TextureAtlas atlas) {

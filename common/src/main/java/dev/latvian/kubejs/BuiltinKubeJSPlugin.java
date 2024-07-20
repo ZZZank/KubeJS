@@ -31,13 +31,7 @@ import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.item.ItemTintFunction;
-import dev.latvian.kubejs.item.custom.ArmorItemType;
-import dev.latvian.kubejs.item.custom.BasicItemType;
-import dev.latvian.kubejs.item.custom.ItemArmorTierEventJS;
-import dev.latvian.kubejs.item.custom.ItemToolTierEventJS;
-import dev.latvian.kubejs.item.custom.ItemType;
-import dev.latvian.kubejs.item.custom.ItemTypes;
-import dev.latvian.kubejs.item.custom.ToolItemType;
+import dev.latvian.kubejs.item.custom.*;
 import dev.latvian.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.kubejs.item.ingredient.IngredientStackJS;
 import dev.latvian.kubejs.loot.LootBuilder;
@@ -172,7 +166,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.ITEM.addType("chestplate", ArmorItemBuilder.Chestplate.class, ArmorItemBuilder.Chestplate::new);
 //		RegistryInfo.ITEM.addType("leggings", ArmorItemBuilder.Leggings.class, ArmorItemBuilder.Leggings::new);
 //		RegistryInfo.ITEM.addType("boots", ArmorItemBuilder.Boots.class, ArmorItemBuilder.Boots::new);
-//		RegistryInfo.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
+		RegistryInfos.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
 		//misc
 //		RegistryInfo.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
 		RegistryInfos.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
@@ -551,36 +545,12 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		for (BuilderBase<?> builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateDataJsons(generator);
 		}
-
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			if (builder.lootTable != null) {
-				LootBuilder lootBuilder = new LootBuilder(null);
-				lootBuilder.type = "minecraft:block";
-				builder.lootTable.accept(lootBuilder);
-				generator.json(builder.newID("loot_tables/blocks/", ""), lootBuilder.toJson());
-			}
-
-			builder.type.generateData(builder, generator);
-		}
-
-		for (ItemBuilder builder : KubeJSObjects.ITEMS.values()) {
-			builder.type.generateData(builder, generator);
-		}
 	}
 
 	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
 		for (BuilderBase<?> builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateAssetJsons(generator);
-		}
-
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			builder.type.generateAssets(builder, generator);
-		}
-
-
-		for (ItemBuilder builder : KubeJSObjects.ITEMS.values()) {
-			builder.type.generateAssets(builder, generator);
 		}
 
 		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {

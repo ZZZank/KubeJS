@@ -56,22 +56,13 @@ public class KubeJSItemEventHandler {
 	}
 
 	private static void registry() {
-		for (ItemBuilder builder : KubeJSObjects.ITEMS.values()) {
-			builder.item = builder.type.createItem(builder);
-
-			if (builder.item instanceof ItemKJS) {
-				((ItemKJS) builder.item).setItemBuilderKJS(builder);
-			}
-
-			KubeJSRegistries.items().register(builder.id, () -> builder.item);
-		}
 
 		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
 			if (builder.itemBuilder != null) {
 				builder.itemBuilder.blockItem = new BlockItemJS(builder.itemBuilder);
 
-				if (builder.itemBuilder.blockItem instanceof ItemKJS) {
-					((ItemKJS) builder.itemBuilder.blockItem).setItemBuilderKJS(builder.itemBuilder);
+				if (builder.itemBuilder.blockItem instanceof ItemKJS kjsItem) {
+					kjsItem.setItemBuilderKJS(builder.itemBuilder);
 				}
 
 				KubeJSRegistries.items().register(builder.id, () -> builder.itemBuilder.blockItem);

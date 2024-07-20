@@ -37,7 +37,6 @@ import java.util.function.Consumer;
  * @author LatvianModder
  */
 public class BlockBuilder extends BuilderBase<Block> {
-	public static BlockBuilder current;
 
 	public transient BlockType type;
 	public transient MaterialJS material;

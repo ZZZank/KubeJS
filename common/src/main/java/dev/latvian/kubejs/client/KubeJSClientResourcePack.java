@@ -51,10 +51,6 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		AssetJsonGenerator generator = new AssetJsonGenerator(map);
 		KubeJSPlugins.forEachPlugin(p -> p.generateAssetJsons(generator));
 
-		for (var builder : RegistryInfos.ALL_BUILDERS) {
-			builder.generateAssetJsons(generator);
-		}
-
 		generateLang(generator);
 	}
 
@@ -69,7 +65,6 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 		KubeJSPlugins.forEachPlugin(p -> p.generateLang(langMap));
 
         new GenerateClientAssetsEventJS(generator).post(ScriptType.CLIENT, KubeJSEvents.CLIENT_GENERATE_ASSET);
-
 
 		//read lang json and add into lang event
 		try (var in = Files.list(KubeJSPaths.ASSETS)) {
@@ -99,7 +94,7 @@ public class KubeJSClientResourcePack extends KubeJSResourcePack {
 
 		//using a special namespace to keep backward equivalence
 		langEvent.get("kubejs_generated", "en_us").addAll(langMap);
-		langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
+        langEvent.post(ScriptType.CLIENT, KubeJSEvents.CLIENT_LANG);
 
 		for (var lang2entries : langEvent.namespace2lang2entries.values()) {
 			for (var entries : lang2entries.values()) {

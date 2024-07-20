@@ -48,20 +48,6 @@ public class KubeJSBlockEventHandler {
 	}
 
 	private static void registry() {
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			BlockBuilder.current = builder;
-
-			builder.block = builder.type.createBlock(builder);
-
-			if (builder.block instanceof BlockKJS) {
-				((BlockKJS) builder.block).setBlockBuilderKJS(builder);
-			}
-
-			KubeJSRegistries.blocks().register(builder.id, () -> builder.block);
-		}
-
-		BlockBuilder.current = null;
-
 		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
 			builder.block = buildFluidBlock(builder, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 			KubeJSRegistries.blocks().register(builder.id, () -> builder.block);

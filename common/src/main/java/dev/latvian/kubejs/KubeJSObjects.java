@@ -23,7 +23,7 @@ public class KubeJSObjects {
     public static void register() {
 		ALL.clear();
 		ITEMS.clear();
-		BLOCKS.clear();
+//		BLOCKS.clear();
 		FLUIDS.clear();
 	}
 }
