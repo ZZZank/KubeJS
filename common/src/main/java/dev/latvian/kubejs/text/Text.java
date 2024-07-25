@@ -9,6 +9,7 @@ import dev.latvian.mods.rhino.annotations.typing.JSInfo;
 import dev.latvian.mods.rhino.mod.util.JsonSerializable;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
+import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
@@ -325,7 +326,16 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 		return this;
 	}
 
-	public final Text hover(@Nullable Object o) {
+    /**
+     * only for backward compat
+     */
+    @HideFromJS
+    @Deprecated
+    public final Text click(String s) {
+        return click((Object) s);
+    }
+
+    public final Text hover(@Nullable Object o) {
         hover = TextWrapper.hoverEventOf(o);
         return this;
 	}

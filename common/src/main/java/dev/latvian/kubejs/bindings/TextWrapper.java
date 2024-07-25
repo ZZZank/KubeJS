@@ -76,22 +76,22 @@ public class TextWrapper {
         Returns a plain text of the input
         
         non-string object will be force-converted into string""")
-	public static TextString string(Object text) {
+	public static Text string(Object text) {
 		return new TextString(text);
 	}
 
     @JSInfo("Returns a translatable text of the input key")
-	public static TextTranslate translate(String key) {
+	public static Text translate(String key) {
 		return new TextTranslate(key, UtilsJS.EMPTY_OBJECT_ARRAY);
 	}
 
     @JSInfo("Returns a translatable text of the input key, with args of the key")
-	public static TextTranslate translate(String key, Object... objects) {
+	public static Text translate(String key, Object... objects) {
 		return new TextTranslate(key, objects);
 	}
 
     @JSInfo("Returns a keybinding Text of the input keybinding descriptor")
-	public static TextKeybind keybind(String keybind) {
+	public static Text keybind(String keybind) {
 		return new TextKeybind(keybind);
 	}
 
@@ -198,8 +198,7 @@ public class TextWrapper {
     public static HoverEvent hoverEventOf(Object o) {
         if (o == null) {
             return null;
-        }
-        if (o instanceof HoverEvent hoverEvent) {
+        } else if (o instanceof HoverEvent hoverEvent) {
             return hoverEvent;
         }
         //vanilla json / kjs map
@@ -222,12 +221,10 @@ public class TextWrapper {
             );
         }
         //fallback to text
-        else {
-            return new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                of(o).component()
-            );
-        }
+        return new HoverEvent(
+            HoverEvent.Action.SHOW_TEXT,
+            of(o).component()
+        );
     }
 
     @JSInfo("""
@@ -277,10 +274,10 @@ public class TextWrapper {
             return new TextString(e.name());
         } else if (o instanceof Text) {
             return (Text) o;
-        } else if (o instanceof ListJS) {
+        } else if (o instanceof ListJS l) {
             Text text = new TextString("");
 
-            for (Object e1 : (ListJS) o) {
+            for (Object e1 : l) {
                 text.append(ofWrapped(e1));
             }
 
