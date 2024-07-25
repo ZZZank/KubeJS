@@ -1,6 +1,5 @@
 package dev.latvian.kubejs.item.events;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
@@ -21,7 +20,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -49,12 +47,7 @@ public class KubeJSItemEventHandler {
 		PlayerEvent.SMELT_ITEM.register(KubeJSItemEventHandler::smelted);
 	}
 
-	@ExpectPlatform
-	private static BucketItem buildBucket(FluidBuilder builder) {
-		throw new AssertionError();
-	}
-
-	private static void registry() {
+    private static void registry() {
 
         for (var builderBase : RegistryInfos.BLOCK.objects.values()) {
             if (builderBase instanceof BlockBuilder builder && builder.itemBuilder != null) {
@@ -67,13 +60,6 @@ public class KubeJSItemEventHandler {
                 KubeJSRegistries.items().register(builder.id, () -> builder.itemBuilder.blockItem);
             }
         }
-
-		for (var base : RegistryInfos.FLUID.objects.values()) {
-            if (base instanceof FluidBuilder builder) {
-                builder.bucketItem = buildBucket(builder);
-                KubeJSRegistries.items().register(builder.newID("", "_bucket"), () -> builder.bucketItem);
-            }
-		}
 
 		if (!CommonProperties.get().serverOnly) {
 			DUMMY_FLUID_ITEM = KubeJSRegistries.items().register(KubeJS.id("dummy_fluid_item"), () -> new Item(new Item.Properties().stacksTo(1).tab(KubeJS.tab)));

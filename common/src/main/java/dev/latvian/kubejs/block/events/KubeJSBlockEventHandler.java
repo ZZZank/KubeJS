@@ -1,12 +1,7 @@
 package dev.latvian.kubejs.block.events;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJSEvents;
-import dev.latvian.kubejs.KubeJSRegistries;
-import dev.latvian.kubejs.fluid.FluidBuilder;
-import dev.latvian.kubejs.registry.BuilderBase;
-import dev.latvian.kubejs.registry.RegistryInfos;
 import me.shedaniel.architectury.event.events.BlockEvent;
 import me.shedaniel.architectury.event.events.InteractionEvent;
 import me.shedaniel.architectury.utils.IntValue;
@@ -18,12 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -42,18 +32,7 @@ public class KubeJSBlockEventHandler {
 		BlockEvent.PLACE.register(KubeJSBlockEventHandler::blockPlace);
 	}
 
-	@ExpectPlatform
-	private static LiquidBlock buildFluidBlock(FluidBuilder builder, BlockBehaviour.Properties properties) {
-		throw new AssertionError();
-	}
-
-	private static void registry() {
-        for (BuilderBase<? extends Fluid> builderBase : RegistryInfos.FLUID.objects.values()) {
-            if (builderBase instanceof FluidBuilder builder) {
-                builder.block = buildFluidBlock(builder, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
-                KubeJSRegistries.blocks().register(builder.id, () -> builder.block);
-            }
-        }
+    private static void registry() {
 	}
 
 	private static InteractionResult rightClick(Player player, InteractionHand hand, BlockPos pos, Direction direction) {

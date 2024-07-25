@@ -2,6 +2,7 @@ package dev.latvian.kubejs.fluid;
 
 import com.google.gson.JsonObject;
 import dev.latvian.kubejs.KubeJS;
+import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.bindings.RarityWrapper;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.registry.RegistryInfo;
@@ -9,9 +10,11 @@ import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.registry.RegistryInfos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 
 /**
  * @author LatvianModder
@@ -50,11 +53,26 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 
 	@Override
 	public Fluid createObject() {
-		//ToDo
-		return null;
+        KubeJSRegistries.fluids().register(id, () -> stillFluid = KubeJSFluidEventHandler.buildFluid(true, this));
+        return stillFluid;
 	}
 
-	public FluidBuilder color(int c) {
+    @Override
+    public void createAdditionalObjects() {
+        KubeJSRegistries.fluids().register(new ResourceLocation(id.getNamespace(), "flowing_" + id.getPath()),
+            () -> flowingFluid = KubeJSFluidEventHandler.buildFluid(false, this)
+        );
+        KubeJSRegistries.blocks()
+            .register(id,
+                () -> block = KubeJSFluidEventHandler.buildFluidBlock(this,
+                    Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()
+                )
+            );
+        KubeJSRegistries.items()
+            .register(newID("", "_bucket"), () -> bucketItem = KubeJSFluidEventHandler.buildBucket(this));
+    }
+
+    public FluidBuilder color(int c) {
 		color = c;
 
 		if ((color & 0xFFFFFF) == color) {
@@ -90,11 +108,11 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 		return textureFlowing(id);
 	}
 
-	public FluidBuilder textureThick(int color) {
-		return textureStill(KubeJS.id("fluid/fluid_thick"))
-				.textureFlowing(KubeJS.id("fluid/fluid_thick_flow"))
-				.color(color);
-	}
+    public FluidBuilder textureThick(int color) {
+        return textureStill(KubeJS.id("fluid/fluid_thick"))
+            .textureFlowing(KubeJS.id("fluid/fluid_thick_flow"))
+            .color(color);
+    }
 	public FluidBuilder thickTexture(int color) {
 		return textureThick(color);
 	}
