@@ -4,7 +4,6 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.latvian.kubejs.CommonProperties;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.KubeJSEvents;
-import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.block.BlockBuilder;
 import dev.latvian.kubejs.core.ItemKJS;
@@ -69,9 +68,11 @@ public class KubeJSItemEventHandler {
             }
         }
 
-		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
-			builder.bucketItem = buildBucket(builder);
-			KubeJSRegistries.items().register(builder.newID("", "_bucket"), () -> builder.bucketItem);
+		for (var base : RegistryInfos.FLUID.objects.values()) {
+            if (base instanceof FluidBuilder builder) {
+                builder.bucketItem = buildBucket(builder);
+                KubeJSRegistries.items().register(builder.newID("", "_bucket"), () -> builder.bucketItem);
+            }
 		}
 
 		if (!CommonProperties.get().serverOnly) {

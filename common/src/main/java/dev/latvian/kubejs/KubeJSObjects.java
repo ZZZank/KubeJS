@@ -13,6 +13,7 @@ import java.util.*;
 /**
  * @author LatvianModder
  */
+@Deprecated
 public class KubeJSObjects {
     @Deprecated
 	public static final List<BuilderBase<?>> ALL = RegistryInfos.ALL_BUILDERS;
@@ -20,12 +21,13 @@ public class KubeJSObjects {
 	public static final Map<ResourceLocation, ItemBuilder> ITEMS = UtilsJS.cast(Collections.unmodifiableMap(RegistryInfos.ITEM.objects));
     @Deprecated
 	public static final Map<ResourceLocation, BlockBuilder> BLOCKS = UtilsJS.cast(Collections.unmodifiableMap(RegistryInfos.BLOCK.objects));
-	public static final Map<ResourceLocation, FluidBuilder> FLUIDS = new LinkedHashMap<>();
+    @Deprecated
+	public static final Map<ResourceLocation, FluidBuilder> FLUIDS = UtilsJS.cast(Collections.unmodifiableMap(RegistryInfos.FLUID.objects));
 
     public static void register() {
 //		ALL.clear();
 //		ITEMS.clear();
 //		BLOCKS.clear();
-		FLUIDS.clear();
+//		FLUIDS.clear();
 	}
 }

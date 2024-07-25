@@ -2,7 +2,6 @@ package dev.latvian.kubejs.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.latvian.kubejs.KubeJSEvents;
-import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSPaths;
 import dev.latvian.kubejs.block.BlockBuilder;
 import dev.latvian.kubejs.client.asset.AtlasSpriteRegistryEventJS;
@@ -16,6 +15,7 @@ import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.item.events.ItemTooltipEventJS;
 import dev.latvian.kubejs.item.OldItemTooltipEventJS;
 import dev.latvian.kubejs.player.AttachPlayerDataEvent;
+import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.registry.RegistryInfos;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.Tags;
@@ -46,6 +46,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -224,33 +226,34 @@ public class KubeJSClientEventHandler {
 	}
 
 	private void itemColors() {
-        RegistryInfos.ITEM.objects
-            .values()
-            .stream()
-            .map(o -> (ItemBuilder) o)
-            .filter(b -> b.tint != null)
-            .forEach(builder -> ColorHandlers.registerItemColors(
+        for (BuilderBase<? extends Item> base : RegistryInfos.ITEM.objects.values()) {
+            if (base instanceof ItemBuilder builder && builder.tint != null) {
+                ColorHandlers.registerItemColors(
                     builder.tint.asItemColor(),
                     Objects.requireNonNull(builder.get(), "Item " + builder.id + " is null!")
-                )
-            );
+                );
+            }
+        }
 
-        RegistryInfos.BLOCK.objects.values()
-            .stream()
-            .map(o -> (BlockBuilder) o)
-            .filter(builder -> builder.itemBuilder != null && !builder.color.isEmpty())
-            .forEach(builder ->
+        for (BuilderBase<? extends Block> o : RegistryInfos.BLOCK.objects.values()) {
+            if (o instanceof BlockBuilder builder
+                && builder.itemBuilder != null
+                && !builder.color.isEmpty()) {
                 ColorHandlers.registerItemColors(
                     (stack, index) -> builder.color.get(index),
-                    Objects.requireNonNull(builder.itemBuilder.blockItem, "Block Item " + builder.id + " is null!")
-                )
-            );
+                    Objects.requireNonNull(
+                        builder.itemBuilder.blockItem,
+                        "Block Item " + builder.id + " is null!"
+                    )
+                );
+            }
+        }
 
-		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
-			if (builder.bucketColor != 0xFFFFFFFF) {
-				ColorHandlers.registerItemColors((stack, index) -> index == 1 ? builder.bucketColor : 0xFFFFFFFF, Objects.requireNonNull(builder.bucketItem, "Bucket Item " + builder.id + " is null!"));
-			}
-		}
+        for (BuilderBase<? extends Fluid> builderBase : RegistryInfos.FLUID.objects.values()) {
+            if (builderBase instanceof FluidBuilder builder && builder.bucketColor != 0xFFFFFFFF) {
+                ColorHandlers.registerItemColors((stack, index) -> index == 1 ? builder.bucketColor : 0xFFFFFFFF, Objects.requireNonNull(builder.bucketItem, "Bucket Item " + builder.id + " is null!"));
+            }
+        }
 	}
 
 	private void blockColors() {

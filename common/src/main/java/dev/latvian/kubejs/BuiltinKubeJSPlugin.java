@@ -549,15 +549,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateAssetJsons(generator);
 		}
-
-		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
-			generator.json(builder.newID("blockstates/", ""), builder.getBlockstateJson());
-			generator.json(builder.newID("models/block/", ""), builder.getBlockModelJson());
-
-			JsonObject bucketModel = new JsonObject();
-			bucketModel.addProperty("parent", "kubejs:item/generated_bucket");
-			generator.json(builder.newID("models/item/", "_bucket"), bucketModel);
-		}
 	}
 
 	@Override
@@ -565,12 +556,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		lang.put("itemGroup.kubejs.kubejs", "KubeJS");
 
 		for (var builder : RegistryInfos.ALL_BUILDERS) {
-			if (builder.overrideLangJson && builder.display != null) {
-				lang.put(builder.translationKey, builder.display.getString());
-			}
-		}
-
-		for (var builder : KubeJSObjects.FLUIDS.values()) {
 			if (builder.overrideLangJson && builder.display != null) {
 				lang.put(builder.translationKey, builder.display.getString());
 			}

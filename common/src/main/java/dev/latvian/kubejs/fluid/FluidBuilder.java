@@ -3,6 +3,7 @@ package dev.latvian.kubejs.fluid;
 import com.google.gson.JsonObject;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.bindings.RarityWrapper;
+import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.registry.RegistryInfos;
@@ -169,4 +170,14 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 
 		return blockModelJson;
 	}
+
+    @Override
+    public void generateAssetJsons(AssetJsonGenerator generator) {
+        generator.json(this.newID("blockstates/", ""), this.getBlockstateJson());
+        generator.json(this.newID("models/block/", ""), this.getBlockModelJson());
+
+        JsonObject bucketModel = new JsonObject();
+        bucketModel.addProperty("parent", "kubejs:item/generated_bucket");
+        generator.json(this.newID("models/item/", "_bucket"), bucketModel);
+    }
 }
