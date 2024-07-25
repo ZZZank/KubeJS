@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.core;
 
 import dev.latvian.kubejs.item.ingredient.TagIngredientJS;
-import dev.latvian.kubejs.server.tag.TagEventJS;
+import dev.latvian.kubejs.server.TagEventJS;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
 

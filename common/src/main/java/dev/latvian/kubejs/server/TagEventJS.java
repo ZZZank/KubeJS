@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.server.tag;
+package dev.latvian.kubejs.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -12,7 +12,6 @@ import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.registry.RegistryInfos;
 import dev.latvian.kubejs.script.ScriptType;
-import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.util.ConsoleJS;
 import dev.latvian.kubejs.util.ListJS;
 import dev.latvian.kubejs.util.UtilsJS;
