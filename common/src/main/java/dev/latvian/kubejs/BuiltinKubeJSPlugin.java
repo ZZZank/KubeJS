@@ -567,7 +567,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 	public void generateLang(Map<String, String> lang) {
 		lang.put("itemGroup.kubejs.kubejs", "KubeJS");
 
-		for (var builder : KubeJSObjects.ALL) {
+		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			if (builder.overrideLangJson && builder.display != null) {
 				lang.put(builder.translationKey, builder.display.getString());
 			}

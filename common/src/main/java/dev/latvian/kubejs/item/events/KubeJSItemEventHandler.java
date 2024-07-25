@@ -10,8 +10,8 @@ import dev.latvian.kubejs.block.BlockBuilder;
 import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.fluid.FluidBuilder;
 import dev.latvian.kubejs.item.BlockItemJS;
-import dev.latvian.kubejs.item.ItemBuilder;
 import dev.latvian.kubejs.player.InventoryChangedEventJS;
+import dev.latvian.kubejs.registry.RegistryInfos;
 import me.shedaniel.architectury.event.events.InteractionEvent;
 import me.shedaniel.architectury.event.events.PlayerEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,17 +57,17 @@ public class KubeJSItemEventHandler {
 
 	private static void registry() {
 
-		for (BlockBuilder builder : KubeJSObjects.BLOCKS.values()) {
-			if (builder.itemBuilder != null) {
-				builder.itemBuilder.blockItem = new BlockItemJS(builder.itemBuilder);
+        for (var builderBase : RegistryInfos.BLOCK.objects.values()) {
+            if (builderBase instanceof BlockBuilder builder && builder.itemBuilder != null) {
+                builder.itemBuilder.blockItem = new BlockItemJS(builder.itemBuilder);
 
-				if (builder.itemBuilder.blockItem instanceof ItemKJS kjsItem) {
-					kjsItem.setItemBuilderKJS(builder.itemBuilder);
-				}
+                if (builder.itemBuilder.blockItem instanceof ItemKJS kjsItem) {
+                    kjsItem.setItemBuilderKJS(builder.itemBuilder);
+                }
 
-				KubeJSRegistries.items().register(builder.id, () -> builder.itemBuilder.blockItem);
-			}
-		}
+                KubeJSRegistries.items().register(builder.id, () -> builder.itemBuilder.blockItem);
+            }
+        }
 
 		for (FluidBuilder builder : KubeJSObjects.FLUIDS.values()) {
 			builder.bucketItem = buildBucket(builder);

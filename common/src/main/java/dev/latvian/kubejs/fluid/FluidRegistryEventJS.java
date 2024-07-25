@@ -10,7 +10,7 @@ public class FluidRegistryEventJS extends StartupEventJS {
 	public FluidBuilder create(String name) {
 		FluidBuilder builder = new FluidBuilder(name);
 		KubeJSObjects.FLUIDS.put(builder.id, builder);
-		KubeJSObjects.ALL.add(builder);
+//		KubeJSObjects.ALL.add(builder);
 		return builder;
 	}
 }
