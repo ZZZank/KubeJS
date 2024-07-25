@@ -36,13 +36,13 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 	private JsonObject blockstateJson;
 	private JsonObject blockModelJson;
 
-	public FluidBuilder(String i) {
-		super(i);
-		textureStill(KubeJS.id("fluid/fluid_thin"));
-		textureFlowing(KubeJS.id("fluid/fluid_thin_flow"));
-	}
+    public FluidBuilder(ResourceLocation id) {
+        super(id);
+        textureStill( KubeJS.id("fluid/fluid_thin"));
+        textureFlowing(KubeJS.id("fluid/fluid_thin_flow"));
+    }
 
-	@Override
+    @Override
 	public RegistryInfo<Fluid> getRegistryType() {
 		return RegistryInfos.FLUID;
 	}

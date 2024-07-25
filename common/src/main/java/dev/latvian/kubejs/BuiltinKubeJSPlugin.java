@@ -23,7 +23,6 @@ import dev.latvian.kubejs.client.painter.screen.*;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.event.IEventHandler;
 import dev.latvian.kubejs.fluid.FluidBuilder;
-import dev.latvian.kubejs.fluid.FluidRegistryEventJS;
 import dev.latvian.kubejs.fluid.FluidStackJS;
 import dev.latvian.kubejs.fluid.FluidWrapper;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
@@ -34,7 +33,6 @@ import dev.latvian.kubejs.item.ItemTintFunction;
 import dev.latvian.kubejs.item.custom.*;
 import dev.latvian.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.kubejs.item.ingredient.IngredientStackJS;
-import dev.latvian.kubejs.loot.LootBuilder;
 import dev.latvian.kubejs.recipe.RegisterRecipeHandlersEvent;
 import dev.latvian.kubejs.recipe.filter.RecipeFilter;
 import dev.latvian.kubejs.recipe.ingredientaction.IngredientActionFilter;
@@ -67,7 +65,6 @@ import dev.latvian.kubejs.script.RegistryTypeWrapperFactory;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.text.Text;
-import dev.latvian.kubejs.registry.BuilderBase;
 import dev.latvian.kubejs.util.*;
 import dev.latvian.kubejs.world.BlockContainerJS;
 import dev.latvian.mods.rhino.mod.util.NBTWrapper;
@@ -168,7 +165,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 //		RegistryInfo.ITEM.addType("boots", ArmorItemBuilder.Boots.class, ArmorItemBuilder.Boots::new);
 		RegistryInfos.ITEM.addType("music_disc", RecordItemJS.Builder.class, RecordItemJS.Builder::new);
 		//misc
-//		RegistryInfo.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
+		RegistryInfos.FLUID.addType("basic", FluidBuilder.class, FluidBuilder::new);
 		RegistryInfos.ENCHANTMENT.addType("basic", EnchantmentBuilder.class, EnchantmentBuilder::new);
 		RegistryInfos.MOB_EFFECT.addType("basic", BasicMobEffect.Builder.class, BasicMobEffect.Builder::new);
 		RegistryInfos.POTION.addType("basic", PotionBuilder.class, PotionBuilder::new);
@@ -191,7 +188,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		}
 //		new BlockRegistryEventJS().post(KubeJSEvents.BLOCK_REGISTRY);
 //		new ItemRegistryEventJS().post(KubeJSEvents.ITEM_REGISTRY);
-		new FluidRegistryEventJS().post(KubeJSEvents.FLUID_REGISTRY);
+//		new FluidRegistryEventJS().post(KubeJSEvents.FLUID_REGISTRY);
 	}
 
 	@Override
@@ -542,14 +539,14 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 	@Override
 	public void generateDataJsons(DataJsonGenerator generator) {
-		for (BuilderBase<?> builder : RegistryInfos.ALL_BUILDERS) {
+		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateDataJsons(generator);
 		}
 	}
 
 	@Override
 	public void generateAssetJsons(AssetJsonGenerator generator) {
-		for (BuilderBase<?> builder : RegistryInfos.ALL_BUILDERS) {
+		for (var builder : RegistryInfos.ALL_BUILDERS) {
 			builder.generateAssetJsons(generator);
 		}
 
