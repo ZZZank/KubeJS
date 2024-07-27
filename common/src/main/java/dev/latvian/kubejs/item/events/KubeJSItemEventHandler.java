@@ -48,23 +48,11 @@ public class KubeJSItemEventHandler {
 	}
 
     private static void registry() {
-
-        for (var builderBase : RegistryInfos.BLOCK.objects.values()) {
-            if (builderBase instanceof BlockBuilder builder && builder.itemBuilder != null) {
-                builder.itemBuilder.blockItem = new BlockItemJS(builder.itemBuilder);
-
-                if (builder.itemBuilder.blockItem instanceof ItemKJS kjsItem) {
-                    kjsItem.setItemBuilderKJS(builder.itemBuilder);
-                }
-
-                KubeJSRegistries.items().register(builder.id, () -> builder.itemBuilder.blockItem);
-            }
-        }
-
-		if (!CommonProperties.get().serverOnly) {
-			DUMMY_FLUID_ITEM = KubeJSRegistries.items().register(KubeJS.id("dummy_fluid_item"), () -> new Item(new Item.Properties().stacksTo(1).tab(KubeJS.tab)));
-		}
-	}
+        DUMMY_FLUID_ITEM = KubeJSRegistries.items().register(
+            KubeJS.id("dummy_fluid_item"),
+            () -> new Item(new Item.Properties().stacksTo(1).tab(KubeJS.tab))
+        );
+    }
 
 	private static InteractionResultHolder<ItemStack> rightClick(Player player, InteractionHand hand) {
 		if (!player.getCooldowns().isOnCooldown(player.getItemInHand(hand).getItem()) && new ItemRightClickEventJS(player, hand).post(KubeJSEvents.ITEM_RIGHT_CLICK)) {

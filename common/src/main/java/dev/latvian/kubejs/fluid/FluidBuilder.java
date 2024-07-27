@@ -53,23 +53,22 @@ public class FluidBuilder extends BuilderBase<Fluid> {
 
 	@Override
 	public Fluid createObject() {
-        KubeJSRegistries.fluids().register(id, () -> stillFluid = KubeJSFluidEventHandler.buildFluid(true, this));
+//        KubeJSRegistries.fluids().register(id, () -> stillFluid = KubeJSFluidEventHandler.buildFluid(true, this));
+        //dont register at this time
+        stillFluid = KubeJSFluidEventHandler.buildFluid(true, this);
         return stillFluid;
 	}
 
     @Override
     public void createAdditionalObjects() {
-        KubeJSRegistries.fluids().register(new ResourceLocation(id.getNamespace(), "flowing_" + id.getPath()),
-            () -> flowingFluid = KubeJSFluidEventHandler.buildFluid(false, this)
+        block = KubeJSFluidEventHandler.buildFluidBlock(this,
+            Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()
         );
-        KubeJSRegistries.blocks()
-            .register(id,
-                () -> block = KubeJSFluidEventHandler.buildFluidBlock(this,
-                    Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()
-                )
-            );
-        KubeJSRegistries.items()
-            .register(newID("", "_bucket"), () -> bucketItem = KubeJSFluidEventHandler.buildBucket(this));
+        flowingFluid = KubeJSFluidEventHandler.buildFluid(false, this);
+        bucketItem = KubeJSFluidEventHandler.buildBucket(this);
+        KubeJSRegistries.fluids().register(newID("flowing_", ""), () -> flowingFluid);
+        KubeJSRegistries.blocks().register(id, () -> block);
+        KubeJSRegistries.items().register(newID("", "_bucket"), () -> bucketItem);
     }
 
     public FluidBuilder color(int c) {

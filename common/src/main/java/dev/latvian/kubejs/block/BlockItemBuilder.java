@@ -1,5 +1,6 @@
 package dev.latvian.kubejs.block;
 
+import dev.latvian.kubejs.item.BlockItemJS;
 import dev.latvian.kubejs.item.ItemBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -15,7 +16,13 @@ public class BlockItemBuilder extends ItemBuilder {
 		super(id);
 	}
 
-	@Override
+    @Override
+    public BlockItem createObject() {
+        blockItem = new BlockItemJS(this);
+        return blockItem;
+    }
+
+    @Override
 	public String getBuilderType() {
 		return "block";
 	}

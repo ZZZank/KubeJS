@@ -1,11 +1,13 @@
 package dev.latvian.kubejs.block;
 
 import com.google.gson.JsonObject;
+import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.block.custom.BasicBlockJS;
 import dev.latvian.kubejs.block.custom.BasicBlockType;
 import dev.latvian.kubejs.block.custom.BlockType;
 import dev.latvian.kubejs.client.ModelGenerator;
 import dev.latvian.kubejs.client.VariantBlockStateGenerator;
+import dev.latvian.kubejs.core.ItemKJS;
 import dev.latvian.kubejs.generator.AssetJsonGenerator;
 import dev.latvian.kubejs.generator.DataJsonGenerator;
 import dev.latvian.kubejs.loot.LootBuilder;
@@ -116,7 +118,7 @@ public class BlockBuilder extends BuilderBase<Block> {
 	}
 
 	@Override
-	public RegistryInfo getRegistryType() {
+	public RegistryInfo<Block> getRegistryType() {
 		return RegistryInfos.BLOCK;
 	}
 
@@ -125,7 +127,17 @@ public class BlockBuilder extends BuilderBase<Block> {
 		return new BasicBlockJS(this);
 	}
 
-	@Override
+    @Override
+    public void createAdditionalObjects() {
+        if (this.itemBuilder != null) {
+            KubeJSRegistries.items().register(itemBuilder.id, () -> itemBuilder.createObject());
+            if (itemBuilder.blockItem instanceof ItemKJS kjsItem) {
+                kjsItem.setItemBuilderKJS(itemBuilder);
+            }
+        }
+    }
+
+    @Override
 	public String getBuilderType() {
 		return "block";
 	}
