@@ -69,7 +69,7 @@ public interface RegistryInfos {
     LinkedList<RegistryInfo<?>> AFTER_VANILLA = new LinkedList<>();
     Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> MAP = Collections.synchronizedMap(new LinkedHashMap<>());
     Map<ResourceKey<? extends Registry<?>>, RegistryInfo<?>> WITH_TYPE = Collections.synchronizedMap(new LinkedHashMap<>());
-    List<BuilderBase<?>> ALL_BUILDERS = new LinkedList<>();
+    List<BuilderBase<?>> ALL_BUILDERS = new ArrayList<>();
 
     RegistryInfo<SoundEvent> SOUND_EVENT = RegistryInfo.of(Registry.SOUND_EVENT, SoundEvent.class);
     RegistryInfo<Fluid> FLUID = RegistryInfo.of(Registry.FLUID, Fluid.class);

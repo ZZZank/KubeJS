@@ -24,8 +24,8 @@ public class GenerateClientAssetsEventJS extends EventJS {
 
 	public void addModel(String type, ResourceLocation id, Consumer<ModelGenerator> consumer) {
 		var gen = Util.make(new ModelGenerator(), consumer);
-		add(new ResourceLocation(id.getNamespace(), "models/%s/%s".formatted(type, id.getPath())), gen.toJson());
-	}
+        add(new ResourceLocation(id.getNamespace(), String.format("models/%s/%s", type, id.getPath())), gen.toJson());
+    }
 
 	public void addBlockState(ResourceLocation id, Consumer<VariantBlockStateGenerator> consumer) {
 		var gen = Util.make(new VariantBlockStateGenerator(), consumer);

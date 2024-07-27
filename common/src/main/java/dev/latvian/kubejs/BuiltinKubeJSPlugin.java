@@ -50,7 +50,7 @@ import dev.latvian.kubejs.recipe.mod.MATagRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapedArtisanRecipeJS;
 import dev.latvian.kubejs.recipe.mod.ShapelessArtisanRecipeJS;
 import dev.latvian.kubejs.registry.RegistryInfos;
-import dev.latvian.kubejs.registry.builder.SoundEventBuilder;
+import dev.latvian.kubejs.registry.types.SoundEventBuilder;
 import dev.latvian.kubejs.registry.types.CustomStatBuilder;
 import dev.latvian.kubejs.registry.types.enchantment.EnchantmentBuilder;
 import dev.latvian.kubejs.registry.types.mobeffects.BasicMobEffect;

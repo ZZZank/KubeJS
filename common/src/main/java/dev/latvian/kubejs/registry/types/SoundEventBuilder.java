@@ -1,4 +1,4 @@
-package dev.latvian.kubejs.registry.builder;
+package dev.latvian.kubejs.registry.types;
 
 import dev.latvian.kubejs.registry.RegistryInfo;
 import dev.latvian.kubejs.registry.BuilderBase;

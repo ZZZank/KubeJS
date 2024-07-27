@@ -14,9 +14,9 @@ public class Lazy<T> implements Supplier<T> {
 
 	public static <T> Lazy<T> serviceLoader(Class<T> type) {
         return of(() -> {
-            var loader = ServiceLoader.load(type).iterator();
-            if (loader.hasNext()) {
-                return loader.next();
+            var loaded = ServiceLoader.load(type).iterator();
+            if (loaded.hasNext()) {
+                return loaded.next();
             }
             throw new RuntimeException(String.format(
                 "Could not find platform implementation for %s!",

@@ -232,9 +232,7 @@ public class TextWrapper {
     public static ClickEvent clickEventOf(Object o) {
         if (o == null) {
             return null;
-        }
-        //raw
-        if (o instanceof ClickEvent ce) {
+        } else if (o instanceof ClickEvent ce) {
             return ce;
         }
         //json
