@@ -105,13 +105,6 @@ public class ScriptManager {
 		// typeWrappers.removeAll();
 		KubeJSPlugins.forEachPlugin(plugin -> plugin.addTypeWrappers(type, typeWrappers));
 
-		HashSet<String> globals = new HashSet<>();
-		for (Object key : pack.scope.getIds()) {
-			if (key instanceof String) { // just in case
-				globals.add((String) key);
-			}
-		}
-
 		for (RegistryTypeWrapperFactory<?> registryTypeWrapperFactory : RegistryTypeWrapperFactory.getAll()) {
 			try {
 				typeWrappers.register(registryTypeWrapperFactory.type, UtilsJS.cast(registryTypeWrapperFactory));
@@ -133,6 +126,13 @@ public class ScriptManager {
 				KubeJSPlugins.forEachPlugin(plugin -> plugin.addBindings(event));
 				BindingsEvent.EVENT.invoker().accept(event);
 
+				HashSet<String> globals = new HashSet<>();
+				for (Object key : pack.scope.getIds()) {
+					if (key instanceof String) { // just in case
+						globals.add((String) key);
+					}
+				}
+
 				for (ScriptFile file : pack.scripts) {
 					t++;
 					long start = System.currentTimeMillis();
@@ -150,7 +150,7 @@ public class ScriptManager {
 					}
 
 					for (Object key : pack.scope.getIds()) {
-						if (key instanceof String && !globals.contains((String) key)) {
+						if (key instanceof String && !globals.contains(key)) {
 							type.console.info("- new global variable: " + key);
 							globals.add((String) key);
 						}
