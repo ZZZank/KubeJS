@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -104,6 +105,13 @@ public class ScriptManager {
 		// typeWrappers.removeAll();
 		KubeJSPlugins.forEachPlugin(plugin -> plugin.addTypeWrappers(type, typeWrappers));
 
+		HashSet<String> globals = new HashSet<>();
+		for (Object key : pack.scope.getIds()) {
+			if (key instanceof String) { // just in case
+				globals.add((String) key);
+			}
+		}
+
 		for (RegistryTypeWrapperFactory<?> registryTypeWrapperFactory : RegistryTypeWrapperFactory.getAll()) {
 			try {
 				typeWrappers.register(registryTypeWrapperFactory.type, UtilsJS.cast(registryTypeWrapperFactory));
@@ -138,6 +146,13 @@ public class ScriptManager {
 						} else {
 							type.console.error("Error loading KubeJS script: " + file.info.location + ": " + file.getError());
 							file.getError().printStackTrace();
+						}
+					}
+
+					for (Object key : pack.scope.getIds()) {
+						if (key instanceof String && !globals.contains((String) key)) {
+							type.console.info("- new global variable: " + key);
+							globals.add((String) key);
 						}
 					}
 				}
