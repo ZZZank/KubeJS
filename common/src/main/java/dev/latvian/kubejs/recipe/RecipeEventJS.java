@@ -369,7 +369,7 @@ public class RecipeEventJS extends EventJS {
 		ConsoleJS.SERVER.info("Added " + added.getValue() + " recipes, removed " + removed.getValue() + " recipes, modified " + modifiedRecipesCount.get() + " recipes, with " + failed.getValue() + " failed recipes and " + fallbacked.getValue() + " fall-backed recipes");
 		RecipeJS.itemErrors = false;
 
-		if (CommonProperties.get().debugInfo) {
+		if (true) {
 			ConsoleJS.SERVER.info("======== Debug output of all added recipes ========");
 
 			for (RecipeJS r : addedRecipes) {
