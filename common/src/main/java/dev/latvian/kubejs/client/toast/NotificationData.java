@@ -3,27 +3,32 @@ package dev.latvian.kubejs.client.toast;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.latvian.kubejs.KubeJSCodecs;
-import dev.latvian.kubejs.client.toast.icon.ToastIcon;
+import dev.latvian.kubejs.client.toast.icon.*;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
+import lombok.*;
+import lombok.experimental.Accessors;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.time.Duration;
+import java.util.Optional;
 
 /**
  * @author ZZZank
  */
-public record NotificationData(
-    Duration duration,
-    Component text,
-    ToastIcon icon,
-    int iconSize,
-    Color outlineColor,
-    Color borderColor,
-    Color backgroundColor,
-    boolean textShadow
-) {
+@AllArgsConstructor
+@Getter
+@Accessors(fluent = true, chain = true)
+@Setter
+@ToString
+@EqualsAndHashCode
+public final class NotificationData {
     public static final Component[] NO_TEXT = new Component[0];
     public static final Duration DEFAULT_DURATION = Duration.ofSeconds(5L);
     public static final Color DEFAULT_BORDER_COLOR = new SimpleColor(0x472954);
@@ -35,10 +40,60 @@ public record NotificationData(
             KubeJSCodecs.COMPONENT.optionalFieldOf("text", null).forGetter(NotificationData::text),
             ToastIcon.CODEC.optionalFieldOf("icon", null).forGetter(NotificationData::icon),
             Codec.INT.optionalFieldOf("iconSize", 16).forGetter(NotificationData::iconSize),
-            KubeJSCodecs.COLOR.optionalFieldOf("outlineColor", ColorWrapper.BLACK).forGetter(NotificationData::outlineColor),
-            KubeJSCodecs.COLOR.optionalFieldOf("borderColor", DEFAULT_BORDER_COLOR).forGetter(NotificationData::borderColor),
-            KubeJSCodecs.COLOR.optionalFieldOf("backgroundColor", DEFAULT_BACKGROUND_COLOR).forGetter(NotificationData::backgroundColor),
+            KubeJSCodecs.COLOR.optionalFieldOf("outlineColor", ColorWrapper.BLACK)
+                .forGetter(NotificationData::outlineColor),
+            KubeJSCodecs.COLOR.optionalFieldOf("borderColor", DEFAULT_BORDER_COLOR)
+                .forGetter(NotificationData::borderColor),
+            KubeJSCodecs.COLOR.optionalFieldOf("backgroundColor", DEFAULT_BACKGROUND_COLOR)
+                .forGetter(NotificationData::backgroundColor),
             Codec.BOOL.optionalFieldOf("textShadow", true).forGetter(NotificationData::textShadow)
         ).apply(builder, NotificationData::new)
     );
+
+    private Duration duration;
+    private Component text;
+    private ToastIcon icon;
+    private int iconSize;
+    private Color outlineColor;
+    private Color borderColor;
+    private Color backgroundColor;
+    private boolean textShadow;
+
+    public NotificationData() {
+        duration = DEFAULT_DURATION;
+        text = null;
+        icon = NoIcon.INSTANCE;
+        iconSize = 16;
+        outlineColor = ColorWrapper.BLACK;
+        borderColor = DEFAULT_BORDER_COLOR;
+        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        textShadow = true;
+    }
+
+    public NotificationData(Component text) {
+        this();
+        this.text = text;
+    }
+
+    public NotificationData textureIcon(ResourceLocation textureLocation) {
+        return icon(new TextureIcon(textureLocation));
+    }
+
+    public NotificationData itemIcon(ItemStack stack) {
+        return icon(new ItemIcon(stack));
+    }
+
+    public NotificationData atlasIcon(ResourceLocation atlas, ResourceLocation sprite) {
+        return icon(new AtlasIcon(Optional.ofNullable(atlas), sprite));
+    }
+
+    public NotificationData atlasIcon(ResourceLocation sprite) {
+        return atlasIcon(null, sprite);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void show() {
+        val mc = Minecraft.getInstance();
+        mc.getToasts().addToast(new NotificationToast(mc, this));
+    }
 }
