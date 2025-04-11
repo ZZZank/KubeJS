@@ -39,6 +39,6 @@ public record ItemIcon(ItemStack stack) implements ToastIcon {
 
     @Override
     public ToastIconType getType() {
-        return ToastIconRegistry.ITEM;
+        return ToastIconType.ITEM;
     }
 }

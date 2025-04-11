@@ -15,11 +15,6 @@ public record ToastIconRegistry(int index, Codec<? extends ToastIcon> codec) imp
 
     private static final List<ToastIconType> REGISTERED = new ArrayList<>();
 
-    public static final ToastIconType NONE = register(NoIcon.CODEC);
-    public static final ToastIconType TEXTURE = register(TextureIcon.CODEC);
-    public static final ToastIconType ITEM = register(ItemIcon.CODEC);
-    public static final ToastIconType ATLAS = register(AtlasIcon.CODEC);
-
     public static ToastIconType register(Codec<? extends ToastIcon> codec) {
         val entry = new ToastIconRegistry(REGISTERED.size(), codec);
         REGISTERED.add(entry);

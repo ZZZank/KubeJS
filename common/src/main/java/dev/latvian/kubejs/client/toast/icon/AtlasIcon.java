@@ -50,6 +50,6 @@ public record AtlasIcon(Optional<ResourceLocation> atlas, ResourceLocation sprit
 
     @Override
     public ToastIconType getType() {
-        return ToastIconRegistry.ATLAS;
+        return ToastIconType.ATLAS;
     }
 }

@@ -16,6 +16,6 @@ public class NoIcon implements ToastIcon {
 
     @Override
     public ToastIconType getType() {
-        return ToastIconRegistry.NONE;
+        return ToastIconType.NONE;
     }
 }

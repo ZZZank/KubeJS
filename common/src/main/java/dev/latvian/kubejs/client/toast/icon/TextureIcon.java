@@ -37,6 +37,6 @@ public record TextureIcon(ResourceLocation texture) implements ToastIcon {
 
     @Override
     public ToastIconType getType() {
-        return ToastIconRegistry.TEXTURE;
+        return ToastIconType.TEXTURE;
     }
 }
