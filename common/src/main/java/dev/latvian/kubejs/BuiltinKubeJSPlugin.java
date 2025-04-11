@@ -61,6 +61,7 @@ import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.text.Text;
 import dev.latvian.kubejs.util.*;
 import dev.latvian.kubejs.world.BlockContainerJS;
+import dev.latvian.mods.rhino.mod.util.NBTUtils;
 import dev.latvian.mods.rhino.mod.util.NBTWrapper;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.AABBWrapper;
@@ -80,6 +81,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CollectionTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
@@ -385,6 +387,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		typeWrappers.register(CompoundTag.class, MapJS::isNbt, MapJS::nbt);
 		typeWrappers.register(CollectionTag.class, ListJS::nbt);
 		typeWrappers.register(ListTag.class, o -> (ListTag) ListJS.nbt(o));
+        typeWrappers.register(Tag.class, NBTUtils::toTag);
+
 		typeWrappers.register(Component.class, Text::componentOf);
 		typeWrappers.register(MutableComponent.class, o -> new TextComponent("").append(Text.componentOf(o)));
 
