@@ -384,8 +384,8 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 
 		typeWrappers.register(ResourceLocation.class, UtilsJS::getMCID);
 		typeWrappers.register(ItemStack.class, o -> ItemStackJS.of(o).getItemStack());
-		typeWrappers.register(CompoundTag.class, MapJS::isNbt, MapJS::nbt);
-		typeWrappers.register(CollectionTag.class, ListJS::nbt);
+		typeWrappers.register(CompoundTag.class, NBTUtils::canBeTagCompound, NBTUtils::toTagCompound);
+		typeWrappers.register(CollectionTag.class, NBTUtils::isTagCollection, NBTUtils::toTagCollection);
 		typeWrappers.register(ListTag.class, o -> (ListTag) ListJS.nbt(o));
         typeWrappers.register(Tag.class, NBTUtils::toTag);
 
