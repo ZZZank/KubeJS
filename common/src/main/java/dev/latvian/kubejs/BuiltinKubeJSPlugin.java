@@ -365,8 +365,9 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 	}
 
 	private static Object onEvent(BindingsEvent event, Object[] args) {
-		for (Object o : ListJS.orSelf(args[0])) {
-			event.type.manager.get().events.listen(String.valueOf(o), (IEventHandler) args[1]);
+        val events = event.type.manager.get().events;
+		for (val o : ListJS.orSelf(args[0])) {
+            events.listen(String.valueOf(o), (IEventHandler) args[1]);
 		}
 
 		return null;
@@ -390,7 +391,10 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
         typeWrappers.register(Tag.class, NBTUtils::toTag);
 
 		typeWrappers.register(Component.class, Text::componentOf);
-		typeWrappers.register(MutableComponent.class, o -> new TextComponent("").append(Text.componentOf(o)));
+		typeWrappers.register(MutableComponent.class, o -> {
+            val component = Text.componentOf(o);
+            return component instanceof MutableComponent mutable ? mutable : new TextComponent("").append(component);
+        });
 
 		typeWrappers.register(BlockPos.class, o -> {
 			if (o instanceof BlockPos) {
