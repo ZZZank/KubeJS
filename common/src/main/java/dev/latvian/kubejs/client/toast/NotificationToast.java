@@ -17,7 +17,7 @@ import java.util.List;
 
 public class NotificationToast implements Toast {
 
-    private final NotificationBuilder notification;
+    private final NotificationData notification;
 
     private final long duration;
     private final ToastIcon icon;
@@ -27,18 +27,18 @@ public class NotificationToast implements Toast {
     private long lastChanged;
     private boolean changed;
 
-    public NotificationToast(Minecraft mc, NotificationBuilder notification) {
-        this.notification = notification;
-        this.duration = notification.duration.toMillis();
+    public NotificationToast(Minecraft mc, NotificationData data) {
+        this.notification = data;
+        this.duration = data.duration().toMillis();
 
-        this.icon = notification.icon;
+        this.icon = data.icon();
 
         this.text = new ArrayList<>(2);
         this.width = 0;
         this.height = 0;
 
-        if (!TextWrapper.isEmpty(notification.text)) {
-            this.text.addAll(mc.font.split(notification.text, 240));
+        if (!TextWrapper.isEmpty(data.text())) {
+            this.text.addAll(mc.font.split(data.text(), 240));
         }
 
         for (val l : this.text) {
@@ -97,17 +97,17 @@ public class NotificationToast implements Toast {
         val w = width();
         val h = height();
 
-        val oc = notification.outlineColor.getRgbKJS();
+        val oc = notification.outlineColor().getRgbKJS();
         val ocr = FastColor.ARGB32.red(oc);
         val ocg = FastColor.ARGB32.green(oc);
         val ocb = FastColor.ARGB32.blue(oc);
 
-        val bc = notification.borderColor.getRgbKJS();
+        val bc = notification.borderColor().getRgbKJS();
         val bcr = FastColor.ARGB32.red(bc);
         val bcg = FastColor.ARGB32.green(bc);
         val bcb = FastColor.ARGB32.blue(bc);
 
-        val bgc = notification.backgroundColor.getRgbKJS();
+        val bgc = notification.backgroundColor().getRgbKJS();
         val bgcr = FastColor.ARGB32.red(bgc);
         val bgcg = FastColor.ARGB32.green(bgc);
         val bgcb = FastColor.ARGB32.blue(bgc);
@@ -122,14 +122,14 @@ public class NotificationToast implements Toast {
         drawRectangle(m, 2, 2, w - 2, h - 2, bgcr, bgcg, bgcb);
 
         if (icon != null) {
-            icon.draw(mc, poseStack, 14, h / 2, notification.iconSize);
+            icon.draw(mc, poseStack, 14, h / 2, notification.iconSize());
         }
 
         val th = icon == null ? 6 : 26;
         val tv = (h - text.size() * 10) / 2 + 1;
 
         for (var i = 0; i < text.size(); i++) {
-            if (notification.textShadow) {
+            if (notification.textShadow()) {
                 mc.font.drawShadow(poseStack, text.get(i), th, tv + i * 10, 0xFFFFFF);
             } else {
                 mc.font.draw(poseStack, text.get(i), th, tv + i * 10, 0xFFFFFF);

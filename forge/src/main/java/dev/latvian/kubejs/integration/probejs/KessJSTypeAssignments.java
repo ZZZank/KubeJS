@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.integration.probejs;
 
 import dev.latvian.kubejs.block.BlockTintFunction;
-import dev.latvian.kubejs.client.toast.NotificationBuilder;
+import dev.latvian.kubejs.client.toast.NotificationData;
 import dev.latvian.kubejs.item.ItemTintFunction;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import lombok.val;
@@ -29,6 +29,6 @@ public class KessJSTypeAssignments implements ProbeJSPlugin {
             scriptDump.assignType(ItemTintFunction.class, Types.literal(s));
         }
 
-        scriptDump.assignType(NotificationBuilder.class, Types.type(Component.class));
+        scriptDump.assignType(NotificationData.class, Types.type(Component.class));
     }
 }

@@ -1,7 +1,7 @@
 package dev.latvian.kubejs.player;
 
 import dev.latvian.kubejs.KubeJS;
-import dev.latvian.kubejs.client.toast.NotificationBuilder;
+import dev.latvian.kubejs.client.toast.NotificationData;
 import dev.latvian.kubejs.entity.RayTraceResultJS;
 import dev.latvian.kubejs.net.SendDataFromClientMessage;
 import net.minecraft.client.Minecraft;
@@ -59,7 +59,7 @@ public class ClientPlayerJS extends PlayerJS<Player> {
 	}
 
     @Override
-    public void notify(NotificationBuilder notification) {
+    public void notify(NotificationData notification) {
         notification.show();
     }
 }

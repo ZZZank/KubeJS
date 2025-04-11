@@ -1,6 +1,6 @@
 package dev.latvian.kubejs.player;
 
-import dev.latvian.kubejs.client.toast.NotificationBuilder;
+import dev.latvian.kubejs.client.toast.NotificationData;
 import dev.latvian.kubejs.core.PlayerInteractionManagerKJS;
 import dev.latvian.kubejs.item.ItemStackJS;
 import dev.latvian.kubejs.net.NotificationMessage;
@@ -169,7 +169,7 @@ public class ServerPlayerJS extends PlayerJS<ServerPlayer> {
 	}
 
     @Override
-    public void notify(NotificationBuilder notification) {
+    public void notify(NotificationData notification) {
         new NotificationMessage(notification).sendTo(this.minecraftPlayer);
     }
 }

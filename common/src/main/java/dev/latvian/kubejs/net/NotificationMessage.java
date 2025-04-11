@@ -2,23 +2,29 @@ package dev.latvian.kubejs.net;
 
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.bindings.UtilsWrapper;
-import dev.latvian.kubejs.client.toast.NotificationBuilder;
+import dev.latvian.kubejs.client.toast.NotificationData;
 import lombok.val;
 import me.shedaniel.architectury.networking.NetworkManager.PacketContext;
 import me.shedaniel.architectury.networking.simple.BaseS2CMessage;
 import me.shedaniel.architectury.networking.simple.MessageType;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class NotificationMessage extends BaseS2CMessage {
-	private final NotificationBuilder notification;
+import java.io.IOException;
 
-	public NotificationMessage(NotificationBuilder notification) {
-		this.notification = notification;
+public class NotificationMessage extends BaseS2CMessage {
+	private final NotificationData data;
+
+	public NotificationMessage(NotificationData data) {
+		this.data = data;
 	}
 
 	NotificationMessage(FriendlyByteBuf buf) {
-		notification = new NotificationBuilder(buf);
-	}
+        try {
+            data = buf.readWithCodec(NotificationData.CODEC);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	@Override
 	public MessageType getType() {
@@ -27,8 +33,11 @@ public class NotificationMessage extends BaseS2CMessage {
 
 	@Override
 	public void write(FriendlyByteBuf buf) {
-		notification.write(buf);
-	}
+        try {
+            buf.writeWithCodec(NotificationData.CODEC, this.data);
+        } catch (IOException e) {
+        }
+    }
 
 	@Override
 	public void handle(PacketContext context) {
@@ -36,6 +45,6 @@ public class NotificationMessage extends BaseS2CMessage {
 		if (player == null) {
 			return;
 		}
-        player.notify(notification);
+        player.notify(data);
 	}
 }
