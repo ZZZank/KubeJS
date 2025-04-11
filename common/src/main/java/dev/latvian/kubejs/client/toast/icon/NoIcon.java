@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 /**
  * @author ZZZank
  */
-public class NoIcon implements ToastIcon {
-    public static final Codec<NoIcon> CODEC = Codec.unit(null);
+public enum NoIcon implements ToastIcon {
+    INSTANCE;
+
+    public static final Codec<NoIcon> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public void draw(Minecraft mc, PoseStack graphics, int x, int y, int size) {
