@@ -426,8 +426,6 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		});
 
 		typeWrappers.register(Item.class, ItemStackJS::getRawItem);
-		typeWrappers.register(GenerationStep.Decoration.class, o -> o == null || o.toString().isEmpty() ? null : GenerationStep.Decoration.valueOf(o.toString().toUpperCase()));
-		typeWrappers.register(MobCategory.class, o -> o == null ? null : MobCategory.byName(o.toString()));
 		typeWrappers.register(net.minecraft.network.chat.TextColor.class, o -> {
 			if (o instanceof Number n) {
 				return net.minecraft.network.chat.TextColor.fromRgb(n.intValue() & 0xFFFFFF);
@@ -439,10 +437,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		});
 
 		typeWrappers.register(AABB.class, AABBWrapper::wrap);
-		typeWrappers.register(Direction.class, o -> o instanceof Direction ? (Direction) o : DirectionWrapper.ALL.get(o.toString().toLowerCase()));
 		typeWrappers.register(RandomIntGenerator.class, UtilsJS::randomIntGeneratorOf);
-		typeWrappers.register(LootContext.EntityTarget.class, o -> o == null ? null : LootContext.EntityTarget.getByName(o.toString().toLowerCase()));
-		typeWrappers.register(CopyNameFunction.NameSource.class, o -> o == null ? null : CopyNameFunction.NameSource.getByName(o.toString().toLowerCase()));
 
 		// KubeJS //
 		typeWrappers.register(MapJS.class, MapJS::of);
