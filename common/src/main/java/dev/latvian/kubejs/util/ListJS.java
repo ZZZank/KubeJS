@@ -8,6 +8,7 @@ import dev.latvian.mods.rhino.mod.util.JsonSerializable;
 import dev.latvian.mods.rhino.mod.util.NBTSerializable;
 import dev.latvian.mods.rhino.mod.util.NBTUtils;
 import dev.latvian.mods.rhino.mod.util.StringBuilderAppendable;
+import lombok.val;
 import me.shedaniel.architectury.utils.NbtType;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CollectionTag;
@@ -39,14 +40,12 @@ public class ListJS extends ArrayList<Object>
 	}
 
 	public static ListJS orSelf(@Nullable Object o) {
-		ListJS l = of(o);
-
+		val l = of(o);
 		if (l != null) {
 			return l;
 		}
 
-		ListJS list = new ListJS(1);
-
+		val list = new ListJS(1);
 		if (o != null) {
 			list.add(o);
 		}

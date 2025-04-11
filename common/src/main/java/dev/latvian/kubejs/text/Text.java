@@ -10,17 +10,19 @@ import dev.latvian.mods.rhino.mod.util.JsonSerializable;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import lombok.val;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author LatvianModder
@@ -150,8 +152,16 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	}
 
 	public boolean hasStyle() {
-        return color != -1 || bold != null || italic != null || underlined != null || strikethrough != null
-            || obfuscated != null || insertion != null || font != null || click != null || hover != null;
+        return color != -1
+            || bold != null
+            || italic != null
+            || underlined != null
+            || strikethrough != null
+            || obfuscated != null
+            || insertion != null
+            || font != null
+            || click != null
+            || hover != null;
     }
 
 	public Style createStyle() {
@@ -175,21 +185,13 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
 	}
 
 	@Override
-	public final Iterator<Text> iterator() {
-		if (getSiblings().isEmpty()) {
+	public final @NotNull Iterator<Text> iterator() {
+        val siblings = getSiblings();
+        if (siblings.isEmpty()) {
 			return Collections.singleton(this).iterator();
 		}
-
-		List<Text> list = new ArrayList<>();
-		list.add(this);
-
-		for (Text child : getSiblings()) {
-			for (Text part : child) {
-				list.add(part);
-			}
-		}
-
-		return list.iterator();
+        return Stream.concat(Stream.of(this), siblings.stream())
+            .iterator();
 	}
 
 	public final Text color(Color c) {
@@ -367,18 +369,17 @@ public abstract class Text implements Iterable<Text>, Comparable<Text>, JsonSeri
         if (obj == this) {
             return true;
         } else if (obj instanceof Text t) {
-            if (color == t.color
+            return color == t.color
                 && bold == t.bold
                 && italic == t.italic
                 && underlined == t.underlined
                 && strikethrough == t.strikethrough
-                && obfuscated == t.obfuscated) {
-                return Objects.equals(insertion, t.insertion)
-                    && Objects.equals(font, t.font)
-                    && Objects.equals(click, t.click)
-                    && Objects.equals(hover, t.hover)
-                    && Objects.equals(siblings, t.siblings);
-            }
+                && obfuscated == t.obfuscated
+                && Objects.equals(insertion, t.insertion)
+                && Objects.equals(font, t.font)
+                && Objects.equals(click, t.click)
+                && Objects.equals(hover, t.hover)
+                && Objects.equals(siblings, t.siblings);
         }
 
         return false;

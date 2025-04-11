@@ -93,7 +93,9 @@ public class ServerWorldJS extends WorldJS {
 		}
 
 		try {
-			return createEntityList(new EntitySelectorParser(new StringReader(filter), true).parse().findEntities(new WorldCommandSender(this)));
+            return createEntityList(new EntitySelectorParser(new StringReader(filter), true)
+                .parse()
+                .findEntities(new WorldCommandSender(this)));
 		} catch (CommandSyntaxException e) {
 			return new EntityArrayList(this, 0);
 		}
