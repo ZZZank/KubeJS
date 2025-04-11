@@ -26,10 +26,14 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class NotificationBuilder {
-	public static final Component[] NO_TEXT = new Component[0];
-	public static final Duration DEFAULT_DURATION = Duration.ofSeconds(5L);
-	public static final Color DEFAULT_BORDER_COLOR = new SimpleColor(0x472954);
-	public static final Color DEFAULT_BACKGROUND_COLOR = new SimpleColor(0x241335);
+    public Duration duration;
+    public Component text;
+    public ToastIcon icon;
+    public int iconSize;
+    public Color outlineColor;
+    public Color borderColor;
+    public Color backgroundColor;
+    public boolean textShadow;
 
 	private static final int FLAG_ICON = 1;
 	private static final int FLAG_TEXT_SHADOW = FLAG_ICON << 1;
@@ -62,23 +66,14 @@ public class NotificationBuilder {
 		return b;
 	}
 
-	public Duration duration;
-	public Component text;
-    public ToastIcon icon;
-	public int iconSize;
-	public Color outlineColor;
-	public Color borderColor;
-	public Color backgroundColor;
-	public boolean textShadow;
-
 	public NotificationBuilder(Component text) {
-		duration = DEFAULT_DURATION;
+		this.duration = NotificationData.DEFAULT_DURATION;
 		this.text = text;
-		iconSize = 16;
-		outlineColor = SimpleColor.BLACK;
-		borderColor = DEFAULT_BORDER_COLOR;
-		backgroundColor = DEFAULT_BACKGROUND_COLOR;
-		textShadow = true;
+		this.iconSize = 16;
+		this.outlineColor = SimpleColor.BLACK;
+		this.borderColor = NotificationData.DEFAULT_BORDER_COLOR;
+		this.backgroundColor = NotificationData.DEFAULT_BACKGROUND_COLOR;
+		this.textShadow = true;
 	}
 
     public NotificationBuilder() {
@@ -91,7 +86,7 @@ public class NotificationBuilder {
 
 		duration = ((flags & FLAG_DURATION) != 0)
             ? Duration.ofMillis(buf.readVarLong())
-            : DEFAULT_DURATION;
+            : NotificationData.DEFAULT_DURATION;
 
         if ((flags & FLAG_ICON) != 0) {
             icon = ToastIcon.read(buf);
@@ -118,14 +113,14 @@ public class NotificationBuilder {
 			flags |= FLAG_TEXT_SHADOW;
 		}
 
-		if (duration != DEFAULT_DURATION) {
+		if (duration != NotificationData.DEFAULT_DURATION) {
 			flags |= FLAG_DURATION;
 		}
 
 		buf.writeVarInt(flags);
 		buf.writeComponent(text);
 
-		if (duration != DEFAULT_DURATION) {
+		if (duration != NotificationData.DEFAULT_DURATION) {
 			buf.writeVarLong(duration.toMillis());
 		}
 
