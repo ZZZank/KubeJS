@@ -1,10 +1,12 @@
 package dev.latvian.kubejs.client.toast;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.latvian.kubejs.KubeJSCodecs;
 import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.client.toast.icon.*;
+import dev.latvian.kubejs.util.MapJS;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
@@ -40,7 +42,8 @@ public final class NotificationData {
         if (object instanceof NotificationData b) {
             return b;
         } else if (object instanceof Map<?, ?> map) {
-            return null; // FIXME
+            val decoded = CODEC.decode(JsonOps.INSTANCE, MapJS.json(map));
+            return decoded.result().orElseThrow().getFirst();
         }
         return new NotificationData(TextWrapper.componentOf(object));
     }
