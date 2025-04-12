@@ -362,6 +362,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
         event.add("BlockPos", BlockPos.class);
         event.add("BlockProperties", BlockStateProperties.class);
         event.add("Notification", NotificationData.class);
+        event.add("Duration", Duration.class);
 
 		KubeJS.PROXY.clientBindings(event);
 	}
