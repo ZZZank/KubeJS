@@ -23,16 +23,13 @@ public interface ToastIconType {
     }
 
     static ToastIconType register(ResourceLocation id, Codec<? extends ToastIcon> codec) {
-        val entry = new ToastIconRegistry(REGISTRY.entrySet().size(), codec);
-        return register(id, entry);
+        return register(id, () -> codec);
     }
 
     ToastIconType NONE = register(KubeJS.id("none"), NoIcon.CODEC);
     ToastIconType TEXTURE = register(KubeJS.id("texture"), TextureIcon.CODEC);
     ToastIconType ITEM = register(KubeJS.id("item"), ItemIcon.CODEC);
     ToastIconType ATLAS = register(KubeJS.id("atlas"), AtlasIcon.CODEC);
-
-    int index();
 
     Codec<? extends ToastIcon> codec();
 }
