@@ -41,4 +41,9 @@ public record ItemIcon(ItemStack stack) implements ToastIcon {
     public ToastIconType getType() {
         return ToastIconType.ITEM;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ItemIcon(ItemStack otherStack) && ItemStack.matches(this.stack, otherStack);
+    }
 }
