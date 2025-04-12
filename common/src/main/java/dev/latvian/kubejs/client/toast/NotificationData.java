@@ -3,10 +3,14 @@ package dev.latvian.kubejs.client.toast;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.latvian.kubejs.KubeJSCodecs;
+import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.client.toast.icon.*;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
+import dev.latvian.mods.rhino.native_java.type.info.TypeInfo;
+import dev.latvian.mods.rhino.util.HideFromJS;
 import lombok.*;
 import lombok.experimental.Accessors;
 import net.fabricmc.api.EnvType;
@@ -17,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.time.Duration;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -29,6 +34,25 @@ import java.util.Optional;
 @ToString
 @EqualsAndHashCode
 public final class NotificationData {
+
+    @HideFromJS
+    public static NotificationData of(Context cx, Object object, TypeInfo target) {
+        if (object instanceof NotificationData b) {
+            return b;
+        } else if (object instanceof Map<?, ?> map) {
+            return null; // FIXME
+        }
+        return new NotificationData(TextWrapper.componentOf(object));
+    }
+
+    public static NotificationData ofText(Component title) {
+        return new NotificationData(title);
+    }
+
+    public static NotificationData ofTitles(Component title, Component subTitle) {
+        return new NotificationData(title.copy().append("\n").append(subTitle));
+    }
+
     public static final Component[] NO_TEXT = new Component[0];
     public static final Duration DEFAULT_DURATION = Duration.ofSeconds(5L);
     public static final Color DEFAULT_BORDER_COLOR = new SimpleColor(0x472954);

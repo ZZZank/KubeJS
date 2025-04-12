@@ -14,7 +14,6 @@ import dev.latvian.kubejs.block.custom.builder.*;
 import dev.latvian.kubejs.block.BlockStatePredicate;
 import dev.latvian.kubejs.client.painter.Painter;
 import dev.latvian.kubejs.client.painter.screen.*;
-import dev.latvian.kubejs.client.toast.NotificationBinding;
 import dev.latvian.kubejs.client.toast.NotificationData;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.event.IEventHandler;
@@ -465,7 +464,7 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
         typeWrappers.register(BlockTintFunction.class, BlockTintFunction::of);
         typeWrappers.register(ItemTintFunction.class, ItemTintFunction::of);
 
-        typeWrappers.register(NotificationData.class, NotificationBinding::of);
+        typeWrappers.register(NotificationData.class, NotificationData::of);
 
         //registry
         for (val wrapperFactory : RegistryTypeWrapperFactory.getAll()) {
