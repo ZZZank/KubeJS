@@ -110,6 +110,10 @@ public final class NotificationData {
         return atlasIcon(null, sprite);
     }
 
+    public NotificationData noIcon() {
+        return icon(NoIcon.INSTANCE);
+    }
+
     @Environment(EnvType.CLIENT)
     public void show() {
         val mc = Minecraft.getInstance();
