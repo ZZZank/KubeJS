@@ -61,6 +61,8 @@ import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.server.ServerSettings;
 import dev.latvian.kubejs.text.Text;
 import dev.latvian.kubejs.util.*;
+import dev.latvian.kubejs.util.time.TickDuration;
+import dev.latvian.kubejs.util.time.TimeJS;
 import dev.latvian.kubejs.world.BlockContainerJS;
 import dev.latvian.mods.rhino.mod.util.NBTWrapper;
 import dev.latvian.mods.rhino.mod.util.color.Color;
@@ -100,6 +102,8 @@ import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.time.Duration;
+import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -379,6 +383,10 @@ public class BuiltinKubeJSPlugin extends KubeJSPlugin {
 		typeWrappers.register(Pattern.class, UtilsJS::parseRegex);
 		typeWrappers.register(JsonObject.class, MapJS::json);
 		typeWrappers.register(JsonArray.class, ListJS::json);
+
+        typeWrappers.register(TemporalAmount.class, TimeJS::wrapTemporalAmount);
+        typeWrappers.register(Duration.class, TimeJS::wrapDuration);
+        typeWrappers.register(TickDuration.class, TickDuration::wrap);
 
 		typeWrappers.register(ResourceLocation.class, UtilsJS::getMCID);
 		typeWrappers.register(ItemStack.class, o -> ItemStackJS.of(o).getItemStack());
