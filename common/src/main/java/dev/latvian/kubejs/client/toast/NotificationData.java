@@ -59,20 +59,15 @@ public final class NotificationData {
     private Color backgroundColor;
     private boolean textShadow;
 
-    public NotificationData() {
-        duration = DEFAULT_DURATION;
-        text = null;
-        icon = NoIcon.INSTANCE;
-        iconSize = 16;
-        outlineColor = ColorWrapper.BLACK;
-        borderColor = DEFAULT_BORDER_COLOR;
-        backgroundColor = DEFAULT_BACKGROUND_COLOR;
-        textShadow = true;
-    }
-
     public NotificationData(Component text) {
-        this();
+        this.duration = DEFAULT_DURATION;
         this.text = text;
+        this.icon = NoIcon.INSTANCE;
+        this.iconSize = 16;
+        this.outlineColor = ColorWrapper.BLACK;
+        this.borderColor = DEFAULT_BORDER_COLOR;
+        this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        this.textShadow = true;
     }
 
     public NotificationData textureIcon(ResourceLocation textureLocation) {
