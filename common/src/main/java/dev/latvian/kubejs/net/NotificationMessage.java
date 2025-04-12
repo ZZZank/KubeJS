@@ -19,11 +19,14 @@ public class NotificationMessage extends BaseS2CMessage {
 	}
 
 	NotificationMessage(FriendlyByteBuf buf) {
+        NotificationData got;
         try {
-            data = buf.readWithCodec(NotificationData.CODEC);
+            got = buf.readWithCodec(NotificationData.CODEC);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            KubeJS.LOGGER.error("Error when reading NotificationData from network message", e);
+            got = null;
         }
+        data = got;
     }
 
 	@Override
@@ -36,11 +39,15 @@ public class NotificationMessage extends BaseS2CMessage {
         try {
             buf.writeWithCodec(NotificationData.CODEC, this.data);
         } catch (IOException e) {
+            KubeJS.LOGGER.error("Error when writing NotificationData to network message", e);
         }
     }
 
 	@Override
 	public void handle(PacketContext context) {
+        if (data == null) {
+            return;
+        }
         val player = UtilsWrapper.getClientWorld().getPlayer(KubeJS.PROXY.getClientPlayer());
 		if (player == null) {
 			return;
