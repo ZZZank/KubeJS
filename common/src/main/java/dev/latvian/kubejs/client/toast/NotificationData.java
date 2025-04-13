@@ -36,18 +36,6 @@ import java.util.Optional;
 @ToString
 @EqualsAndHashCode
 public final class NotificationData {
-
-    @HideFromJS
-    public static NotificationData of(Context cx, Object object, TypeInfo target) {
-        if (object instanceof NotificationData b) {
-            return b;
-        } else if (object instanceof Map<?, ?> map) {
-            val decoded = CODEC.decode(JsonOps.INSTANCE, MapJS.json(map));
-            return decoded.result().orElseThrow().getFirst();
-        }
-        return new NotificationData(TextWrapper.componentOf(object));
-    }
-
     public static NotificationData ofText(Component title) {
         return new NotificationData(title);
     }

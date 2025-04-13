@@ -33,8 +33,6 @@ public class KessJSTypeAssignments implements ProbeJSPlugin {
             scriptDump.assignType(ItemTintFunction.class, Types.literal(s));
         }
 
-        scriptDump.assignType(NotificationData.class, Types.type(Component.class));
-
         scriptDump.assignType(TemporalAmount.class, Types.NUMBER);
         scriptDump.assignType(TemporalAmount.class, Types.STRING);
         scriptDump.assignType(Duration.class, Types.type(TemporalAmount.class));
