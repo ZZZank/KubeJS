@@ -16,6 +16,7 @@ import java.util.Objects;
  */
 public final class ImmutableComponent implements Component {
     public static final ImmutableComponent LINE_BREAK = new ImmutableComponent("\n");
+    public static final ImmutableComponent EMPTY = new ImmutableComponent("");
 
     private final Style style;
     private final String content;
@@ -27,7 +28,7 @@ public final class ImmutableComponent implements Component {
     public ImmutableComponent(Style style, String content, List<Component> siblings) {
         this.style = style;
         this.content = content;
-        this.siblings = siblings;
+        this.siblings = List.copyOf(siblings);
     }
 
     public ImmutableComponent(String content) {
@@ -67,15 +68,19 @@ public final class ImmutableComponent implements Component {
         val language = Language.getInstance();
 
         if (this.cachedLang != language) {
-            this.cachedLang = language;
-            this.cachedFormatted = language.getVisualOrder(this);
+            synchronized (this) {
+                if (this.cachedLang != language) {
+                    this.cachedLang = language;
+                    this.cachedFormatted = language.getVisualOrder(this);
+                }
+            }
         }
 
         return this.cachedFormatted;
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         return o instanceof ImmutableComponent that
             && Objects.equals(style, that.style)
             && Objects.equals(content, that.content)

@@ -1,29 +1,24 @@
 package dev.latvian.kubejs.client.toast;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.latvian.kubejs.KubeJSCodecs;
-import dev.latvian.kubejs.bindings.TextWrapper;
 import dev.latvian.kubejs.client.toast.icon.*;
-import dev.latvian.kubejs.util.MapJS;
-import dev.latvian.mods.rhino.Context;
+import dev.latvian.kubejs.text.ImmutableComponent;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.util.color.SimpleColor;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
-import dev.latvian.mods.rhino.native_java.type.info.TypeInfo;
-import dev.latvian.mods.rhino.util.HideFromJS;
 import lombok.*;
 import lombok.experimental.Accessors;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -42,6 +37,10 @@ public final class NotificationData {
 
     public static NotificationData ofTitles(Component title, Component subTitle) {
         return new NotificationData(title.copy().append("\n").append(subTitle));
+    }
+
+    public static NotificationData ofEmpty() {
+        return new NotificationData(ImmutableComponent.EMPTY);
     }
 
     public static final Component[] NO_TEXT = new Component[0];
@@ -83,6 +82,16 @@ public final class NotificationData {
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
         this.textShadow = true;
+    }
+
+    public NotificationData addLine(Component text) {
+        if (this.text.getSiblings().isEmpty() && this.text.getContents().isEmpty()) {
+            return text(text);
+        }
+        val toAppend = this.text instanceof MutableComponent mutable
+            ? mutable
+            : this.text.copy();
+        return text(toAppend.append(ImmutableComponent.LINE_BREAK).append(text));
     }
 
     public NotificationData textureIcon(ResourceLocation textureLocation) {
